@@ -53,7 +53,8 @@ The agent works top to bottom, ticks `[x]` when a task is done, and adds short n
   - Within ~1px of both frames (measured in the browser against the exports). Kit vs frames: MORE tracking is ~1% (not 5%), statement leading is 30/46 px; note and desktop trust items use −3%/−4% tracking. The button is 58 px (`py-[15.5px]`). "clients" is sized from `hero.clientsEm` per language (uk «клієнтів» = 3.5). On /uk/, "БІЛЬШЕ" falls back to regular Roboto (no Cyrillic in Hegarty), which is part of the open font question.
 - [x] Pain points ("Which of these sounds like you")
   - Cards are **equal width** (Nikita overruled Figma's 355/341/477). Desktop matches the frame (section 823 px, cards 367 px); mobile is within 1 px. On lg the cards use a subgrid so bodies line up when a uk title wraps. A `min-h` on a subgrid item doesn't grow its tracks, so the 367 px minimum sits on the body. The "situation |" tag is desktop-only and `aria-hidden`. Heading now switches to left-aligned at `lg`, not `md`.
-- [ ] Process ("How we do it")
+- [x] Process ("How we do it")
+  - Desktop matches the frame (section 966, header card 276, steps card 434 vs 435). Steps are equal columns (same call as the pain cards). Mobile cards use one consistent rhythm; Figma's three mobile cards each have different padding. The mascot is a **temporary 1x cut-out from Webflow** (`mascot-cutout.png`, `TODO(asset)`); `mascot.png` (Figma 1:512) has a beige background, so it can't be used. Desktop mascot sits flush on the card bottom (Figma leaves a 7px gap). "process" label is plain text; Figma has "pro" in bold, which looks accidental. "hand‑offs" uses a non-breaking hyphen.
 - [ ] Cases (exclusive accordion, `<details name>`)
 - [ ] Testimonials (scroll-snap row + arrows)
 - [ ] About / team
@@ -91,6 +92,10 @@ The agent works top to bottom, ticks `[x]` when a task is done, and adds short n
 - [ ] Apply his fixes
 - [ ] Connect his domain on Vercel, then run a final check in production
 - [ ] README: stack, env vars, how to edit copy and translations
+
+## Asks for Nikita
+
+- Mascot (Figma `1:512`): 2x PNG with a transparent background, cropped as in the desktop frame. The current one is a 1x cut-out from Webflow.
 
 ## Questions for Serhii
 

@@ -75,6 +75,26 @@ export const en = {
       },
     ] as { title: [string, string]; text: string }[],
   },
+  process: {
+    label: 'process',
+    title: 'How we do it',
+    intro: 'One clear path. The right people for your goal — no more, no less.',
+    // Titles are [before, after] a desktop-only line break, as in pain.cards.
+    steps: [
+      {
+        title: ['Full cycle,', 'done for you'],
+        text: 'From zero to a steady flow of clients — nothing lost in hand‑offs.',
+      },
+      {
+        title: ['Minimal load', 'on your side'],
+        text: 'We agree the decisions that matter, handle everything else, and leave you free to run your business.',
+      },
+      {
+        title: ['Result in 2–3', 'months'],
+        text: 'We set the timeline before we start, tie it to your scope, and hold to it.',
+      },
+    ] as { title: [string, string]; text: string }[],
+  },
 };
 
 export type Dict = typeof en;
