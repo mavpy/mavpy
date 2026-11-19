@@ -1,0 +1,64 @@
+---
+// Pricing ("Pick your goal, see the price"): three cards. lg: equal columns; each card is a
+// 4-row subgrid (title, "You get", list, price row), so the boxes line up when a uk title
+// wraps, and the price row sits at the bottom. Mobile: stacked, with a
+// full-width button. Figma's insets differ per element and per breakpoint (title, cream box,
+// list, price); they're kept as measured.
+import Button from '../ui/Button.astro';
+import Heading from '../ui/Heading.astro';
+import Section from '../ui/Section.astro';
+import { getLang, t } from '../../i18n/utils';
+
+const { pricing } = t(getLang(Astro.url));
+---
+
+<Section
+  id="pricing"
+  tone="sand"
+  class="pt-[36px] pb-[37px] lg:pt-[70px] lg:pb-[104px]"
+>
+  <div class="lg:flex lg:items-start lg:justify-between">
+    <Heading>{pricing.title}</Heading>
+    <p aria-hidden="true" class="mt-[8px] max-lg:hidden">
+      {pricing.label}
+      <span class="ml-[25px]">|</span>
+    </p>
+  </div>
+  <p class="mx-auto mt-[23px] max-w-[290px] text-center text-[15px] leading-[18px] lg:mx-0 lg:mt-[39px] lg:max-w-none lg:text-left lg:text-body lg:leading-[1.172]">
+    {pricing.sub}
+  </p>
+
+  <ul class="mt-[46px] grid gap-[31px] lg:mt-[84px] lg:grid-cols-3 lg:gap-x-[25px] lg:gap-y-0">
+    {pricing.items.map((item) => (
+      <li class="flex flex-col rounded-card bg-white lg:row-span-4 lg:grid lg:grid-rows-subgrid px-[11px] pt-[25px] pb-[20px] lg:px-[12px] lg:pt-[30px] lg:pb-[46px]">
+        <h3 class="ml-[9px] font-display text-[28px] leading-[1.067] font-medium lg:ml-[4px] lg:text-[32px]">
+          {item.title}
+        </h3>
+        <p class="mt-[29px] min-h-[92px] rounded-[8px] bg-cream px-[9px] pt-[9px] pb-[14px] text-[20px] leading-[23px] lg:mt-[38px] lg:min-h-[107px] lg:px-[12px] lg:pt-[11px] lg:pb-[12px] lg:text-body lg:leading-[28px]">
+          <b>{pricing.youGet}</b> {item.youGet}
+        </p>
+        <ul class="mt-[16px] ml-[23px] space-y-[12px] text-[20px] leading-[23px] lg:mt-[29px] lg:ml-[4px] lg:space-y-[15px] lg:text-body lg:leading-[27px]">
+          {item.bullets.map((b) => (
+            <li class="flex gap-[14px] before:mt-[0.56em] before:size-[0.2em] before:shrink-0 before:rounded-full before:bg-current before:content-[''] lg:gap-[16px]">
+              {b}
+            </li>
+          ))}
+        </ul>
+        <div class="mt-[22px] lg:mt-0 lg:flex lg:flex-wrap lg:items-center lg:self-end lg:justify-between lg:gap-3 lg:pt-[51px] lg:pr-[14px] lg:pl-[12px]">
+          <p class="ml-[39px] text-[24px] whitespace-nowrap leading-[1.172] font-bold lg:ml-0 lg:text-[28px]">
+            {pricing.from} {item.price}
+          </p>
+          <Button
+            href="#contact"
+            size="sm"
+            block
+            class="mt-[30px] max-lg:py-[12px] max-lg:text-[20px] lg:mt-0 lg:px-[21.5px] lg:w-auto lg:shrink-0"
+          >
+            {pricing.cta}
+            <span class="sr-only">: {item.title}</span>
+          </Button>
+        </div>
+      </li>
+    ))}
+  </ul>
+</Section>

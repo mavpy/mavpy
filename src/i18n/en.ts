@@ -232,6 +232,50 @@ export const en = {
     ],
     photoAlt: 'Serhii, founder of MAVPY',
   },
+  pricing: {
+    label: 'pricing',
+    title: 'Pick your goal, see the price',
+    sub: 'No form, no call to see a number. Find your goal, see where it starts.',
+    youGet: 'You get:',
+    from: 'from',
+    cta: 'Get my estimate',
+    // Figma prices (Webflow differs: open question). Card 3 uses the desktop title; mobile
+    // Figma says "Refresh an outdated site". TODO(copy): Serhii to confirm.
+    items: [
+      {
+        title: 'Attract new clients',
+        youGet:
+          'a site that turns strangers into enquiries — and ads that keep them coming.',
+        bullets: [
+          'online positioning',
+          'site design & build',
+          'ad setup & automation',
+        ],
+        price: '$500',
+      },
+      {
+        title: 'Launch a new service',
+        youGet:
+          'one page that makes the new offer impossible to misunderstand.',
+        bullets: [
+          'landing page for the offer',
+          'copy & visuals',
+          'launch ad setup',
+        ],
+        price: '$700',
+      },
+      {
+        title: 'Revamp your website',
+        youGet: "a site you're proud to send — fast, modern, findable.",
+        bullets: [
+          'redesign & modern build',
+          'move to an easy platform',
+          'basic SEO',
+        ],
+        price: '$800',
+      },
+    ],
+  },
 };
 
 export type Dict = typeof en;
