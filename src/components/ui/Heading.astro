@@ -9,7 +9,8 @@ interface Props {
 const { as: Tag = 'h2', size = 'h2', class: className } = Astro.props;
 const styles = {
   // Archivo ExtraBold 64/60; centred below lg, left-aligned from lg (like the hero).
-  h2: 'font-display text-h2 font-extrabold text-center lg:text-left text-balance',
+  // The mobile frame sets it ~3% tighter (measured: same cap height, ~6% narrower lines).
+  h2: 'font-display text-h2 font-extrabold text-center lg:text-left text-balance max-lg:tracking-[-0.03em]',
   // Roboto Bold 40.
   card: 'text-card font-bold',
   // Archivo Black 48, -2%.

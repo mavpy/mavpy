@@ -1,0 +1,53 @@
+---
+// About ("A craft studio, not a conveyor belt"): one founder, as in Figma. lg: a sand panel
+// holding the text card and the photo side by side (Figma's uneven insets: 24 left, 67 right).
+// Mobile: no panel, photo first, then the centred card.
+// Card title: Archivo. Desktop sets line 1 and "founder of MAVPY" in Medium and the rest in
+// Regular; mobile sets line 1 in a heavy weight (800, already loaded for h2) and line 2 smaller.
+import { Image } from 'astro:assets';
+import Heading from '../ui/Heading.astro';
+import Section from '../ui/Section.astro';
+import serhii from '../../assets/images/team/serhii.png';
+import { getLang, t } from '../../i18n/utils';
+
+const { about } = t(getLang(Astro.url));
+---
+
+<Section id="about" class="pt-[69px] pb-[85px] lg:pt-[120px] lg:pb-[151px]">
+  <div class="lg:flex lg:items-start lg:justify-between">
+    <Heading class="whitespace-pre-line">{about.title}</Heading>
+    <p aria-hidden="true" class="mt-[8px] max-lg:hidden">
+      {about.label}
+      <span class="ml-[25px]">|</span>
+    </p>
+  </div>
+  <p class="mx-auto mt-[23px] max-w-[290px] text-center text-[15px] leading-[18px] lg:mx-0 lg:mt-[23px] lg:max-w-none lg:text-left lg:text-body lg:leading-[1.172]">
+    {about.sub}
+  </p>
+
+  <div class="mt-[30px] grid gap-[22px] lg:mt-[51px] lg:grid-cols-[1fr_356px] lg:gap-[27px] lg:rounded-card lg:bg-sand lg:pt-[49px] lg:pr-[67px] lg:pb-[39px] lg:pl-[24px]">
+    <Image
+      src={serhii}
+      alt={about.photoAlt}
+      widths={[360, 720]}
+      sizes="(min-width: 1024px) 356px, 327px"
+      class="aspect-[327/362] w-full rounded-card bg-white object-cover lg:col-start-2 lg:row-start-1 lg:aspect-auto lg:h-full"
+    />
+    <div class="rounded-card bg-white px-[15px] pt-[6px] pb-[55px] text-center lg:col-start-1 lg:row-start-1 lg:px-[26px] lg:pt-[39px] lg:pb-[62px] lg:text-left">
+      <h3 class="font-display">
+        <span class="block text-[32px] leading-[52px] font-extrabold lg:leading-[41px] lg:font-medium">
+          {about.hi}
+        </span>
+        <span class="block text-[24px] leading-[32px] lg:text-[32px] lg:leading-[41px]">
+          <span class="max-lg:block lg:font-medium">{about.role.em}</span>
+          {about.role.after}
+        </span>
+      </h3>
+      <div class="mt-[38px] space-y-[25px] text-[21px] leading-[25px] whitespace-pre-line italic lg:mt-[35px] lg:max-w-[632px] lg:space-y-[27px] lg:text-[23px] lg:leading-[27px]">
+        {about.paragraphs.map((p) => (
+          <p>{p}</p>
+        ))}
+      </div>
+    </div>
+  </div>
+</Section>

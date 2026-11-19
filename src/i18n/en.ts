@@ -216,6 +216,22 @@ export const en = {
       },
     ] as Testimonial[],
   },
+  about: {
+    label: 'about',
+    // \n: the line break both frames use.
+    title: 'A craft studio,\nnot a conveyor belt',
+    sub: 'Founded 2022. The founder leads every project personally, start to launch.',
+    // The card title: line 1, then line 2 with its first part medium-weight on desktop (as in Figma).
+    hi: "Hi, I'm Serhii,",
+    role: { em: 'founder of MAVPY', after: ' design agency.' },
+    // One string per paragraph; \n is a forced line break.
+    paragraphs: [
+      "Three years in, 30+ projects across Ukraine and worldwide.\nI don't want a studio that churns out websites.",
+      'We build one solution for one goal at a time — no wasted steps, no extra people.',
+      'When you work with us, you work with me. Nothing gets lost in a hand-off. Your result is the point — not the website.',
+    ],
+    photoAlt: 'Serhii, founder of MAVPY',
+  },
 };
 
 export type Dict = typeof en;
