@@ -2,7 +2,7 @@
 import type { HTMLAttributes } from 'astro/types';
 
 // btn_main from the UI kit (styles and states follow the Webflow build).
-// lg: hero and form (Roboto Medium 23, about 58px tall). sm: pricing cards (16px, about 41px tall).
+// lg: hero and form (Roboto Medium 23, 58px tall). sm: pricing cards (16px, about 41px tall).
 // Renders an <a> when href is given, otherwise a <button>.
 type Props = {
   size?: 'lg' | 'sm';
@@ -14,7 +14,7 @@ type Props = {
 const { size = 'lg', block = false, class: className, ...rest } = Astro.props;
 const Tag = 'href' in rest && rest.href ? 'a' : 'button';
 const sizes = {
-  lg: 'text-btn px-[38px] py-[15px]',
+  lg: 'text-btn px-[38px] py-[15.5px]',
   sm: 'text-btn-sm px-[18px] py-[11px]',
 };
 ---

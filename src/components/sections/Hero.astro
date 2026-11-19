@@ -1,0 +1,73 @@
+---
+// Hero + trust bar. DOM follows the mobile order (tagline, MORE, clients, statement, CTA);
+// on lg+ the statement is pinned to the top-right cell, the rest auto-flows around it.
+// "MORE" and "clients" are big display words: the h1 is the small tagline (audit §2).
+// Vertical margins are Figma's ink gaps minus each box's slack above the caps / below the baseline.
+import Button from '../ui/Button.astro';
+import Container from '../ui/Container.astro';
+import { getLang, t } from '../../i18n/utils';
+
+const { hero, trust } = t(getLang(Astro.url));
+const [s1, s2, s3] = hero.statement;
+---
+
+<section id="top" class="scroll-mt-4">
+  <Container class="pt-[39px] pb-[69px] text-center lg:grid lg:grid-cols-[1fr_auto] lg:pt-[64px] lg:pb-[88px] lg:text-left">
+    <div class="lg:self-end">
+      <h1 class="text-[23px] leading-[29px] font-medium">
+        {hero.h1.before}
+        <strong class="font-bold">{hero.h1.em}</strong>
+        {hero.h1.after}
+      </h1>
+
+      <!-- The bar is the ::before: as tall as the caps (leading 0.7 = cap height, as in the
+           footer wordmark) and running off the left edge of the screen, ending 1px before the M's ink. -->
+      <p class="relative mx-auto mt-[46.5px] w-fit font-hegarty text-more leading-[0.7] uppercase before:absolute before:inset-y-0 before:right-[calc(100%-0.03em)] before:w-screen before:bg-ink lg:mx-0 lg:mt-[16.5px] lg:ml-[0.5em]">
+        {hero.more}
+      </p>
+    </div>
+
+    <!-- The em margins trim the line box to the ink (ascender top to baseline). Flex centring
+         lets the word overflow both sides equally; -mr cancels the trailing letter-spacing;
+         on desktop Figma's box starts at the column, so the ink sits one side bearing right. -->
+    <p
+      class="mt-[calc(27px-0.0525em)] mb-[-0.235em] flex justify-center font-helvetica text-clients font-thin whitespace-nowrap text-ink-soft lg:col-span-2 lg:[--clients-inset:48px] lg:mt-[calc(61px-0.0525em)]"
+      style={`--clients-em: ${hero.clientsEm}`}
+    >
+      <span class="-mr-[0.04em] lg:relative lg:left-[0.014em]">
+        {hero.clients}
+      </span>
+    </p>
+
+    <p class="mt-[25px] font-display text-statement font-black text-graphite lg:col-start-2 lg:row-start-1 lg:mt-0 lg:-mb-[0.19em] lg:self-end lg:text-right">
+      {s1}
+      <br class="max-lg:hidden" /> {s2}
+      <br />
+      {s3}
+    </p>
+
+    <div class="mt-[75px] flex flex-col items-center lg:col-span-2 lg:mt-[71px] lg:flex-row lg:justify-end lg:gap-[55px]">
+      <p class="text-[23px] leading-[31px] font-medium tracking-[-0.03em]">
+        {hero.note[0]}
+        <br />
+        {hero.note[1]}
+      </p>
+      <Button href="#contact" block class="mt-[52px] lg:mt-0 lg:w-auto">
+        {hero.cta}
+      </Button>
+    </div>
+  </Container>
+
+  <div class="bg-white lg:bg-snow">
+    <Container>
+      <ul
+        aria-label={trust.label}
+        class="divide-y-2 divide-[#e8e8e8] pt-[9px] pb-[14px] text-center text-[23px] lg:tracking-[-0.04em] lg:flex lg:justify-between lg:divide-y-0 lg:pt-[21px] lg:pb-[17px]"
+      >
+        {trust.items.map((item) => (
+          <li class="py-[15.5px] lg:py-0">{item}</li>
+        ))}
+      </ul>
+    </Container>
+  </div>
+</section>

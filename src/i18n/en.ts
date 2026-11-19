@@ -36,6 +36,23 @@ export const en = {
       em: 'websites',
       after: ' for growing businesses',
     },
+    more: 'More',
+    clients: 'clients',
+    // Desktop breaks after every line; mobile only before the last one.
+    statement: ['Not just', 'a new', 'website'],
+    note: ['Scoped, priced upfront,', 'delivered end-to-end.'],
+    cta: 'Get an estimate',
+    // ink width of `clients` in ems (Helvetica Neue Thin, +4%): sizes the word to the column.
+    clientsEm: 2.8,
+  },
+  trust: {
+    label: 'Why MAVPY',
+    items: [
+      '30+ projects',
+      'Fixed price, no surprises',
+      'Founder-led, direct',
+      'Reply within 24h',
+    ],
   },
 };
 

@@ -49,7 +49,8 @@ The agent works top to bottom, ticks `[x]` when a task is done, and adds short n
 
 ## M4: Sections (one task per section, filled in from docs/audit.md)
 
-- [ ] Hero + trust bar
+- [x] Hero + trust bar
+  - Within ~1px of both frames (measured in the browser against the exports). Kit vs frames: MORE tracking is ~1% (not 5%), statement leading is 30/46 px; note and desktop trust items use −3%/−4% tracking. The button is 58 px (`py-[15.5px]`). "clients" is sized from `hero.clientsEm` per language (uk «клієнтів» = 3.5). On /uk/, "БІЛЬШЕ" falls back to regular Roboto (no Cyrillic in Hegarty), which is part of the open font question.
 - [ ] Pain points ("Which of these sounds like you")
 - [ ] Process ("How we do it")
 - [ ] Cases (exclusive accordion, `<details name>`)
@@ -74,7 +75,10 @@ The agent works top to bottom, ticks `[x]` when a task is done, and adds short n
 
 ## M7: Polish
 
-- [ ] Animations and hovers to match Webflow (with reduced-motion fallbacks)
+- [ ] Animations and hovers: start from what Webflow does, then go beyond it to design-studio-level motion (decided 2026-11-19). Not a 1:1 port
+  - Before building, audit the Webflow interactions (list them), then propose a motion concept to Nikita for sign-off: scroll-reveals, staggered headline/text reveals, hero entrance, hover/cursor details, section transitions, smooth scroll. Pick what fits the brand; don't animate everything
+  - Tooling: decide with Nikita (CSS scroll-driven animations + View Transitions first; a small library such as GSAP/Motion only if CSS can't do it). Say why if adding a dependency
+  - Rules: only animate `transform`/`opacity`, no layout shift, no CLS/LCP regression (Lighthouse 95+ still applies), content visible without JS, full `prefers-reduced-motion` fallback (static or simple fades), keyboard/focus states not affected, check both languages
 - [ ] Image optimisation, lazy loading, font preloads
 - [ ] Accessibility pass (keyboard, contrast, landmarks, alt text)
 - [ ] Lighthouse 95+ on `/` and `/uk/`, mobile and desktop

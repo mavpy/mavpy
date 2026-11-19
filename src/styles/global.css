@@ -48,6 +48,7 @@
   --color-sand: #efedea; /* beige sections and panels */
   --color-snow: #fdfdfd; /* trust bar */
   /* Sampled from the frames, not in the kit. */
+  --color-graphite: #2b2b2b; /* hero "Not just a new website" */
   --color-cream: #fff6e9; /* pricing "You get" box */
   --color-mist: #f9f9f9; /* testimonial card footer */
   --color-grey: #606060; /* secondary text */
@@ -61,7 +62,7 @@
   --font-sans: 'Roboto', system-ui, sans-serif;
   --font-display: 'Archivo', 'Roboto', system-ui, sans-serif;
   --font-hegarty: 'BBH Hegarty', 'Archivo', 'Roboto', system-ui, sans-serif;
-  --font-thin:
+  --font-helvetica:
     'Helvetica Neue Thin', 'Helvetica Neue', 'Roboto', system-ui, sans-serif;
 
   /* Type scale. "auto" line height in Figma = the font's normal metrics (1.172 for Roboto). */
@@ -82,18 +83,17 @@
     21.13px + 2.1vw,
     48px
   ); /* Archivo Black 48, "Not just a new website" */
-  --text-statement--line-height: 1;
-  --text-statement--letter-spacing: -0.02em;
+  --text-statement--line-height: clamp(
+    30px,
+    23.37px + 1.768vw,
+    46px
+  ); /* measured 30 / 46 */
+  --text-statement--letter-spacing: -0.03em;
   --text-h2: clamp(36px, 24.4px + 3.09vw, 64px); /* Archivo ExtraBold 64/60 */
   --text-h2--line-height: clamp(38px, 28.9px + 2.43vw, 60px);
   --text-more: clamp(43px, 4.9px + 10.17vw, 135px); /* BBH Hegarty 135, +5% */
   --text-more--line-height: 1;
-  --text-more--letter-spacing: 0.05em;
-  /* Helvetica Neue Thin 438, +4%. Sized to the column width (ink width ≈ 2.8 × font size at both
-     breakpoints), so "clients" always spans the column. */
-  --text-clients: min(438px, (100vw - 48px) / 2.8);
-  --text-clients--line-height: 1;
-  --text-clients--letter-spacing: 0.04em;
+  --text-more--letter-spacing: 0.01em; /* kit says +5%; the frames measure ~1% */
 
   /* Layout: 1226px content column on desktop, 24px gutter on mobile. */
   --container-content: 1226px;
@@ -108,6 +108,21 @@
 
   /* Webflow hover timing (audit §2). */
   --ease-out-quart: cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+/* `inline` so the utility carries the expression itself: --clients-em then resolves on the
+   element (set per language), not on :root. */
+@theme inline {
+  /* Helvetica Neue Thin 438, +4%. Sized so the ink spans the 1226 column on desktop and the
+     screen minus 13px a side on mobile (as in the frames; --clients-inset widens that to the
+     gutter on lg, where it sits beside column-aligned content). --clients-em is the word's ink width
+     in ems, set per language from i18n (2.8 for "clients"). */
+  --text-clients: calc(
+    min(var(--container-content), 100vw - var(--clients-inset, 26px)) /
+      var(--clients-em, 2.8)
+  );
+  --text-clients--line-height: 1;
+  --text-clients--letter-spacing: 0.04em;
 }
 
 @layer base {
