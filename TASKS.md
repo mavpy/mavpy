@@ -28,11 +28,17 @@ The agent works top to bottom, ticks `[x]` when a task is done, and adds short n
 
 ## M2: Foundations
 
-- [ ] Design tokens from the UI kit (colors, type scale, spacing, radii, shadows, breakpoints) in `@theme`
-- [ ] Fonts through Fontsource (with Cyrillic subsets)
-- [ ] `Base.astro` layout: meta, fonts, lang, hreflang
-- [ ] i18n config + `en.ts` / `uk.ts` skeleton + `utils.ts`
-- [ ] UI components: Button (all variants and states), Container, Section, Heading, Input/Textarea, Card
+- [x] Design tokens from the UI kit (colors, type scale, spacing, radii, shadows, breakpoints) in `@theme`
+  - Figma MCP was rate-limited, so tokens come from Nikita's UI-kit screenshots plus pixel sampling of the full-res frames (sips → BMP → read pixels). Neutrals and `#ffab01` are confirmed; the 4 other orange ramp shades are eyeballed (`TODO(figma)`). Type sizes are fluid `clamp()` between the 375 and 1280 values. Breakpoints: Tailwind defaults (md 768, lg 1024, xl 1280); there's no custom set in the kit.
+  - "MORE" is **BBH Hegarty** 135 (not Archivo); h2 is Archivo ExtraBold 64/60; body is Roboto 23.
+- [x] Fonts through Fontsource (with Cyrillic subsets)
+  - The weights already installed match the UI kit exactly. Roboto ships Cyrillic via unicode-range. Archivo/Hegarty stacks fall back to Roboto for Cyrillic until Serhii decides. Helvetica is registered as `Helvetica Neue Thin` so a locally installed Helvetica Neue can't hijack it.
+- [x] `Base.astro` layout: meta, fonts, lang, hreflang
+  - og:image comes in M7. Skip link included.
+- [x] i18n config + `en.ts` / `uk.ts` skeleton + `utils.ts`
+  - Rich text is stored as parts (`{ before, em, after }`) instead of HTML strings. Both pages render `components/Home.astro`.
+- [x] UI components: Button (all variants and states), Container, Section, Heading, Input/Textarea, Card
+  - Button: lg/sm, `block`, hover/active/disabled/aria-busy. The state→colour mapping of the kit ramp is a guess (hover `orange-300`, active `orange-700`, disabled `orange-200`). No Textarea: the form has no message field (audit §3); Input does `input` and `select`. Not visually checked yet; that happens when sections use them in M4.
 
 ## M3: Layout
 

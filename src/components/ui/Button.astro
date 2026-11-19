@@ -1,0 +1,35 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+// btn_main from the UI kit (styles and states follow the Webflow build).
+// lg: hero and form (Roboto Medium 23, about 58px tall). sm: pricing cards (16px, about 41px tall).
+// Renders an <a> when href is given, otherwise a <button>.
+type Props = {
+  size?: 'lg' | 'sm';
+  /** Full width (used on mobile). Pass responsive classes via `class` to undo it on desktop. */
+  block?: boolean;
+  class?: string;
+} & (HTMLAttributes<'a'> | HTMLAttributes<'button'>);
+
+const { size = 'lg', block = false, class: className, ...rest } = Astro.props;
+const Tag = 'href' in rest && rest.href ? 'a' : 'button';
+const sizes = {
+  lg: 'text-btn px-[38px] py-[15px]',
+  sm: 'text-btn-sm px-[18px] py-[11px]',
+};
+---
+
+<Tag
+  {...(Tag === 'button' ? { type: 'button' } : {})}
+  {...rest}
+  class:list={[
+    'inline-flex items-center justify-center gap-2 rounded-btn bg-orange text-center font-medium text-black shadow-btn',
+    'transition-colors duration-300 hover:bg-orange-300 active:bg-orange-700',
+    'disabled:cursor-not-allowed disabled:bg-orange-200 disabled:shadow-none aria-busy:cursor-wait',
+    sizes[size],
+    block && 'w-full',
+    className,
+  ]}
+>
+  <slot />
+</Tag>

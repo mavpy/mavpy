@@ -1,0 +1,22 @@
+---
+// Headings from the UI kit. The tag (semantics) and the look (size) are separate on purpose:
+// e.g. the hero h1 is small, while the big "MORE" is decorative.
+interface Props {
+  as?: 'h1' | 'h2' | 'h3' | 'p';
+  size?: 'h2' | 'card' | 'statement';
+  class?: string;
+}
+const { as: Tag = 'h2', size = 'h2', class: className } = Astro.props;
+const styles = {
+  // Archivo ExtraBold 64/60; centred on mobile, left-aligned on desktop (audit §1).
+  h2: 'font-display text-h2 font-extrabold text-center md:text-left text-balance',
+  // Roboto Bold 40.
+  card: 'text-card font-bold',
+  // Archivo Black 48, -2%.
+  statement: 'font-display text-statement font-black',
+};
+---
+
+<Tag class:list={[styles[size], className]}>
+  <slot />
+</Tag>

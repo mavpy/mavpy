@@ -9,7 +9,15 @@ export default defineConfig({
   site: 'https://mavpy-site.vercel.app',
   // Pages stay static (prerendered); only routes that opt out (the form action) run as functions.
   adapter: vercel(),
-  integrations: [sitemap()],
+  i18n: {
+    defaultLocale: 'en',
+    locales: ['en', 'uk'],
+    routing: { prefixDefaultLocale: false },
+  },
+  // Sitemap writes hreflang alternates for each page from the same locale list.
+  integrations: [
+    sitemap({ i18n: { defaultLocale: 'en', locales: { en: 'en', uk: 'uk' } } }),
+  ],
   vite: {
     plugins: [tailwindcss()],
   },

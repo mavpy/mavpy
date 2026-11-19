@@ -1,0 +1,15 @@
+---
+// The whole one-page site; both locale pages render this. Sections get added here in M3/M4.
+import Section from './ui/Section.astro';
+import { getLang, t } from '../i18n/utils';
+
+const { hero } = t(getLang(Astro.url));
+---
+
+<Section id="top">
+  <h1 class="text-btn">
+    {hero.h1.before}
+    <strong>{hero.h1.em}</strong>
+    {hero.h1.after}
+  </h1>
+</Section>

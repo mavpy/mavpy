@@ -1,0 +1,49 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+// Labelled form field, underline style as in the Figma contact form.
+// `as="select"` renders a select; pass <option>s as children.
+type Props = {
+  label: string;
+  name: string;
+  as?: 'input' | 'select';
+  /** Inline error (from client or server validation). */
+  error?: string;
+  class?: string;
+} & HTMLAttributes<'input'> &
+  HTMLAttributes<'select'>;
+
+const {
+  label,
+  name,
+  as: Tag = 'input',
+  error,
+  class: className,
+  ...rest
+} = Astro.props;
+const id = rest.id ?? `field-${name}`;
+const errorId = `${id}-error`;
+---
+
+<div class:list={['flex flex-col gap-2', className]}>
+  <label for={id} class="text-btn-sm text-grey">
+    {label}
+  </label>
+  <Tag
+    {...rest}
+    id={id}
+    name={name}
+    aria-invalid={error ? 'true' : undefined}
+    aria-describedby={error ? errorId : undefined}
+    class="w-full border-b border-grey-light bg-transparent py-2 text-body transition-colors duration-300 outline-none focus-visible:border-black aria-invalid:border-error"
+  >
+    <slot />
+  </Tag>
+  <p
+    id={errorId}
+    class="min-h-[1.2em] text-btn-sm text-error"
+    aria-live="polite"
+  >
+    {error}
+  </p>
+</div>

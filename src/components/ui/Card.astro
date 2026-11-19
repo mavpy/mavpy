@@ -1,0 +1,14 @@
+---
+interface Props {
+  as?: 'div' | 'article' | 'li';
+  /** white: pain/process/pricing cards; sand: case rows and panels; cream: pricing "You get" box. */
+  tone?: 'white' | 'sand' | 'cream';
+  class?: string;
+}
+const { as: Tag = 'div', tone = 'white', class: className } = Astro.props;
+const bg = { white: 'bg-white', sand: 'bg-sand', cream: 'bg-cream' }[tone];
+---
+
+<Tag class:list={[bg, 'rounded-card p-6.5', className]}>
+  <slot />
+</Tag>

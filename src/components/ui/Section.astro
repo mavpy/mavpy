@@ -1,0 +1,23 @@
+---
+import Container from './Container.astro';
+
+interface Props {
+  id?: string;
+  /** Background, as measured in the frames: paper (default page), sand (beige), white, snow (trust bar). */
+  tone?: 'paper' | 'sand' | 'white' | 'snow';
+  class?: string;
+}
+const { id, tone = 'paper', class: className } = Astro.props;
+const bg = {
+  paper: 'bg-paper',
+  sand: 'bg-sand',
+  white: 'bg-white',
+  snow: 'bg-snow',
+}[tone];
+---
+
+<section id={id} class:list={[bg, 'scroll-mt-4 py-section', className]}>
+  <Container>
+    <slot />
+  </Container>
+</section>
