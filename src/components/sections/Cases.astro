@@ -1,0 +1,174 @@
+---
+// Cases ("Real projects, real results"): an exclusive accordion built on <details name>, so the
+// browser handles "one open at a time" and the ARIA state; a 3-line script keeps the open one
+// from closing (Webflow behaviour). Opening animates in browsers with `interpolate-size`.
+// Layout: mobile stacks screenshot → title → facts → link. lg: a [437px | rest] grid; the
+// screenshot "mat" is absolutely placed in column 2, so the text sets the closed row height
+// (203px) and a min-height (the mat's 761:757 shape + 69px of insets) sets the open one.
+// Figma is inconsistent between the open and closed cards (title offsets, mat padding, gaps);
+// both states use the closed-card values so the title doesn't jump when a card opens.
+// Link: black with an orange arrow, as on desktop. The mobile frame's #ff6b31 text is under
+// 3:1 on sand, so it's not used.
+import { Image } from 'astro:assets';
+import Heading from '../ui/Heading.astro';
+import Section from '../ui/Section.astro';
+import clinic from '../../assets/images/cases/medical-clinic.png';
+import massage from '../../assets/images/cases/massage-studio.png';
+import school from '../../assets/images/cases/english-school.png';
+// TODO(asset): only a strip exists; the open card needs a full screenshot.
+import crypto from '../../assets/images/cases/crypto-company-strip.png';
+import solar from '../../assets/images/cases/solar-company.png';
+import { getLang, t } from '../../i18n/utils';
+
+const { cases } = t(getLang(Astro.url));
+const shots = [clinic, massage, school, crypto, solar];
+const factKeys = ['goal', 'start', 'did', 'time', 'result'] as const;
+---
+
+<Section
+  id="cases"
+  tone="white"
+  class="pt-[54px] pb-[87px] lg:pt-[97px] lg:pb-[132px]"
+>
+  <div class="lg:flex lg:items-start lg:justify-between">
+    <Heading>{cases.title}</Heading>
+    <!-- Decorative section tag, desktop only (not in the mobile frame). -->
+    <p aria-hidden="true" class="mt-[8px] max-lg:hidden">
+      {cases.label}
+      <span class="ml-[25px]">|</span>
+    </p>
+  </div>
+  <p class="mx-auto mt-[29px] max-w-[290px] text-center text-[15px] leading-[18px] lg:mx-0 lg:mt-[22px] lg:max-w-none lg:text-left lg:text-body lg:leading-[1.172]">
+    {cases.sub}
+  </p>
+
+  <ul class="mt-[67px] grid gap-[16px] lg:mt-[69px] lg:gap-[28px]">
+    {cases.items.map((item, i) => {
+      const shot = shots[i];
+      const Link = item.url ? 'a' : 'span';
+      return (
+        <li class="group relative grid rounded-card bg-sand pb-[27px] transition-[min-height] duration-300 lg:grid-cols-[437px_1fr] lg:grid-rows-[auto_1fr] lg:pb-[18px] lg:has-open:min-h-[calc((min(var(--container-content),100vw-2*var(--spacing-gutter))-465px)*757/761+69px)]">
+          <details
+            name="cases"
+            open={i === 0}
+            class="case row-start-2 mt-[45px] px-6 lg:row-start-1 lg:mt-0 lg:pt-[30px] lg:pl-[19px]"
+          >
+            <summary class="grid cursor-pointer list-none grid-cols-[1fr_auto] items-start gap-x-4 [&::-webkit-details-marker]:hidden">
+              <h3 class="text-[30px] leading-[34px] lg:text-[40px] lg:leading-[1.172]">
+                {item.title}
+              </h3>
+              <!-- Mobile: chevron in a grey circle beside the title. lg: a big thin chevron at the
+                   row's right edge. Hidden on the open card, as in Figma. -->
+              <span
+                aria-hidden="true"
+                class="mt-[6px] mr-[11px] grid size-[39px] place-items-center rounded-full bg-grey-light transition-opacity group-has-open:opacity-0 lg:absolute lg:top-[80px] lg:right-[41px] lg:m-0 lg:size-auto lg:bg-transparent"
+              >
+                <svg
+                  viewBox="0 0 89 45"
+                  class="w-[26px] lg:w-[89px]"
+                  fill="none"
+                  stroke="currentColor"
+                >
+                  <path
+                    d="M1 1 44.5 44 88 1"
+                    stroke-width="2"
+                    vector-effect="non-scaling-stroke"
+                  />
+                </svg>
+              </span>
+              <span class="col-start-1 mt-[12px] text-[21px] leading-[1.172] lg:text-body">
+                {item.type}
+              </span>
+            </summary>
+            <dl class="mt-[56px] mb-[66px] space-y-[25px] text-[16px] leading-[20px] lg:mt-[68px] lg:mb-0 lg:max-w-[352px] lg:space-y-[30px] lg:text-[20px] lg:leading-[25px]">
+              {factKeys.map((key) => (
+                <div>
+                  <dt class="inline font-bold">{cases.facts[key]}</dt>{' '}
+                  <dd class="inline">{item.facts[key]}</dd>
+                </div>
+              ))}
+            </dl>
+          </details>
+
+          <Link
+            href={item.url || undefined}
+            target={item.url ? '_blank' : undefined}
+            rel={item.url ? 'noopener' : undefined}
+            class="relative z-1 row-start-3 mt-[14px] ml-6 flex w-fit items-center gap-[13px] text-[26px] leading-[1.172] font-bold lg:row-start-2 lg:mt-[39px] lg:ml-[19px] lg:self-end"
+          >
+            <span class="underline decoration-2 underline-offset-[3px]">
+              {cases.link}
+            </span>
+            {item.url && (
+              <span class="sr-only">
+                : {item.title} ({cases.newTab})
+              </span>
+            )}
+            <svg
+              viewBox="0 0 18 18"
+              class="size-[18px] text-orange"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              aria-hidden="true"
+            >
+              <path d="M1 17 17 1M4 1h13v13" />
+            </svg>
+          </Link>
+
+          <!-- The screenshot mat. Clicks pass through to the summary's full-card overlay. -->
+          <div class="pointer-events-none row-start-1 mx-[18px] mt-[36px] rounded-[10px] bg-white p-[3px] transition-[top,right,bottom] duration-300 lg:absolute lg:col-start-2 lg:row-span-2 lg:inset-y-[17px] lg:right-[158px] lg:left-0 lg:m-0 lg:pt-[10px] lg:pr-[35px] lg:pb-[16px] lg:pl-[31px] lg:group-has-open:top-[40px] lg:group-has-open:right-[28px] lg:group-has-open:bottom-[29px]">
+            <Image
+              src={shot}
+              alt={item.title}
+              width={shot.width}
+              height={Math.min(
+                shot.height,
+                Math.round((shot.width * 757) / 761),
+              )}
+              fit="cover"
+              position="top"
+              widths={[320, 640, 720, 1400]}
+              sizes="(min-width: 1024px) 700px, 290px"
+              class="aspect-video w-full rounded-[7px] object-cover object-top transition-[aspect-ratio] duration-300 group-has-open:aspect-[3/5] lg:size-full lg:group-has-open:aspect-auto"
+            />
+          </div>
+        </li>
+      );
+    })}
+  </ul>
+</Section>
+
+<script>
+  // Keep one case open: clicking the open card's title does nothing (as on Webflow).
+  for (const d of document.querySelectorAll<HTMLDetailsElement>(
+    'details[name="cases"]',
+  ))
+    d.querySelector('summary')?.addEventListener(
+      'click',
+      (e) => d.open && e.preventDefault(),
+    );
+</script>
+
+<style>
+  /* Height animation for the facts; browsers without interpolate-size just snap open. */
+  .case {
+    interpolate-size: allow-keywords;
+  }
+  .case::details-content {
+    block-size: 0;
+    overflow: clip;
+    transition:
+      block-size 0.3s ease-in-out,
+      content-visibility 0.3s allow-discrete;
+  }
+  .case[open]::details-content {
+    block-size: auto;
+  }
+  /* Closed cards are clickable everywhere, not just on the title. */
+  .case:not([open]) summary::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+</style>

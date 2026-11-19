@@ -1,4 +1,23 @@
 // All English copy. Source: Figma (wins on copy, decided 2026-11-19). Sections add keys as they are built in M4.
+type Facts = {
+  goal: string;
+  start: string;
+  did: string;
+  time: string;
+  result: string;
+};
+export type CaseItem = {
+  title: string;
+  type: string;
+  url: string;
+  facts: Facts;
+};
+// TODO(copy): placeholder until Serhii sends the real facts for a case.
+export const tbd = (lang: 'en' | 'uk' = 'en'): Facts => {
+  const v = lang === 'uk' ? 'уточнюється' : 'to be confirmed';
+  return { goal: v, start: v, did: v, time: v, result: v };
+};
+
 export const en = {
   meta: {
     title: 'MAVPY: conversion-focused websites for growing businesses',
@@ -94,6 +113,47 @@ export const en = {
         text: 'We set the timeline before we start, tie it to your scope, and hold to it.',
       },
     ] as { title: [string, string]; text: string }[],
+  },
+  cases: {
+    label: 'cases',
+    title: 'Real projects, real results',
+    sub: 'Same structure every card — so you can compare goals, not marketing.',
+    link: 'View live site',
+    // Appended to the link for screen readers: "View live site: Medical clinic (opens in a new tab)".
+    newTab: 'opens in a new tab',
+    facts: {
+      goal: 'Goal:',
+      start: 'Starting point:',
+      did: 'What we did:',
+      time: 'Timeframe:',
+      result: 'Result:',
+    },
+    // Only the clinic has real facts and a URL. TODO(copy): facts and URLs for cases 2–5 from Serhii.
+    items: [
+      {
+        title: 'Medical clinic',
+        type: 'from scratch',
+        url: 'https://www.drlor-kh.com/',
+        facts: {
+          goal: 'steady patient flow, booking that runs itself',
+          start:
+            'early-2000s site, patients only by word of mouth, every appointment booked by phone',
+          did: 'research · UX analysis · redesign & build · booking + reminder automation',
+          time: '~1.5 months',
+          result:
+            'booking runs on its own, reminders go out automatically, a real stream of enquiries where there used to be only word of mouth',
+        },
+      },
+      { title: 'Massage studio', type: 'redesign', url: '', facts: tbd() },
+      { title: 'English school', type: 'from scratch', url: '', facts: tbd() },
+      { title: 'Crypto company', type: 'from scratch', url: '', facts: tbd() },
+      {
+        title: 'B2B Solar company',
+        type: 'concept project',
+        url: '',
+        facts: tbd(),
+      },
+    ] as CaseItem[],
   },
 };
 

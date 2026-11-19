@@ -55,7 +55,8 @@ The agent works top to bottom, ticks `[x]` when a task is done, and adds short n
   - Cards are **equal width** (Nikita overruled Figma's 355/341/477). Desktop matches the frame (section 823 px, cards 367 px); mobile is within 1 px. On lg the cards use a subgrid so bodies line up when a uk title wraps. A `min-h` on a subgrid item doesn't grow its tracks, so the 367 px minimum sits on the body. The "situation |" tag is desktop-only and `aria-hidden`. Heading now switches to left-aligned at `lg`, not `md`.
 - [x] Process ("How we do it")
   - Desktop matches the frame (section 966, header card 276, steps card 434 vs 435). Steps are equal columns (same call as the pain cards). Mobile cards use one consistent rhythm; Figma's three mobile cards each have different padding. The mascot is a **temporary 1x cut-out from Webflow** (`mascot-cutout.png`, `TODO(asset)`); `mascot.png` (Figma 1:512) has a beige background, so it can't be used. Desktop mascot sits flush on the card bottom (Figma leaves a 7px gap). "process |" label matches "situation |" (Figma has no bar here and "pro" in bold; Nikita asked for the bar). "hand‑offs" uses a non-breaking hyphen.
-- [ ] Cases (exclusive accordion, `<details name>`)
+- [x] Cases (exclusive accordion, `<details name>`)
+  - Within ~1px of the desktop frame (open card 826, closed 203, mat insets, chevron) and ~1–3px of mobile. `<details name="cases">` does the exclusive accordion; a 3-line script keeps the open card from closing (as on Webflow); closed cards are clickable anywhere. Height animates via `interpolate-size` (Chrome; others snap). Figma's open and closed cards disagree on offsets, so both use the closed values (no title jump). Link is black + orange ↗ on mobile too (Figma mobile's #ff6b31 fails contrast on sand). Titles are Roboto on mobile as well (the mobile frame looks like Archivo). Cropped a 27px black capture bar off the clinic and massage screenshots. Cases 2–5 show "to be confirmed" facts and a non-link "View live site" until Serhii sends facts and URLs.
 - [ ] Testimonials (scroll-snap row + arrows)
 - [ ] About / team
 - [ ] Pricing
@@ -112,5 +113,6 @@ The agent works top to bottom, ticks `[x]` when a task is done, and adds short n
 - Prices: Figma $500 / $700 / $800 (third card "Revamp your website"), or Webflow $1000 / $700 / "Care plan" $40/m? Also, the third card's title differs between Figma desktop and mobile.
 - Pain card 3: "High traffic, no enquiries" (Figma) or "Admins drown in calls" (Webflow)?
 - Testimonials: Figma's 4 or Webflow's 6? Dmytro's company and quote differ.
-- Facts for cases 2–5 (only the clinic has them), plus a full screenshot of the crypto site.
+- Facts and live URLs for cases 2–5 (only the clinic has them), plus a full screenshot of the crypto site (the open crypto card is an upscaled strip until then).
+- Cases on mobile: Figma has an orange (#ff6b31) "View live site →" and Archivo-looking titles; we use desktop's black link with ↗ and Roboto titles (contrast, consistency). OK?
 - Natalia's avatar in higher resolution, and Dmytro's photo.
