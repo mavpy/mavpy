@@ -17,10 +17,14 @@ The agent works top to bottom, ticks `[x]` when a task is done, and adds short n
 
 ## M1: Audit (no code)
 
-- [ ] List every section of the page (desktop and mobile frames), with notes on layout differences, in `docs/audit.md`
-- [ ] Compare against the live Webflow site: missing sections, interactions, animations, copy differences
-- [ ] List the form fields and validation rules
-- [ ] List the assets to export (images, icons, logo, OG image) and export them into `src/assets/`
+- [x] List every section of the page (desktop and mobile frames), with notes on layout differences, in `docs/audit.md`
+  - 10 sections plus the header. Desktop `1:331`, mobile `1:904`. The Figma mobile frame has no menu; we follow Webflow's hamburger.
+- [x] Compare against the live Webflow site: missing sections, interactions, animations, copy differences
+  - Live site: https://mavpy.webflow.io/. No scroll animations, only a GSAP accordion and the slider. Big copy split: Figma tells a one-founder story, Webflow a two-founder one (see audit §2).
+- [x] List the form fields and validation rules
+  - Name, email, goal (plus honeypot, time check, locale). Rules in audit §3.
+- [x] List the assets to export (images, icons, logo, OG image) and export them into `src/assets/`
+  - Gaps: a full crypto screenshot, Natalia's avatar is 95 px (the Figma MCP rate limit was hit), Dmytro's photo.
 
 ## M2: Foundations
 
@@ -37,10 +41,13 @@ The agent works top to bottom, ticks `[x]` when a task is done, and adds short n
 
 ## M4: Sections (one task per section, filled in from docs/audit.md)
 
-- [ ] Hero
-- [ ] Section 2
-- [ ] Section 3
-- [ ] ...
+- [ ] Hero + trust bar
+- [ ] Pain points ("Which of these sounds like you")
+- [ ] Process ("How we do it")
+- [ ] Cases (exclusive accordion, `<details name>`)
+- [ ] Testimonials (scroll-snap row + arrows)
+- [ ] About / team
+- [ ] Pricing
 - [ ] Contact section (UI only)
 
 ## M5: Contact form
@@ -81,3 +88,10 @@ The agent works top to bottom, ticks `[x]` when a task is done, and adds short n
 - Archivo and BBH Hegarty have no Cyrillic glyphs. What should Ukrainian headings use? (Options: a Cyrillic-capable look-alike for /uk/, or let the browser fall back to a system font.)
 - Helvetica Neue Thin is a commercial Linotype font. Does the studio have a web licence? If not, we need a free substitute.
 - Production domain?
+- Copy direction: Figma's one-founder "design agency" story or Webflow's two-founder "design & dev" story? Most copy differences follow from this (hero line, trust bar, process 01, about, logo text, "since 2021/2022"). Details in docs/audit.md §2.
+- Which contact details are current? Figma: mavpy_agency@gmail.com, +380 99 320 84 54. Webflow: mavpy.studio@gmail.com, +38 (099) 220 83 43.
+- Prices: Figma $500 / $700 / $800 (third card "Revamp your website"), or Webflow $1000 / $700 / "Care plan" $40/m? Also, the third card's title differs between Figma desktop and mobile.
+- Pain card 3: "High traffic, no enquiries" (Figma) or "Admins drown in calls" (Webflow)?
+- Testimonials: Figma's 4 or Webflow's 6? Dmytro's company and quote differ.
+- Facts for cases 2–5 (only the clinic has them), plus a full screenshot of the crypto site.
+- Natalia's avatar in higher resolution, and Dmytro's photo.
