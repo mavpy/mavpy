@@ -1,0 +1,83 @@
+---
+// Desktop (lg+): brand | contacts | nav columns (at +0 / +515 / +974 px of the 1226 column),
+// then the giant wordmark and the copyright. Mobile: one centred column in the order
+// brand, nav, contacts. DOM follows the mobile order; desktop swaps nav and contacts.
+import LogoWhite from '../../assets/logos/logo-white.svg';
+import Container from '../ui/Container.astro';
+import { site } from '../../data/site';
+import { getLang, localizePath, navLinks, t } from '../../i18n/utils';
+
+const lang = getLang(Astro.url);
+const { nav, footer } = t(lang);
+const link = 'transition-colors duration-300 ease-out-quart hover:text-orange';
+const contacts = [
+  { label: footer.email, value: site.email, href: `mailto:${site.email}` },
+  { label: footer.phone, value: site.phone.display, href: site.phone.href },
+  {
+    label: footer.instagram,
+    value: site.instagram.handle,
+    href: site.instagram.href,
+  },
+];
+---
+
+<footer class="bg-night pt-[27px] pb-[30px] text-center text-nav text-white lg:pt-[124px] lg:pb-[15px] lg:text-left">
+  <Container>
+    <div class="flex flex-col items-center lg:grid lg:grid-cols-[515fr_459fr_252fr] lg:items-start">
+      <div class="flex flex-col items-center lg:items-start">
+        <a href={localizePath(lang, '#top')} aria-label={nav.home}>
+          <LogoWhite aria-hidden="true" class="h-auto w-[120px] lg:w-[156px]" />
+        </a>
+        <p class="mt-[9px] text-[16px] lg:mt-[27px] lg:text-[28px]">
+          {footer.slogan}
+        </p>
+      </div>
+
+      <nav
+        aria-label={footer.navLabel}
+        class="mt-[67px] lg:order-3 lg:mt-[13px]"
+      >
+        <ul class="flex flex-col gap-[21px] uppercase lg:gap-2.5">
+          {navLinks.map(([id, key]) => (
+            <li>
+              <a href={`#${id}`} class={link}>
+                {nav[key]}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      <ul class="mt-[71px] flex flex-col gap-3 lg:order-2 lg:mt-3">
+        {contacts.map((c) => (
+          <li>
+            {c.label}{' '}
+            <a href={c.href} class={link}>
+              {c.value}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <!-- Decorative: the logo above already names the studio. BBH Hegarty caps are 0.7em tall, so
+         leading-[0.7] makes the box exactly the letters; the ink is 4.45em wide, so the size
+         fits the column; -ml cancels the M's side bearing so the ink starts at the column edge. -->
+    <p
+      aria-hidden="true"
+      class="mt-[93px] -ml-[0.04em] font-hegarty text-[length:min(280px,(100vw-48px)/4.45)] leading-[0.7] tracking-[0.06em] whitespace-nowrap text-paper lg:mt-[104px]"
+    >
+      {site.brand}
+    </p>
+
+    <p class="mt-12 text-center lg:mt-[95px]">
+      {footer.years}{' '}
+      <a
+        href={localizePath(lang, '#top')}
+        class:list={[link, 'underline underline-offset-2']}
+      >
+        {footer.studio}
+      </a>
+    </p>
+  </Container>
+</footer>

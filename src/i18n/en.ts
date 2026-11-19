@@ -10,16 +10,24 @@ export const en = {
   },
   nav: {
     label: 'Main',
+    home: 'MAVPY, home',
     howWeWork: 'How we work',
     cases: 'Cases',
     pricing: 'Pricing',
     contact: 'Contact',
+    menuOpen: 'Open menu',
+    menuClose: 'Close menu',
   },
-  langSwitch: {
-    label: 'Language',
-    // Shown on the link that switches to the *other* language.
-    en: 'EN',
-    uk: 'UA',
+  // The link that switches to the other language; its label is written in that language.
+  langSwitch: { short: 'UA', label: 'Українською' },
+  footer: {
+    navLabel: 'Footer',
+    slogan: 'Less noise. More results.',
+    email: 'EMAIL:',
+    phone: 'PHONE:',
+    instagram: 'INST:',
+    years: '2022-2026,',
+    studio: 'MAVPY DESIGN STUDIO',
   },
   hero: {
     // Figma sets "websites" in bold, so the line is split around it.

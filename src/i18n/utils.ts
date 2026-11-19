@@ -20,3 +20,11 @@ export const t = (lang: Lang) => dicts[lang];
 export function localizePath(lang: Lang, hash = '') {
   return getRelativeLocaleUrl(lang, '') + hash;
 }
+
+/** Page sections linked from the header and footer, in order: [anchor id, nav copy key]. */
+export const navLinks = [
+  ['how-we-work', 'howWeWork'],
+  ['cases', 'cases'],
+  ['pricing', 'pricing'],
+  ['contact', 'contact'],
+] as const;

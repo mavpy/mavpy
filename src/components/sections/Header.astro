@@ -1,0 +1,141 @@
+---
+// Desktop (md+): logo left, nav + language link right. Not sticky, as on Webflow.
+// Mobile: language link | centred logo (as in Figma) | menu button. The menu is a native
+// popover: Esc, focus return and top-layer stacking come free; the script only closes it on
+// link click and carries the current section over when switching language.
+import Logo from '../../assets/logos/logo.svg';
+import Container from '../ui/Container.astro';
+import { getLang, localizePath, navLinks, t } from '../../i18n/utils';
+
+const lang = getLang(Astro.url);
+const other = lang === 'en' ? 'uk' : 'en';
+const { nav, langSwitch } = t(lang);
+const home = localizePath(lang, '#top');
+const linkClass =
+  'uppercase transition-colors duration-300 ease-out-quart hover:text-grey';
+---
+
+<header class="pt-[19px] pb-4 md:pt-8.5">
+  <Container class="grid grid-cols-[1fr_auto_1fr] items-center md:flex md:justify-between">
+    <a
+      href={localizePath(other)}
+      hreflang={other}
+      lang={other}
+      aria-label={langSwitch.label}
+      data-lang-switch
+      class:list={[
+        linkClass,
+        'justify-self-start text-nav font-medium md:order-3 md:ml-6 lg:ml-10',
+      ]}
+    >
+      {langSwitch.short}
+    </a>
+
+    <a href={home} aria-label={nav.home} class="md:order-1 md:mr-auto">
+      <Logo aria-hidden="true" width={157} height={42} />
+    </a>
+
+    <nav aria-label={nav.label} class="hidden md:order-2 md:block">
+      <ul class="flex gap-6 text-nav font-medium lg:gap-10">
+        {navLinks.map(([id, key]) => (
+          <li>
+            <a href={`#${id}`} class={linkClass}>
+              {nav[key]}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <button
+      type="button"
+      popovertarget="mobile-menu"
+      aria-label={nav.menuOpen}
+      class="-mr-2 justify-self-end p-2 md:hidden"
+    >
+      <svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true">
+        <path
+          d="M3 7h22M3 14h22M3 21h22"
+          stroke="currentColor"
+          stroke-width="1.5"
+        />
+      </svg>
+    </button>
+  </Container>
+
+  <div
+    id="mobile-menu"
+    popover
+    class="m-0 h-dvh max-h-none w-full max-w-none bg-paper p-0 text-black md:hidden"
+  >
+    <!-- Same row as the closed header, so nothing moves when the menu opens. -->
+    <Container class="grid grid-cols-[1fr_auto_1fr] items-center pt-[19px]">
+      <a
+        href={localizePath(other)}
+        hreflang={other}
+        lang={other}
+        aria-label={langSwitch.label}
+        data-lang-switch
+        class:list={[linkClass, 'justify-self-start text-nav font-medium']}
+      >
+        {langSwitch.short}
+      </a>
+      <a href={home} aria-label={nav.home} data-menu-link>
+        <Logo aria-hidden="true" width={157} height={42} />
+      </a>
+      <button
+        type="button"
+        popovertarget="mobile-menu"
+        popovertargetaction="hide"
+        aria-label={nav.menuClose}
+        autofocus
+        class="-mr-2 justify-self-end p-2"
+      >
+        <svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true">
+          <path
+            d="M5 5l18 18M23 5L5 23"
+            stroke="currentColor"
+            stroke-width="1.5"
+          />
+        </svg>
+      </button>
+    </Container>
+    <nav aria-label={nav.label}>
+      <ul class="mt-16 flex flex-col items-center gap-8 text-card font-bold">
+        {navLinks.map(([id, key]) => (
+          <li>
+            <a href={`#${id}`} class={linkClass} data-menu-link>
+              {nav[key]}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  /* No page scroll behind the open menu. */
+  :global(html:has(#mobile-menu:popover-open)) {
+    overflow: hidden;
+  }
+</style>
+
+<script>
+  const menu = document.getElementById('mobile-menu');
+  menu
+    ?.querySelectorAll('[data-menu-link]')
+    .forEach((a) => a.addEventListener('click', () => menu.hidePopover()));
+
+  // Keep the reader's place: switch language to the section currently in view.
+  document
+    .querySelectorAll<HTMLAnchorElement>('[data-lang-switch]')
+    .forEach((a) =>
+      a.addEventListener('click', () => {
+        const current = [...document.querySelectorAll('main section[id]')]
+          .filter((s) => s.getBoundingClientRect().top <= innerHeight / 3)
+          .pop();
+        a.hash = current && current.id !== 'top' ? current.id : '';
+      }),
+    );
+</script>

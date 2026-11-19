@@ -42,8 +42,10 @@ The agent works top to bottom, ticks `[x]` when a task is done, and adds short n
 
 ## M3: Layout
 
-- [ ] Header: nav, language switcher, CTA, mobile menu (accessible, closes on Esc or on a link click)
-- [ ] Footer
+- [x] Header: nav, language switcher, CTA, mobile menu (accessible, closes on Esc or on a link click)
+  - **No CTA**: the Figma header has none (Figma wins); the CONTACT link covers it. The language link (UA/EN, not in Figma) sits after the nav on desktop and top-left on mobile, which keeps the logo centred as in Figma. The mobile menu is a native `popover` (Esc, focus return, top layer) plus 3 lines of JS for link-click close. The language link carries the section in view as the hash. Checked at 375/768/1024/1280/1920 in EN and UK.
+- [x] Footer
+  - Positions within 1px of the frames at 375 and 1920. Wordmark is BBH Hegarty sized to the column (`leading-[0.7]` = cap height, so the margins equal the Figma gaps). Contacts from Figma (`src/data/site.ts`). I added a space in "INST: @mavpy_agency" (Figma has none).
 
 ## M4: Sections (one task per section, filled in from docs/audit.md)
 

@@ -12,15 +12,23 @@ export const uk: Dict = {
   },
   nav: {
     label: 'Головне',
+    home: 'MAVPY, на головну',
     howWeWork: 'Як ми працюємо',
     cases: 'Кейси',
     pricing: 'Ціни',
     contact: 'Контакти',
+    menuOpen: 'Відкрити меню',
+    menuClose: 'Закрити меню',
   },
-  langSwitch: {
-    label: 'Мова',
-    en: 'EN',
-    uk: 'UA',
+  langSwitch: { short: 'EN', label: 'English' },
+  footer: {
+    navLabel: 'Нижня навігація',
+    slogan: 'Менше шуму. Більше результатів.',
+    email: 'EMAIL:',
+    phone: 'ТЕЛЕФОН:',
+    instagram: 'INST:',
+    years: '2022-2026,',
+    studio: 'ДИЗАЙН-СТУДІЯ MAVPY',
   },
   hero: {
     h1: {
