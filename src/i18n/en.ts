@@ -12,6 +12,13 @@ export type CaseItem = {
   url: string;
   facts: Facts;
 };
+export type Testimonial = {
+  quote: string[];
+  name: string;
+  company: string;
+  project: string;
+  avatar: 'natalia' | 'bram' | 'ivan' | 'placeholder';
+};
 // TODO(copy): placeholder until Serhii sends the real facts for a case.
 export const tbd = (lang: 'en' | 'uk' = 'en'): Facts => {
   const v = lang === 'uk' ? 'уточнюється' : 'to be confirmed';
@@ -154,6 +161,60 @@ export const en = {
         facts: tbd(),
       },
     ] as CaseItem[],
+  },
+  testimonials: {
+    label: 'clients',
+    title: "What it's like to work with us",
+    sub: 'Real people, real projects — read them for one thing: was it calm, was it worth it.',
+    listLabel: 'Client testimonials',
+    prev: 'Previous testimonial',
+    next: 'Next testimonial',
+    // Figma's 4 (Webflow has 6; open question). `quote` is split where the desktop frame breaks
+    // lines; mobile runs it together. TODO(copy): Serhii to confirm the set and the project lines.
+    items: [
+      {
+        quote: [
+          "“Booking used to eat half my administrator's day.",
+          'Now it runs on its own and patients just show up.',
+          'Serhii handled everything — I barely had to step in.”',
+        ],
+        name: 'Natalia M.',
+        company: 'SRT Massage clinic',
+        project: 'about full redesign site',
+        avatar: 'natalia',
+      },
+      {
+        quote: [
+          '“Serhii is strong in communication, super fast in delivering the scope, overdelivers and is a real professional.',
+          'Gladly recommend.”',
+        ],
+        name: 'Bram V.',
+        company: 'Space’M Online',
+        project: 'about design and develop',
+        avatar: 'bram',
+      },
+      {
+        quote: [
+          '“We had visitors but almost no enquiries.',
+          "Serhii didn't just redesign — he asked why people were leaving first.",
+          "That's the difference.",
+          'The form finally started filling.”',
+        ],
+        name: 'Ivan V.',
+        company: 'Doctor LOR',
+        project: 'about full design and develop',
+        avatar: 'ivan',
+      },
+      {
+        quote: [
+          '“What I remember most is how calm it was. Clear steps, honest timeline, no surprise costs at the end. Exactly what was quoted. Rare.”',
+        ],
+        name: 'Dmytro V.',
+        company: 'FitK online store',
+        project: 'about design and develop',
+        avatar: 'placeholder',
+      },
+    ] as Testimonial[],
   },
 };
 
