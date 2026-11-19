@@ -8,7 +8,9 @@ Port the Mavpy (Мавпы) web studio's Webflow site to code, matching the Figm
 
 ## Sources of truth
 
-- **Figma:** `https://www.figma.com/design/daR2lf05KfRp9cp6oHdj02/MAVPY-for-dev?node-id=0-1&p=f&t=G6gqhxcFwnKDoFUS-0`. Frames: desktop, mobile, UI kit. Read it through the Figma MCP server (`get_design_context`, `get_variable_defs`, `get_screenshot`). Before building a section, look at its desktop and mobile frames.
+- **Figma:** `https://www.figma.com/design/daR2lf05KfRp9cp6oHdj02/MAVPY-for-dev?node-id=0-1&p=f&t=G6gqhxcFwnKDoFUS-0`. Frames: desktop, mobile, UI kit. Before building a section, look at its desktop and mobile frames.
+  - **Don't use the Figma MCP server.** The account is on a View seat with a tiny call limit (it failed even on the first call of a session). Instead, ask Nikita for what you need: screenshots, full-res frame exports, assets, or values copied from Inspect (hex, font, size). Say exactly which node or element and what format.
+  - Full-res frame exports can be measured precisely: convert with `sips -s format bmp`, then read pixels in stdlib Python (color runs for backgrounds and edges, dark-pixel row profiles for text; Roboto cap height ≈ 0.711 em). Prefer values from the UI kit when it lists them.
 - **Live Webflow site:** `https://mavpy.webflow.io/` (published; easiest to read with curl). The designer comments link is `https://comments.webflow.com/comment/mavpy?project=1c4379eba7be62ba92ad8f28abf12e56&workflow=comment&pageId=6ab38924dac03dc90dad24da`. Use it for copy, behaviour (menus, hovers, animations) and anything Figma doesn't show.
 - **Figma wins on visuals and on copy** (decided 2026-11-19). Webflow is only for behaviour and for things Figma doesn't show (the mobile menu, form messages). Where they differ, use Figma and list the difference under "Questions for Serhii" so he can confirm.
 - The about section shows one founder (Serhii), as in Figma. There is no second co-founder or CTO block.
