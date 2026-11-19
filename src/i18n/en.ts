@@ -54,6 +54,27 @@ export const en = {
       'Reply within 24h',
     ],
   },
+  pain: {
+    label: 'situation',
+    title: 'Which of these sounds like you right now?',
+    sub: "Find yours below — that's what we'll build around.",
+    // Each title is [before, after] a line break that only shows on desktop (as in Figma).
+    cards: [
+      {
+        title: ['Your site', 'costs deals'],
+        text: 'Visitors make up their minds in seconds, long before they ever read your pitch.',
+      },
+      {
+        title: ["Referrals aren't", 'enough'],
+        text: "Luck isn't a strategy. You need a steady, predictable stream of qualified leads.",
+      },
+      {
+        // Figma copy; Webflow has "Admins drown in calls" (question for Serhii).
+        title: ['High traffic,', 'no enquiries'],
+        text: 'People visit, but the site fails to convert them into real business enquiries.',
+      },
+    ] as { title: [string, string]; text: string }[],
+  },
 };
 
 export type Dict = typeof en;

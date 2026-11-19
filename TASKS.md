@@ -51,7 +51,8 @@ The agent works top to bottom, ticks `[x]` when a task is done, and adds short n
 
 - [x] Hero + trust bar
   - Within ~1px of both frames (measured in the browser against the exports). Kit vs frames: MORE tracking is ~1% (not 5%), statement leading is 30/46 px; note and desktop trust items use −3%/−4% tracking. The button is 58 px (`py-[15.5px]`). "clients" is sized from `hero.clientsEm` per language (uk «клієнтів» = 3.5). On /uk/, "БІЛЬШЕ" falls back to regular Roboto (no Cyrillic in Hegarty), which is part of the open font question.
-- [ ] Pain points ("Which of these sounds like you")
+- [x] Pain points ("Which of these sounds like you")
+  - Cards are **equal width** (Nikita overruled Figma's 355/341/477). Desktop matches the frame (section 823 px, cards 367 px); mobile is within 1 px. On lg the cards use a subgrid so bodies line up when a uk title wraps. A `min-h` on a subgrid item doesn't grow its tracks, so the 367 px minimum sits on the body. The "situation |" tag is desktop-only and `aria-hidden`. Heading now switches to left-aligned at `lg`, not `md`.
 - [ ] Process ("How we do it")
 - [ ] Cases (exclusive accordion, `<details name>`)
 - [ ] Testimonials (scroll-snap row + arrows)
