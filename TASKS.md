@@ -91,7 +91,8 @@ The agent works top to bottom, ticks `[x]` when a task is done, and adds short n
 - [ ] Send Serhii the preview link plus the review list (copy, translation, team section)
 - [ ] Apply his fixes
 - [ ] Connect his domain on Vercel, then run a final check in production
-- [ ] README: stack, env vars, how to edit copy and translations
+- [ ] README: stack, env vars, how to edit copy and translations, plus screenshots (desktop + mobile, EN and UK) saved in `docs/screenshots/` and embedded in the README
+  - Take them from the final production build, after Serhii's fixes. Capture at 1440 and 375 px.
 
 ## Asks for Nikita
 
