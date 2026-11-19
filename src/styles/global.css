@@ -1,0 +1,19 @@
+@import 'tailwindcss';
+
+/* Fontsource: only the weights the raw assets shipped; trim in M2 once the UI kit is audited.
+   Archivo and BBH Hegarty have no Cyrillic (see TASKS.md questions). */
+@import '@fontsource/roboto/400.css';
+@import '@fontsource/roboto/500.css';
+@import '@fontsource/roboto/700.css';
+@import '@fontsource/archivo/800.css';
+@import '@fontsource/archivo/900.css';
+@import '@fontsource/bbh-hegarty/400.css';
+
+/* Not on Fontsource (commercial Linotype font), self-hosted. Licence to confirm with Serhii. */
+@font-face {
+  font-family: 'Helvetica Neue';
+  src: url('/fonts/HelveticaNeue-Thin.woff2') format('woff2');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
