@@ -88,7 +88,7 @@ The agent works top to bottom, ticks `[x]` when a task is done, and adds short n
 - Archivo and BBH Hegarty have no Cyrillic glyphs. What should Ukrainian headings use? (Options: a Cyrillic-capable look-alike for /uk/, or let the browser fall back to a system font.)
 - Helvetica Neue Thin is a commercial Linotype font. Does the studio have a web licence? If not, we need a free substitute.
 - Production domain?
-- Copy direction: we're building Figma's one-founder "design agency" version (decided 2026-11-19). Please confirm the Figma copy where it differs from Webflow: Most copy differences follow from this (hero line, trust bar, process 01, about, logo text, "since 2021/2022"). Details in docs/audit.md §2.
+- Copy direction: we're building Figma's one-founder "design agency" version (decided 2026-11-19). Please confirm the Figma copy where it differs from Webflow: hero line, trust bar, process 01, about, logo text, "since 2021/2022". Details in docs/audit.md §2.
 - Which contact details are current? Figma: mavpy_agency@gmail.com, +380 99 320 84 54. Webflow: mavpy.studio@gmail.com, +38 (099) 220 83 43.
 - Prices: Figma $500 / $700 / $800 (third card "Revamp your website"), or Webflow $1000 / $700 / "Care plan" $40/m? Also, the third card's title differs between Figma desktop and mobile.
 - Pain card 3: "High traffic, no enquiries" (Figma) or "Admins drown in calls" (Webflow)?
