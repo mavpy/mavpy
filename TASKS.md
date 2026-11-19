@@ -12,8 +12,8 @@ The agent works top to bottom, ticks `[x]` when a task is done, and adds short n
   - Astro 7, Tailwind 4.3. `site` in astro.config.mjs is a placeholder until the domain is known. `npm run format` runs Prettier.
 - [x] Sort `_raw-assets/` (from Serhii's Drive): pictures -> `src/assets/images/`, logos/icons -> `src/assets/logos|icons/`, fonts -> `public/fonts/` + `@font-face` (or Fontsource if available; check Cyrillic), favicon.svg + favicon_dark.svg -> `public/` (dark via `media="(prefers-color-scheme: dark)"`), webclip.svg -> `public/apple-touch-icon.png` 180x180. Then delete `_raw-assets/`
   - Fonts: Roboto 400/500/700, Archivo 800/900 and BBH Hegarty 400 come from Fontsource (imported in global.css). Helvetica Neue Thin isn't on Fontsource, so it's self-hosted as `public/fonts/HelveticaNeue-Thin.woff2`. **Archivo and BBH Hegarty have no Cyrillic** (neither the files nor Fontsource). Image filenames are slugified; the arrow variants are in `src/assets/icons/arrows*/`.
-- [ ] Private GitHub repo `mavpy-site`, first push, Vercel preview deploy
-  - Repo created and pushed: github.com/yeldynov/mavpy-site (private). Vercel is still to do: the MCP connection has no access to the team scope `nicos-projects-6b517826`, and the Vercel CLI isn't installed. Import the repo in the Vercel dashboard (framework: Astro), or grant MCP access and retry.
+- [x] Private GitHub repo `mavpy-site`, first push, Vercel preview deploy
+  - github.com/yeldynov/mavpy-site (private). Deployed by hand at https://mavpy-site.vercel.app/ (matches `site` in astro.config.mjs).
 
 ## M1: Audit (no code)
 
