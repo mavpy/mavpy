@@ -70,7 +70,7 @@ Components stay presentational: copy comes in through props or `t()`. **No hard-
 
 ## Working rules
 
-- Work one TASKS.md task at a time. When a task is done: run `npm run build`, tick the box, add a one-line note if something is worth remembering, and commit with a message like `feat(hero): ...`
+- Work one TASKS.md task at a time. When a task is done: run `npm run check` and `npm run build`, tick the box, add a one-line note if something is worth remembering, and commit with a message like `feat(hero): ...`
 - Small commits, one per task or section
 - Don't add dependencies beyond the ones above without saying why
 - When something is blocked on Serhii, add it to "Questions for Serhii" in TASKS.md and move on to the next task

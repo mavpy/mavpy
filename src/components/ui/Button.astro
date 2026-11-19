@@ -12,24 +12,31 @@ type Props = {
 } & (HTMLAttributes<'a'> | HTMLAttributes<'button'>);
 
 const { size = 'lg', block = false, class: className, ...rest } = Astro.props;
-const Tag = 'href' in rest && rest.href ? 'a' : 'button';
 const sizes = {
   lg: 'text-btn px-[38px] py-[15.5px]',
   sm: 'text-btn-sm px-[18px] py-[11px]',
 };
+const classes = [
+  'inline-flex items-center justify-center gap-2 rounded-btn bg-orange text-center font-medium text-black shadow-btn',
+  'transition-colors duration-300 hover:bg-orange-300 active:bg-orange-700',
+  'disabled:cursor-not-allowed disabled:bg-orange-200 disabled:shadow-none aria-busy:cursor-wait',
+  sizes[size],
+  block && 'w-full',
+  className,
+];
 ---
 
-<Tag
-  {...(Tag === 'button' ? { type: 'button' } : {})}
-  {...rest}
-  class:list={[
-    'inline-flex items-center justify-center gap-2 rounded-btn bg-orange text-center font-medium text-black shadow-btn',
-    'transition-colors duration-300 hover:bg-orange-300 active:bg-orange-700',
-    'disabled:cursor-not-allowed disabled:bg-orange-200 disabled:shadow-none aria-busy:cursor-wait',
-    sizes[size],
-    block && 'w-full',
-    className,
-  ]}
->
-  <slot />
-</Tag>
+{/* Two explicit branches rather than a dynamic <Tag>: TS can't type `type` on an a|button union. */}
+{'href' in rest && rest.href ? (
+  <a {...(rest as HTMLAttributes<'a'>)} class:list={classes}>
+    <slot />
+  </a>
+) : (
+  <button
+    type="button"
+    {...(rest as HTMLAttributes<'button'>)}
+    class:list={classes}
+  >
+    <slot />
+  </button>
+)}
