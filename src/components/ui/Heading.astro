@@ -4,13 +4,20 @@
 interface Props {
   as?: 'h1' | 'h2' | 'h3' | 'p';
   size?: 'h2' | 'card' | 'statement';
+  /** Centred at every breakpoint (the contact CTA); h2 is otherwise left-aligned from lg. */
+  center?: boolean;
   class?: string;
 }
-const { as: Tag = 'h2', size = 'h2', class: className } = Astro.props;
+const {
+  as: Tag = 'h2',
+  size = 'h2',
+  center = false,
+  class: className,
+} = Astro.props;
 const styles = {
   // Archivo ExtraBold 64/60; centred below lg, left-aligned from lg (like the hero).
   // The mobile frame sets it ~3% tighter (measured: same cap height, ~6% narrower lines).
-  h2: 'font-display text-h2 font-extrabold text-center lg:text-left text-balance max-lg:tracking-[-0.03em]',
+  h2: 'font-display text-h2 font-extrabold text-center text-balance max-lg:tracking-[-0.03em]',
   // Roboto Bold 40.
   card: 'text-card font-bold',
   // Archivo Black 48, -2%.
@@ -18,6 +25,12 @@ const styles = {
 };
 ---
 
-<Tag class:list={[styles[size], className]}>
+<Tag
+  class:list={[
+    styles[size],
+    size === 'h2' && !center && 'lg:text-left',
+    className,
+  ]}
+>
   <slot />
 </Tag>

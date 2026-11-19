@@ -1,0 +1,84 @@
+---
+// Contact ("Tell us your goal, we'll price it"). Restyled on purpose, not a 1:1 copy of the frame
+// (the Figma block looks unfinished): shared h2 and subline, one underline field style everywhere,
+// the lg button. Structure, copy and outer spacing follow the frames.
+// lg: sand card with an orange left border around a white form card. Mobile: no sand card (as in
+// the mobile frame). The form is a 2-column grid; each field is a 3-row subgrid (label, control,
+// error), so the button sits on the select's row however tall the error text gets.
+// Delivery, client validation and the status message logic come in M5.
+import Button from '../ui/Button.astro';
+import Heading from '../ui/Heading.astro';
+import Input from '../ui/Input.astro';
+import Section from '../ui/Section.astro';
+import { getLang, t } from '../../i18n/utils';
+
+const { contact, pricing } = t(getLang(Astro.url));
+// Goal options follow the pricing cards, plus "Other". Values are language-neutral for the lead.
+const goals = [
+  ['attract', pricing.items[0].title],
+  ['launch', pricing.items[1].title],
+  ['revamp', pricing.items[2].title],
+  ['other', contact.other],
+] as const;
+const field = 'lg:row-span-3 lg:grid lg:grid-rows-subgrid lg:gap-y-2';
+---
+
+<Section id="contact" class="pt-[80px] pb-[82px] lg:pt-[113px] lg:pb-[192px]">
+  <div class="lg:-ml-[4px] lg:rounded-card lg:border-l-[5px] lg:border-orange lg:bg-sand lg:px-[109px] lg:pt-[62px] lg:pb-[58px]">
+    <!-- Centred on desktop too, unlike other h2s: it's the closing call to action. -->
+    <Heading center class="mx-auto max-w-[720px]">
+      {contact.title}
+    </Heading>
+    <p class="mx-auto mt-[23px] max-w-[290px] text-center text-[15px] leading-[18px] lg:mt-[30px] lg:max-w-[30em] lg:text-body lg:leading-[1.172]">
+      {contact.sub}
+    </p>
+
+    <form
+      method="post"
+      class="mt-[49px] grid gap-y-3 rounded-card bg-white px-[21px] pt-[30px] pb-[12px] lg:mt-[44px] lg:grid-cols-2 lg:gap-x-[64px] lg:gap-y-0 lg:px-[73px] lg:pt-[42px] lg:pb-[20px]"
+    >
+      <Input
+        label={contact.name}
+        name="name"
+        autocomplete="name"
+        required
+        minlength={2}
+        maxlength={100}
+        class={field}
+      />
+      <Input
+        label={contact.email}
+        name="email"
+        type="email"
+        autocomplete="email"
+        required
+        maxlength={254}
+        class={field}
+      />
+      <Input
+        as="select"
+        label={contact.goal}
+        name="goal"
+        required
+        class={field}
+      >
+        {goals.map(([value, label]) => (
+          <option value={value}>{label}</option>
+        ))}
+      </Input>
+      <Button
+        type="submit"
+        block
+        class="mt-4 lg:col-start-2 lg:row-start-5 lg:mt-0 lg:w-auto lg:self-center lg:justify-self-start"
+      >
+        {contact.cta}
+      </Button>
+      <!-- Form-level success/error message (M5), styled like the field errors. On lg it sits in
+           the button's error row, so its space is already reserved. -->
+      <p
+        role="status"
+        class="mt-2 min-h-[1.2em] text-btn-sm data-[tone=error]:text-error data-[tone=success]:text-success lg:col-start-2 lg:row-start-6"
+      ></p>
+    </form>
+  </div>
+</Section>

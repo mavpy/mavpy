@@ -276,6 +276,17 @@ export const en = {
       },
     ],
   },
+  contact: {
+    title: "Tell us your goal, we'll price it",
+    // TODO(copy): "from $500" follows the Figma prices (Webflow starts at $1000).
+    sub: "You've seen the ballpark — from $500. Exact figure on a short call. No sales marathon. We reply within 24 hours.",
+    name: 'Your Name',
+    email: 'Your E-mail',
+    goal: 'Your goal',
+    // Goal options are the pricing card titles plus this one.
+    other: 'Other',
+    cta: 'Get my estimate',
+  },
 };
 
 export type Dict = typeof en;
