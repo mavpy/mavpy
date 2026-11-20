@@ -3,7 +3,7 @@
 /* Fontsource. These are exactly the weights the Figma UI kit uses (1:1886):
    Roboto 400/500/700 + 400 italic (body, nav, buttons, card titles, about paragraphs), Archivo 400/500 (about card title) and 800/900 (h2, statement),
    BBH Hegarty 400 ("MORE"). Each Fontsource CSS file ships every subset behind unicode-range,
-   so browsers only download the Cyrillic file on /ua/.
+   so browsers only download the Cyrillic file on /uk/.
    Archivo and BBH Hegarty have no Cyrillic at all, so their stacks fall back to Roboto,
    which keeps Ukrainian headings in a heavy Roboto rather than a random system font
    (open question for Serhii in TASKS.md). */

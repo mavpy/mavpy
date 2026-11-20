@@ -11,14 +11,12 @@ export default defineConfig({
   adapter: vercel(),
   i18n: {
     defaultLocale: 'en',
-    // URL says /ua/ (the country, what people expect); the language code stays `uk` (ISO 639-1),
-    // which is what <html lang>, hreflang and og:locale use.
-    locales: ['en', { path: 'ua', codes: ['uk'] }],
+    locales: ['en', 'uk'],
     routing: { prefixDefaultLocale: false },
   },
   // Sitemap writes hreflang alternates for each page from the same locale list.
   integrations: [
-    sitemap({ i18n: { defaultLocale: 'en', locales: { en: 'en', ua: 'uk' } } }),
+    sitemap({ i18n: { defaultLocale: 'en', locales: { en: 'en', uk: 'uk' } } }),
   ],
   // Lead delivery secrets, read through `astro:env/server` so any adapter (Vercel now, Cloudflare
   // later) works. Optional: a channel with missing config just counts as failed (see lib/leads.ts).

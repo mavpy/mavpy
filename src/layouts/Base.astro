@@ -15,7 +15,7 @@ const { meta, a11y } = t(lang);
 const site = Astro.site ?? Astro.url;
 const canonical = new URL(Astro.url.pathname, site).href;
 const ogLocale = { en: 'en_US', uk: 'uk_UA' } as const;
-// Helvetica Thin is "clients" (the LCP) on both pages. On /ua/ "БІЛЬШЕ" falls back to Roboto (no Cyrillic in Hegarty).
+// Helvetica Thin is "clients" (the LCP) on both pages. On /uk/ "БІЛЬШЕ" falls back to Roboto (no Cyrillic in Hegarty).
 const preloadFonts = [
   '/fonts/HelveticaNeue-Thin.woff2',
   ...(lang === 'uk'

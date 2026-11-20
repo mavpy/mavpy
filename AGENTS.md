@@ -39,7 +39,7 @@ src/
   i18n/en.ts, i18n/uk.ts    all copy, same keys in both (uk typed as `typeof en`)
   i18n/utils.ts             getLang(Astro.url), t(lang), localized path helper
   pages/index.astro         English (/)
-  pages/ua/index.astro      Ukrainian (/ua/; language code stays `uk`)
+  pages/uk/index.astro      Ukrainian (/uk/)
   actions/index.ts          contact form action
 ```
 
@@ -48,6 +48,7 @@ Components stay presentational: copy comes in through props or `t()`. **No hard-
 ## i18n
 
 - Astro built-in i18n: `defaultLocale: 'en'`, `locales: ['en', 'uk']`, `prefixDefaultLocale: false`
+- URL paths use the ISO 639-1 language code, same as `hreflang` and `<html lang>`: Ukrainian is `/uk/`, not `/ua/` (`ua` is the country code). Decided 2026-11-20
 - A language switcher in the header keeps the same section anchor when switching
 - `<html lang>`, `hreflang` alternates, and localized `<title>`/description/OG for each language
 - Ukrainian copy: draft the translation in natural Ukrainian (not word-for-word) and mark it `// review: Serhii` until he approves it
