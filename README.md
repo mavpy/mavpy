@@ -2,7 +2,16 @@
 
 One-page site for the MAVPY (Мавпи) web studio, in English (`/`) and Ukrainian (`/uk/`), with a contact form that delivers leads to Telegram and Airtable.
 
-<!-- Screenshots (desktop 1440 + mobile 375, EN and UK) go in docs/screenshots/ once Serhii's fixes are in. -->
+| English                                              | Ukrainian                                              |
+| ---------------------------------------------------- | ------------------------------------------------------ |
+| ![Desktop, English](docs/screenshots/desktop-en.png) | ![Desktop, Ukrainian](docs/screenshots/desktop-uk.png) |
+
+<p>
+  <img src="docs/screenshots/mobile-en.png" alt="Mobile, English" width="300">
+  <img src="docs/screenshots/mobile-uk.png" alt="Mobile, Ukrainian" width="300">
+</p>
+
+<!-- Desktop 1440×900 @1x, mobile 375×812 @2x, from production. Retake after Serhii's fixes. -->
 
 ## Stack
 

@@ -121,9 +121,9 @@ The agent works top to bottom, ticks `[x]` when a task is done, and adds short n
 - [ ] Swap Telegram bot/group and Airtable base to Mavpy accounts (only env var values change)
 - [ ] Domain + e-mail sending (later phase): buy the domain (Cloudflare Registrar, at cost), Resend → Domains → add it (one-click DNS on Cloudflare: DKIM, SPF/MX on `send.`, DMARC `p=none`), verify, then set `MAIL_FROM="MAVPY <hello@domain>"` + `RESEND_API_KEY` on the host. Optional: Cloudflare Email Routing to forward hello@ to Gmail. Full steps in the M5 auto-reply plan notes.
 - [ ] Move hosting to Cloudflare (free, commercial use allowed; Vercel Hobby is non-commercial): `@astrojs/cloudflare` instead of `@astrojs/vercel`, re-enter the secrets, point DNS
-- [ ] README: stack, env vars, how to edit copy and translations, plus screenshots (desktop + mobile, EN and UK) saved in `docs/screenshots/` and embedded in the README
+- [x] README: stack, env vars, how to edit copy and translations, plus screenshots (desktop + mobile, EN and UK) saved in `docs/screenshots/` and embedded in the README
   - Take them from the final production build, after Serhii's fixes. Capture at 1440 and 375 px.
-  - README written (2026-11-20). Screenshots still to do after Serhii's fixes; a comment in README marks the spot.
+  - README written (2026-11-20). Screenshots: first screen of production, desktop 1440×900 @1x and mobile 375×812 @2x (DevTools device emulation; plain headless Chrome won't go narrower than ~500 px). Retake after Serhii's fixes.
 
 ## Asks for Nikita
 
