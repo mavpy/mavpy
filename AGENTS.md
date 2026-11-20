@@ -39,7 +39,7 @@ src/
   i18n/en.ts, i18n/uk.ts    all copy, same keys in both (uk typed as `typeof en`)
   i18n/utils.ts             getLang(Astro.url), t(lang), localized path helper
   pages/index.astro         English (/)
-  pages/uk/index.astro      Ukrainian (/uk/)
+  pages/ua/index.astro      Ukrainian (/ua/; language code stays `uk`)
   actions/index.ts          contact form action
 ```
 

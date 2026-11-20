@@ -105,7 +105,7 @@ The agent works top to bottom, ticks `[x]` when a task is done, and adds short n
   - `.rise` (hero, load-time, staggered by `--d`; the "MORE" bar wipes in), `.reveal` (`animation-timeline: view()`, staggered per row by `--i`), and `@view-transition` for EN⇄UK; all live in global.css inside `prefers-reduced-motion: no-preference` (verified: 0 animations under reduce). Reveals use `transform`, hover lifts use `translate`, so they compose. h2 reveals come from Heading.astro. Scroll-driven reveals replay when you scroll back up and are static in Firefox. Desktop testimonial cards don't reveal (their view timeline binds to the horizontal scroller), which is harmless. Hovers: card lift (pain, pricing), case-link arrow nudge, underline draw on nav/footer links, mascot tilt. Card got a `style` prop.
 - [ ] Image optimisation, lazy loading, font preloads
 - [ ] Accessibility pass (keyboard, contrast, landmarks, alt text)
-- [ ] Lighthouse 95+ on `/` and `/uk/`, mobile and desktop
+- [ ] Lighthouse 95+ on `/` and `/ua/`, mobile and desktop
 - [ ] Favicon set, OG image, robots.txt, 404 page
 
 ## M8: Handoff
@@ -130,7 +130,7 @@ The agent works top to bottom, ticks `[x]` when a task is done, and adds short n
 - Auto-reply e-mail wording (EN + UK drafts in `contact.autoReply`): OK?
 - Final copy and team section: when?
 - Who approves the Ukrainian translation?
-- Archivo and BBH Hegarty have no Cyrillic glyphs. What should Ukrainian headings use? (Options: a Cyrillic-capable look-alike for /uk/, or let the browser fall back to a system font.)
+- Archivo and BBH Hegarty have no Cyrillic glyphs. What should Ukrainian headings use? (Options: a Cyrillic-capable look-alike for /ua/, or let the browser fall back to a system font.)
 - Helvetica Neue Thin is a commercial Linotype font. Does the studio have a web licence? If not, we need a free substitute.
 - Copy direction: we're building Figma's one-founder "design agency" version (decided 2026-11-19). Please confirm the Figma copy where it differs from Webflow: hero line, trust bar, process 01, about, logo text, "since 2021/2022". Details in docs/audit.md §2.
 - Which contact details are current? Figma: mavpy_agency@gmail.com, +380 99 320 84 54. Webflow: mavpy.studio@gmail.com, +38 (099) 220 83 43.
