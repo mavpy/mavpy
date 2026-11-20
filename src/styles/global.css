@@ -2,28 +2,31 @@
 
 /* Fontsource. These are exactly the weights the Figma UI kit uses (1:1886):
    Roboto 400/500/700 + 400 italic (body, nav, buttons, card titles, about paragraphs), Archivo 400/500 (about card title) and 800/900 (h2, statement),
-   BBH Hegarty 400 ("MORE"). Each Fontsource CSS file ships every subset behind unicode-range,
-   so browsers only download the Cyrillic file on /uk/.
+   BBH Hegarty 400 ("MORE"). fonts.css keeps only the latin + cyrillic faces, behind unicode-range,
+   so browsers only download the Cyrillic files on /uk/.
    Archivo and BBH Hegarty have no Cyrillic at all, so their stacks fall back to Roboto,
    which keeps Ukrainian headings in a heavy Roboto rather than a random system font
    (open question for Serhii in TASKS.md). */
-@import '@fontsource/roboto/400.css';
-@import '@fontsource/roboto/500.css';
-@import '@fontsource/roboto/700.css';
-@import '@fontsource/roboto/400-italic.css';
-@import '@fontsource/archivo/400.css';
-@import '@fontsource/archivo/500.css';
-@import '@fontsource/archivo/800.css';
-@import '@fontsource/archivo/900.css';
-@import '@fontsource/bbh-hegarty/400.css';
+@import './fonts.css';
 
-/* Not on Fontsource (commercial Linotype font), self-hosted. Licence to confirm with Serhii. */
+/* Not on Fontsource (commercial Linotype font), self-hosted. Licence to confirm with Serhii.
+   It only sets the hero word, so it's subset (pyftsubset) and split like Fontsource: latin 22 KB +
+   cyrillic 10 KB instead of the 105 KB original. */
 @font-face {
   font-family: 'Helvetica Neue Thin';
-  src: url('/fonts/HelveticaNeue-Thin.woff2') format('woff2');
+  src: url('/fonts/HelveticaNeue-Thin-latin.woff2') format('woff2');
   font-weight: 100;
   font-style: normal;
   font-display: swap;
+  unicode-range: U+0020-007E, U+00A0-00FF, U+2018-201E, U+2026;
+}
+@font-face {
+  font-family: 'Helvetica Neue Thin';
+  src: url('/fonts/HelveticaNeue-Thin-cyrillic.woff2') format('woff2');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0400-045F, U+0490-0491;
 }
 
 /* Design tokens. Source: Figma UI kit (1:1886) plus pixel measurements of the desktop (1:331,

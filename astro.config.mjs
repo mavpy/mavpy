@@ -35,6 +35,8 @@ export default defineConfig({
       }),
     },
   },
+  // One-page site: inlining the CSS saves a render-blocking round trip before first paint.
+  build: { inlineStylesheets: 'always' },
   vite: {
     plugins: [tailwindcss()],
   },
