@@ -123,6 +123,7 @@ The agent works top to bottom, ticks `[x]` when a task is done, and adds short n
 - [ ] Move hosting to Cloudflare (free, commercial use allowed; Vercel Hobby is non-commercial): `@astrojs/cloudflare` instead of `@astrojs/vercel`, re-enter the secrets, point DNS
 - [ ] README: stack, env vars, how to edit copy and translations, plus screenshots (desktop + mobile, EN and UK) saved in `docs/screenshots/` and embedded in the README
   - Take them from the final production build, after Serhii's fixes. Capture at 1440 and 375 px.
+  - README written (2026-11-20). Screenshots still to do after Serhii's fixes; a comment in README marks the spot.
 
 ## Asks for Nikita
 
