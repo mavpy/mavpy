@@ -70,7 +70,7 @@ The agent works top to bottom, ticks `[x]` when a task is done, and adds short n
   - **Desktop grid:** the 2×2 grid leaves dead space (fields fill about half of each column), and the button is the small variant floating next to the select. Make the fields fill their columns. Put the button on the select's row, aligned to the field baseline or bottom, or span it across the full width. Use the `lg` button as in the hero, since this is the page's main CTA.
   - **Mobile:** the field right inset is larger than the left. Use symmetric card padding, the same as the other mobile cards.
   - **States the frame doesn't show:** design hover, focus-visible, invalid with an inline error, disabled/loading on the button, and a slot for the form-level success/error message. Reserve space so the layout doesn't jump. Use the existing tokens only (`error`, the orange ramp, greys).
-  - Process: show Nikita a screenshot of the polished version (desktop + mobile, EN + UK) for sign-off before ticking. List the deviations from Figma under "Questions for Serhii".
+  - Process: show Nikita a screenshot of the polished version (desktop + mobile, EN + UK) for sign-off before ticking. List the deviations from Figma under "To settle with Serhii".
   - Signed off by Nikita. Outer rhythm within ~1px of both frames; cards are taller (desktop sand card 639 vs 609) because labels sit above fields and error lines are reserved. lg form is a 2-col grid of 3-row subgrids (label/control/error), so the button sits on the select row; the form message reuses the button's error row. Mobile has no sand card (as in the frame). Goal values are `attract|launch|revamp|other`. Heading got a `center` prop. Screenshots were taken via headless Chrome over CDP when the extension dropped.
 
 ## M5: Contact form
@@ -123,30 +123,46 @@ The agent works top to bottom, ticks `[x]` when a task is done, and adds short n
 - [ ] Move hosting to Cloudflare (free, commercial use allowed; Vercel Hobby is non-commercial): `@astrojs/cloudflare` instead of `@astrojs/vercel`, re-enter the secrets, point DNS
 - [x] README: stack, env vars, how to edit copy and translations, plus screenshots (desktop + mobile, EN and UK) saved in `docs/screenshots/` and embedded in the README
   - Take them from the final production build, after Serhii's fixes. Capture at 1440 and 375 px.
-  - README written (2026-11-20). Screenshots: first screen of production, desktop 1440×900 @1x and mobile 375×812 @2x (DevTools device emulation; plain headless Chrome won't go narrower than ~500 px). Retake after Serhii's fixes.
+  - README written (2026-11-20). Screenshots: desktop only (Nikita, 2026-11-20), 1440 px @1x from production: hero EN + UK, plus how-we-work, cases, pricing, contact sections (DevTools script: scrolls the page first for lazy images, grows the viewport to the section height or off-screen parts render blank). Retake after Serhii's fixes.
 
-## Asks for Nikita
+## Decisions for Nikita
 
-- Decide: analytics (none / Plausible / GA) and the production domain name.
+Technical and setup calls that are Nikita's alone.
+
+- Analytics: none, Plausible or GA?
+- Production domain name (registrar: Cloudflare, at cost, per M8).
+- Mavpy-owned accounts for the Telegram bot and group, Airtable, Resend and hosting: who creates and owns them? (M8 swaps the personal ones out; only env var values change.)
+- When to move hosting from Vercel Hobby (non-commercial) to Cloudflare: before launch, or right after?
+
+### Assets from Nikita
 
 - Mascot (Figma `1:512`): 2x PNG with a transparent background, cropped as in the desktop frame. The current one is a 1x cut-out from Webflow.
 
-## Questions for Serhii
+## To settle with Serhii
 
+Copy, translation, prices, contact details and brand content. Nikita and Serhii decide these together. The site is the source of truth; changes come from Serhii through Figma.
+
+**Copy and content**
+- Contact subline says "from $500", but the lowest price on the site is now $700 (cards: $1000 / $700 / Care plan $40/m). What should it say?
+- The form's goal list still has "Revamp your website", which no longer has a pricing card. Keep it, or swap it for "Care plan"?
+- Testimonial project lines read oddly in English ("full redesign site", "design and develop", "full design and dev"). Rewrite, e.g. "Full redesign", "Design and development"?
+- About says "Five years" (since 2021). Fine to hard-code, or should the count update itself each year?
 - Auto-reply e-mail wording (EN + UK drafts in `contact.autoReply`): OK?
-- Final copy and team section: when?
-- Who approves the Ukrainian translation?
-- Archivo and BBH Hegarty have no Cyrillic glyphs. What should Ukrainian headings use? (Options: a Cyrillic-capable look-alike for /uk/, or let the browser fall back to a system font.)
-- Helvetica Neue Thin is a commercial Linotype font. Does the studio have a web licence? If not, we need a free substitute.
-- Copy direction: we're building Figma's one-founder "design agency" version (decided 2026-11-19). Please confirm the Figma copy where it differs from Webflow: hero line, trust bar, process 01, about, logo text, "since 2021/2022". Details in docs/audit.md §2.
-- Which contact details are current? Figma: mavpy_agency@gmail.com, +380 99 320 84 54. Webflow: mavpy.studio@gmail.com, +38 (099) 220 83 43.
-- Prices: Figma $500 / $700 / $800 (third card "Revamp your website"), or Webflow $1000 / $700 / "Care plan" $40/m? Also, the third card's title differs between Figma desktop and mobile.
-- Pain card 3: "High traffic, no enquiries" (Figma) or "Admins drown in calls" (Webflow)?
-- Testimonials: Figma's 4 or Webflow's 6? Dmytro's company and quote differ.
+- Ukrainian translation: review it together (the whole of `uk.ts` is marked `// review: Serhii`).
+
+**Contact details**
+- The site shows mavpy_agency@gmail.com and +380 99 320 84 54 (from Figma). Webflow had mavpy.studio@gmail.com and +38 (099) 220 83 43. Which are current?
+
+**Assets**
 - Facts and live URLs for cases 2–5 (only the clinic has them), plus a full screenshot of the crypto site (the open crypto card is an upscaled strip until then).
-- Cases on mobile: Figma has an orange (#ff6b31) "View live site →" and Archivo-looking titles; we use desktop's black link with ↗ and Roboto titles (contrast, consistency). OK?
-- Natalia's avatar in higher resolution, and Dmytro's photo.
-- Testimonial project lines read oddly in English ("about full redesign site", "about design and develop"). Keep as in Figma, or rewrite (e.g. "Full redesign", "Design and development")?
-- About: "Founded 2022" here vs "since 2021" on Webflow, and "Three years in" (2022 + 3 = 2025). Which year, and should the count update itself?
-- Contact section: the Figma block looked unfinished, so we restyled it to match the rest of the site: shared heading style, one underline field style on all screens, a full-size button, and designed error/loading states. Structure and copy are unchanged. OK?
-- Testimonials on desktop: we added ‹ › arrows (Webflow has them, Figma doesn't) so mouse users can scroll the row. OK?
+- Photos: Natalia's avatar in higher resolution; Dmytro, Julia and Daria have grey placeholders.
+
+**Fonts**
+- Archivo and BBH Hegarty have no Cyrillic glyphs. What should Ukrainian headings use? (A Cyrillic-capable look-alike for /uk/, or the browser's fallback system font.)
+- Helvetica Neue Thin is a commercial Linotype font. Does the studio have a web licence? If not, we need a free substitute.
+
+**Design choices the build made differently from Figma** (Serhii to update Figma, or ask to revert)
+- Contact section: restyled to match the rest of the site (shared heading style, one underline field style on all screens, a full-size button, designed error/loading states). Structure unchanged.
+- Cases on mobile: black link with ↗ and Roboto titles, as on desktop, instead of Figma's orange (#ff6b31, fails contrast on sand) "View live site →".
+- Testimonials on desktop: ‹ › arrows so mouse users can scroll the row (not in Figma).
+- Copy was synced from Webflow (hero note, trust bar, pain card 3, process, 6 testimonials, about card, pricing, form labels, footer years), so Figma's text is now out of date in those places.

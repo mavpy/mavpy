@@ -6,12 +6,13 @@ One-page site for the MAVPY (Мавпи) web studio, in English (`/`) and Ukrain
 | ---------------------------------------------------- | ------------------------------------------------------ |
 | ![Desktop, English](docs/screenshots/desktop-en.png) | ![Desktop, Ukrainian](docs/screenshots/desktop-uk.png) |
 
-<p>
-  <img src="docs/screenshots/mobile-en.png" alt="Mobile, English" width="300">
-  <img src="docs/screenshots/mobile-uk.png" alt="Mobile, Ukrainian" width="300">
-</p>
+| How we work                                                      | Pricing                                                  |
+| ---------------------------------------------------------------- | -------------------------------------------------------- |
+| ![How we work section](docs/screenshots/desktop-how-we-work.png) | ![Pricing section](docs/screenshots/desktop-pricing.png) |
+| **Cases**                                                        | **Contact form**                                         |
+| ![Cases section](docs/screenshots/desktop-cases.png)             | ![Contact section](docs/screenshots/desktop-contact.png) |
 
-<!-- Desktop 1440×900 @1x, mobile 375×812 @2x, from production. Retake after Serhii's fixes. -->
+<!-- Desktop 1440 px @1x, from production. Retake after Serhii's fixes. -->
 
 ## Stack
 
