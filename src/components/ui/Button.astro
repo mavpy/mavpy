@@ -11,7 +11,14 @@ type Props = {
   class?: string;
 } & (HTMLAttributes<'a'> | HTMLAttributes<'button'>);
 
-const { size = 'lg', block = false, class: className, ...rest } = Astro.props;
+// `type` is pulled out: spreading it after a default would render the attribute twice (first wins).
+const {
+  size = 'lg',
+  block = false,
+  class: className,
+  type,
+  ...rest
+} = Astro.props;
 const sizes = {
   lg: 'text-btn px-[38px] py-[15.5px]',
   sm: 'text-btn-sm px-[18px] py-[11px]',
@@ -28,13 +35,13 @@ const classes = [
 
 {/* Two explicit branches rather than a dynamic <Tag>: TS can't type `type` on an a|button union. */}
 {'href' in rest && rest.href ? (
-  <a {...(rest as HTMLAttributes<'a'>)} class:list={classes}>
+  <a {...(rest as HTMLAttributes<'a'>)} type={type} class:list={classes}>
     <slot />
   </a>
 ) : (
   <button
-    type="button"
     {...(rest as HTMLAttributes<'button'>)}
+    type={(type as HTMLAttributes<'button'>['type']) ?? 'button'}
     class:list={classes}
   >
     <slot />

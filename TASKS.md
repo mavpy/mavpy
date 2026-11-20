@@ -75,10 +75,14 @@ The agent works top to bottom, ticks `[x]` when a task is done, and adds short n
 
 ## M5: Contact form
 
-- [ ] Zod schema + Astro Action + client validation
-- [ ] Honeypot + time-to-submit check
-- [ ] Telegram delivery (`src/lib/leads.ts`), env vars, `.env.example`
+- [x] Zod schema + Astro Action + client validation
+  - Pages are static, so the form calls `actions.contact` from a script (JS required). Inline errors are our own localized copy, not the browser's `validationMessage` (that follows the browser language, not the page's). Fixed a Button bug on the way: it rendered `type="button" type="submit"`, so the button never submitted.
+- [x] Honeypot + time-to-submit check
+  - Hidden `website` field + under 3 s from page load → fake success, nothing delivered.
+- [ ] Telegram + Airtable delivery (`src/lib/leads.ts`), env vars, `.env.example`
+  - Code done: both channels in parallel, success if either works. Secrets via `astro:env` (works on Cloudflare too). Waiting on tokens: Nikita's personal bot/group + Airtable base first, Mavpy accounts later. Then I fetch the chat id, create the Leads table via the Airtable API, and set the Vercel env vars.
 - [ ] (Optional) email via Resend
+  - Blocked until the production domain exists (Resend only sends to other people from a verified domain).
 - [ ] Success and error states in EN and UK, then an end-to-end test on the preview deploy
 
 ## M6: Ukrainian
@@ -103,6 +107,8 @@ The agent works top to bottom, ticks `[x]` when a task is done, and adds short n
 - [ ] Send Serhii the preview link plus the review list (copy, translation, team section)
 - [ ] Apply his fixes
 - [ ] Connect his domain on Vercel, then run a final check in production
+- [ ] Swap Telegram bot/group and Airtable base to Mavpy accounts (only env var values change)
+- [ ] Move hosting to Cloudflare (free, commercial use allowed; Vercel Hobby is non-commercial): `@astrojs/cloudflare` instead of `@astrojs/vercel`, re-enter the secrets, point DNS
 - [ ] README: stack, env vars, how to edit copy and translations, plus screenshots (desktop + mobile, EN and UK) saved in `docs/screenshots/` and embedded in the README
   - Take them from the final production build, after Serhii's fixes. Capture at 1440 and 375 px.
 
@@ -112,7 +118,7 @@ The agent works top to bottom, ticks `[x]` when a task is done, and adds short n
 
 ## Questions for Serhii
 
-- Where should leads go: Telegram, email, or both? Which chat or address?
+- Leads go to a Telegram group (bot) + an Airtable table. Who should be in the group, and whose Airtable workspace should own the base? Is email (Resend) also wanted?
 - Final copy and team section: when?
 - Who approves the Ukrainian translation?
 - Analytics: Google Analytics, Plausible, or none?

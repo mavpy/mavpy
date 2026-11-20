@@ -1,5 +1,5 @@
 // @ts-check
-import { defineConfig } from 'astro/config';
+import { defineConfig, envField } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 import vercel from '@astrojs/vercel';
 import sitemap from '@astrojs/sitemap';
@@ -18,7 +18,30 @@ export default defineConfig({
   integrations: [
     sitemap({ i18n: { defaultLocale: 'en', locales: { en: 'en', uk: 'uk' } } }),
   ],
+  // Lead delivery secrets, read through `astro:env/server` so any adapter (Vercel now, Cloudflare
+  // later) works. Optional: a channel with missing config just counts as failed (see lib/leads.ts).
+  env: {
+    schema: {
+      TELEGRAM_BOT_TOKEN: secret(),
+      TELEGRAM_CHAT_ID: secret(),
+      AIRTABLE_TOKEN: secret(),
+      AIRTABLE_BASE_ID: secret(),
+      AIRTABLE_TABLE: envField.string({
+        context: 'server',
+        access: 'secret',
+        default: 'Leads',
+      }),
+    },
+  },
   vite: {
     plugins: [tailwindcss()],
   },
 });
+
+function secret() {
+  return envField.string({
+    context: 'server',
+    access: 'secret',
+    optional: true,
+  });
+}

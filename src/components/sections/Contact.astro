@@ -5,21 +5,24 @@
 // lg: sand card with an orange left border around a white form card. Mobile: no sand card (as in
 // the mobile frame). The form is a 2-column grid; each field is a 3-row subgrid (label, control,
 // error), so the button sits on the select's row however tall the error text gets.
-// Delivery, client validation and the status message logic come in M5.
+// Pages are static, so the form posts through the `contact` action from a script (JS required).
+// Validation: native constraints, shown as our own localized inline errors; the server re-checks.
 import Button from '../ui/Button.astro';
 import Heading from '../ui/Heading.astro';
 import Input from '../ui/Input.astro';
 import Section from '../ui/Section.astro';
+import { goalIds, goalLabel } from '../../data/goals';
+import { site } from '../../data/site';
 import { getLang, t } from '../../i18n/utils';
 
-const { contact, pricing } = t(getLang(Astro.url));
-// Goal options follow the pricing cards, plus "Other". Values are language-neutral for the lead.
-const goals = [
-  ['attract', pricing.items[0].title],
-  ['launch', pricing.items[1].title],
-  ['revamp', pricing.items[2].title],
-  ['other', contact.other],
-] as const;
+const lang = getLang(Astro.url);
+const dict = t(lang);
+const { contact } = dict;
+const messages = {
+  ...contact.errors,
+  success: contact.success,
+  error: `${contact.error} ${site.email}`,
+};
 const field = 'lg:row-span-3 lg:grid lg:grid-rows-subgrid lg:gap-y-2';
 ---
 
@@ -35,6 +38,8 @@ const field = 'lg:row-span-3 lg:grid lg:grid-rows-subgrid lg:gap-y-2';
 
     <form
       method="post"
+      novalidate
+      data-messages={JSON.stringify(messages)}
       class="mt-[49px] grid gap-y-3 rounded-card bg-white px-[21px] pt-[30px] pb-[12px] lg:mt-[44px] lg:grid-cols-2 lg:gap-x-[64px] lg:gap-y-0 lg:px-[73px] lg:pt-[42px] lg:pb-[20px]"
     >
       <Input
@@ -62,10 +67,15 @@ const field = 'lg:row-span-3 lg:grid lg:grid-rows-subgrid lg:gap-y-2';
         required
         class={field}
       >
-        {goals.map(([value, label]) => (
-          <option value={value}>{label}</option>
+        {goalIds.map((id) => (
+          <option value={id}>{goalLabel(dict, id)}</option>
         ))}
       </Input>
+      <input type="hidden" name="locale" value={lang} />
+      <!-- Honeypot: off-screen and out of the tab order; people never see it, bots fill it. -->
+      <div class="absolute -left-[9999px]" aria-hidden="true">
+        <input type="text" name="website" tabindex="-1" autocomplete="off" />
+      </div>
       <Button
         type="submit"
         block
@@ -73,8 +83,8 @@ const field = 'lg:row-span-3 lg:grid lg:grid-rows-subgrid lg:gap-y-2';
       >
         {contact.cta}
       </Button>
-      <!-- Form-level success/error message (M5), styled like the field errors. On lg it sits in
-           the button's error row, so its space is already reserved. -->
+      <!-- Form-level success/error message, styled like the field errors. On lg it sits in the
+           button's error row, so its space is already reserved. -->
       <p
         role="status"
         class="mt-2 min-h-[1.2em] text-btn-sm data-[tone=error]:text-error data-[tone=success]:text-success lg:col-start-2 lg:row-start-6"
@@ -82,3 +92,90 @@ const field = 'lg:row-span-3 lg:grid lg:grid-rows-subgrid lg:gap-y-2';
     </form>
   </div>
 </Section>
+
+<script>
+  import { actions, isInputError } from 'astro:actions';
+
+  const form = document.querySelector<HTMLFormElement>('#contact form')!;
+  const button = form.querySelector<HTMLButtonElement>('[type=submit]')!;
+  const status = form.querySelector<HTMLElement>('[role=status]')!;
+  const msg = JSON.parse(form.dataset.messages!);
+  const loadedAt = Date.now();
+  const fields = [
+    ...form.querySelectorAll<HTMLInputElement>(
+      'input[id^=field-], select[id^=field-]',
+    ),
+  ];
+
+  function setError(el: HTMLInputElement, text: string) {
+    const errorId = `${el.id}-error`;
+    document.getElementById(errorId)!.textContent = text;
+    // "true", not just present: Tailwind's aria-invalid: variant matches [aria-invalid="true"].
+    if (text) {
+      el.setAttribute('aria-invalid', 'true');
+      el.setAttribute('aria-describedby', errorId);
+    } else {
+      el.removeAttribute('aria-invalid');
+      el.removeAttribute('aria-describedby');
+    }
+  }
+
+  const errorFor = ({ validity: v }: HTMLInputElement) =>
+    v.valueMissing
+      ? msg.required
+      : v.typeMismatch
+        ? msg.email
+        : v.tooShort
+          ? msg.short
+          : '';
+
+  function setStatus(tone: 'success' | 'error' | '', text = '') {
+    status.dataset.tone = tone;
+    status.textContent = text;
+  }
+
+  // Clear a field's error as soon as it becomes valid.
+  form.addEventListener('input', (e) => {
+    const el = e.target as HTMLInputElement;
+    if (el.validity.valid && fields.includes(el)) setError(el, '');
+  });
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    setStatus('');
+    const invalid = fields.filter(
+      (el) => (setError(el, errorFor(el)), !el.validity.valid),
+    );
+    if (invalid.length) return invalid[0].focus();
+
+    const data = new FormData(form);
+    data.set('elapsed', String(Date.now() - loadedAt));
+    button.disabled = true;
+    button.setAttribute('aria-busy', 'true');
+    let error: unknown;
+    try {
+      ({ error } = await actions.contact(data));
+    } catch (err) {
+      error = err; // offline / network failure
+    }
+    button.disabled = false;
+    button.removeAttribute('aria-busy');
+
+    if (!error) {
+      form.reset();
+      return setStatus('success', msg.success);
+    }
+    // Server-side validation caught something the browser didn't: mark those fields.
+    if (isInputError(error)) {
+      const bad = fields.filter(
+        (el) => error.fields[el.name as keyof typeof error.fields],
+      );
+      bad.forEach((el) =>
+        setError(el, el.type === 'email' ? msg.email : msg.short),
+      );
+      if (bad.length) return bad[0].focus();
+    }
+    // Delivery failed: values stay in the form, and the message gives our e-mail.
+    setStatus('error', msg.error);
+  });
+</script>

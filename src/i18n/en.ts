@@ -286,6 +286,14 @@ export const en = {
     // Goal options are the pricing card titles plus this one.
     other: 'Other',
     cta: 'Get my estimate',
+    errors: {
+      required: 'Please fill this in',
+      email: 'Enter a valid e-mail',
+      short: 'Too short',
+    },
+    success: "Thanks! We'll reply within 24 hours.",
+    // The studio e-mail is appended, so people can still reach us.
+    error: "Couldn't send. Please e-mail us:",
   },
 };
 
