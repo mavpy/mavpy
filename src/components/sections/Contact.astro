@@ -20,7 +20,6 @@ const dict = t(lang);
 const { contact } = dict;
 const messages = {
   ...contact.errors,
-  success: contact.success,
   error: `${contact.error} ${site.email}`,
 };
 const field = 'lg:row-span-3 lg:grid lg:grid-rows-subgrid lg:gap-y-2';
@@ -83,13 +82,42 @@ const field = 'lg:row-span-3 lg:grid lg:grid-rows-subgrid lg:gap-y-2';
       >
         {contact.cta}
       </Button>
-      <!-- Form-level success/error message, styled like the field errors. On lg it sits in the
-           button's error row, so its space is already reserved. -->
+      <!-- Form-level error message, styled like the field errors. On lg it sits in the button's
+           error row, so its space is already reserved. -->
       <p
         role="status"
-        class="mt-2 min-h-[1.2em] text-btn-sm data-[tone=error]:text-error data-[tone=success]:text-success lg:col-start-2 lg:row-start-6"
+        class="mt-2 min-h-[1.2em] text-btn-sm text-error lg:col-start-2 lg:row-start-6"
       ></p>
     </form>
+
+    <!-- Shown in place of the form after a successful submit: same card, fades in (motion-safe). -->
+    <div
+      id="contact-success"
+      hidden
+      tabindex="-1"
+      class="mt-[49px] flex flex-col items-center justify-center rounded-card bg-white px-[21px] py-[48px] text-center outline-none focus-visible:shadow-none lg:mt-[44px] lg:px-[73px] motion-safe:transition-opacity motion-safe:duration-500 motion-safe:starting:opacity-0"
+    >
+      <span
+        class="flex size-[64px] items-center justify-center rounded-full bg-orange lg:size-[80px]"
+        aria-hidden="true"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          class="w-1/2"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M5 12.5 10 17.5 19 7" />
+        </svg>
+      </span>
+      <Heading as="h3" size="card" class="mt-6">
+        {contact.successTitle}
+      </Heading>
+      <p class="mt-3 max-w-[24em] text-body text-grey">{contact.success}</p>
+    </div>
   </div>
 </Section>
 
@@ -99,6 +127,7 @@ const field = 'lg:row-span-3 lg:grid lg:grid-rows-subgrid lg:gap-y-2';
   const form = document.querySelector<HTMLFormElement>('#contact form')!;
   const button = form.querySelector<HTMLButtonElement>('[type=submit]')!;
   const status = form.querySelector<HTMLElement>('[role=status]')!;
+  const success = document.getElementById('contact-success')!;
   const msg = JSON.parse(form.dataset.messages!);
   const loadedAt = Date.now();
   const fields = [
@@ -129,10 +158,7 @@ const field = 'lg:row-span-3 lg:grid lg:grid-rows-subgrid lg:gap-y-2';
           ? msg.short
           : '';
 
-  function setStatus(tone: 'success' | 'error' | '', text = '') {
-    status.dataset.tone = tone;
-    status.textContent = text;
-  }
+  const setStatus = (text = '') => (status.textContent = text);
 
   // Clear a field's error as soon as it becomes valid.
   form.addEventListener('input', (e) => {
@@ -142,7 +168,7 @@ const field = 'lg:row-span-3 lg:grid lg:grid-rows-subgrid lg:gap-y-2';
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    setStatus('');
+    setStatus();
     const invalid = fields.filter(
       (el) => (setError(el, errorFor(el)), !el.validity.valid),
     );
@@ -162,8 +188,13 @@ const field = 'lg:row-span-3 lg:grid lg:grid-rows-subgrid lg:gap-y-2';
     button.removeAttribute('aria-busy');
 
     if (!error) {
-      form.reset();
-      return setStatus('success', msg.success);
+      // Swap the form for the thank-you card at the same height, so the page doesn't jump,
+      // and move focus there so screen readers announce it.
+      success.style.minHeight = `${form.offsetHeight}px`;
+      form.hidden = true;
+      success.hidden = false;
+      success.focus();
+      return;
     }
     // Server-side validation caught something the browser didn't: mark those fields.
     if (isInputError(error)) {
@@ -176,6 +207,6 @@ const field = 'lg:row-span-3 lg:grid lg:grid-rows-subgrid lg:gap-y-2';
       if (bad.length) return bad[0].focus();
     }
     // Delivery failed: values stay in the form, and the message gives our e-mail.
-    setStatus('error', msg.error);
+    setStatus(msg.error);
   });
 </script>
