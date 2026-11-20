@@ -21,7 +21,6 @@ const linkClass =
       href={localizePath(other)}
       hreflang={other}
       lang={other}
-      aria-label={langSwitch.label}
       data-lang-switch
       class:list={[
         linkClass,
@@ -29,6 +28,7 @@ const linkClass =
       ]}
     >
       {langSwitch.short}
+      <span class="sr-only">, {langSwitch.label}</span>
     </a>
 
     <a href={home} aria-label={nav.home} class="md:order-1 md:mr-auto">
@@ -74,11 +74,11 @@ const linkClass =
         href={localizePath(other)}
         hreflang={other}
         lang={other}
-        aria-label={langSwitch.label}
         data-lang-switch
         class:list={[linkClass, 'justify-self-start text-nav font-medium']}
       >
         {langSwitch.short}
+        <span class="sr-only">, {langSwitch.label}</span>
       </a>
       <a href={home} aria-label={nav.home} data-menu-link>
         <Logo aria-hidden="true" width={157} height={42} />
@@ -122,10 +122,22 @@ const linkClass =
 </style>
 
 <script>
-  const menu = document.getElementById('mobile-menu');
+  const menu = document.getElementById('mobile-menu')!;
   menu
-    ?.querySelectorAll('[data-menu-link]')
+    .querySelectorAll('[data-menu-link]')
     .forEach((a) => a.addEventListener('click', () => menu.hidePopover()));
+
+  // A popover isn't modal, so Tab would walk out onto the page hidden behind it: make the rest
+  // inert while it's open. `beforetoggle` (not `toggle`) so the menu button is no longer inert
+  // when the popover returns focus to it on close.
+  const behind = [
+    menu.previousElementSibling,
+    ...document.querySelectorAll('main, footer, [href="#main"]'),
+  ];
+  menu.addEventListener('beforetoggle', (e) => {
+    const open = (e as ToggleEvent).newState === 'open';
+    behind.forEach((el) => ((el as HTMLElement).inert = open));
+  });
 
   // Keep the reader's place: switch language to the section currently in view.
   document

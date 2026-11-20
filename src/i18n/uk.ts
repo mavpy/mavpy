@@ -122,7 +122,13 @@ export const uk: Dict = {
       },
       { title: 'Масажна студія', type: 'редизайн', url: '', facts: tbd('uk') },
       { title: 'Школа англійської', type: 'з нуля', url: '', facts: tbd('uk') },
-      { title: 'Криптокомпанія', type: 'з нуля', url: '', facts: tbd('uk') },
+      {
+        title:
+          'Крипто\u00ADкомпанія' /* soft hyphen: one 231px word overflows at 320px */,
+        type: 'з нуля',
+        url: '',
+        facts: tbd('uk'),
+      },
       {
         title: 'B2B-компанія із сонячної енергетики',
         type: 'концепт-проєкт',

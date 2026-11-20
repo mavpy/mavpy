@@ -55,7 +55,7 @@
   --color-cream: #fff6e9; /* pricing "You get" box */
   --color-mist: #f9f9f9; /* testimonial card footer */
   --color-grey: #606060; /* secondary text */
-  --color-grey-light: #a0a0a0; /* hairlines, input underline */
+  --color-grey-light: #949494; /* hairlines, input underline. Figma's #a0a0a0 is 2.6:1 on white; 3:1 needed for a field edge */
   /* Form states: not in Figma, taken from the Webflow build's system colors. */
   --color-error: #b3261e;
   --color-error-bg: #f8e4e4;

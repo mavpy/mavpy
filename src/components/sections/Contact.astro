@@ -207,6 +207,8 @@ const field = 'lg:row-span-3 lg:grid lg:grid-rows-subgrid lg:gap-y-2';
       if (bad.length) return bad[0].focus();
     }
     // Delivery failed: values stay in the form, and the message gives our e-mail.
+    // Disabling the button dropped focus to <body>; put it back so keyboard users can retry.
     setStatus(msg.error);
+    button.focus();
   });
 </script>
