@@ -1,4 +1,4 @@
-// All English copy. Source: Figma (wins on copy, decided 2026-11-19). Sections add keys as they are built in M4.
+// All English copy. Source: the live Webflow site (newer than Figma on copy, 2026-11-20). Sections add keys as they are built in M4.
 type Facts = {
   goal: string;
   start: string;
@@ -29,7 +29,7 @@ export const en = {
   meta: {
     title: 'MAVPY: conversion-focused websites for growing businesses',
     description:
-      'A founder-led design studio. Websites that turn visitors into clients: scoped, priced upfront and delivered end-to-end.',
+      'A design and development studio. Websites that turn visitors into clients: designed and built in-house, priced upfront.',
     ogImageAlt:
       'MAVPY: the pixel monkey logo on orange, design and development',
   },
@@ -59,8 +59,8 @@ export const en = {
     email: 'EMAIL:',
     phone: 'PHONE:',
     instagram: 'INST:',
-    years: '2022-2026,',
-    studio: 'MAVPY DESIGN STUDIO',
+    years: '2021-2026,',
+    studio: 'MAVPY DESIGN & DEVELOPMENT STUDIO',
   },
   hero: {
     // Figma sets "websites" in bold, so the line is split around it.
@@ -73,7 +73,7 @@ export const en = {
     clients: 'clients',
     // Desktop breaks after every line; mobile only before the last one.
     statement: ['Not just', 'a new', 'website'],
-    note: ['Scoped, priced upfront,', 'delivered end-to-end.'],
+    note: ['Designed and built in-house.', 'Priced upfront.'],
     cta: 'Get an estimate',
     // ink width of `clients` in ems (Helvetica Neue Thin, +4%): sizes the word to the column.
     clientsEm: 2.8,
@@ -83,8 +83,8 @@ export const en = {
     items: [
       '30+ projects',
       'Fixed price, no surprises',
-      'Founder-led, direct',
-      'Reply within 24h',
+      'Designed and built in-house',
+      'PageSpeed 90+ on mobile',
     ],
   },
   pain: {
@@ -102,21 +102,21 @@ export const en = {
         text: "Luck isn't a strategy. You need a steady, predictable stream of qualified leads.",
       },
       {
-        // Figma copy; Webflow has "Admins drown in calls" (question for Serhii).
-        title: ['High traffic,', 'no enquiries'],
-        text: 'People visit, but the site fails to convert them into real business enquiries.',
+        title: ['Admins drown', 'in calls'],
+        text: 'Patients call, can’t get through and book elsewhere. No-shows eat the schedule.',
       },
     ] as { title: [string, string]; text: string }[],
   },
   process: {
     label: 'process',
     title: 'How we do it',
-    intro: 'One clear path. The right people for your goal — no more, no less.',
+    intro:
+      'Design that can actually be built. Code that sells. Both under one roof.',
     // Titles are [before, after] a desktop-only line break, as in pain.cards.
     steps: [
       {
-        title: ['Full cycle,', 'done for you'],
-        text: 'From zero to a steady flow of clients — nothing lost in hand‑offs.',
+        title: ['Design and code', 'under one roof'],
+        text: 'Strategy, design, build and automation by the two founders. No hand-offs to outside contractors.',
       },
       {
         title: ['Minimal load', 'on your side'],
@@ -176,8 +176,7 @@ export const en = {
     listLabel: 'Client testimonials',
     prev: 'Previous testimonial',
     next: 'Next testimonial',
-    // Figma's 4 (Webflow has 6; open question). `quote` is split where the desktop frame breaks
-    // lines; mobile runs it together. TODO(copy): Serhii to confirm the set and the project lines.
+    // Webflow's 6. `quote` is split where the desktop frame breaks lines; mobile runs it together.
     items: [
       {
         quote: [
@@ -187,7 +186,7 @@ export const en = {
         ],
         name: 'Natalia M.',
         company: 'SRT Massage clinic',
-        project: 'about full redesign site',
+        project: 'full redesign site',
         avatar: 'natalia',
       },
       {
@@ -197,7 +196,7 @@ export const en = {
         ],
         name: 'Bram V.',
         company: 'Space’M Online',
-        project: 'about design and develop',
+        project: 'design and develop',
         avatar: 'bram',
       },
       {
@@ -209,16 +208,34 @@ export const en = {
         ],
         name: 'Ivan V.',
         company: 'Doctor LOR',
-        project: 'about full design and develop',
+        project: 'full design and dev',
         avatar: 'ivan',
       },
       {
         quote: [
-          '“What I remember most is how calm it was. Clear steps, honest timeline, no surprise costs at the end. Exactly what was quoted. Rare.”',
+          '“Our team wasted hours confirming appointments manually every single week. Serhii set up a self-serve system that patients love. Best operational upgrade we’ve made.”',
         ],
         name: 'Dmytro V.',
-        company: 'FitK online store',
-        project: 'about design and develop',
+        company: 'Dental clinic',
+        project: 'full redesign site',
+        avatar: 'placeholder',
+      },
+      {
+        quote: [
+          '“I was afraid setting up online scheduling would be a headache, but Serhii built everything smoothly. It saved us a full-time hire and works like clockwork 24/7.”',
+        ],
+        name: 'Julia G.',
+        company: 'Online store',
+        project: 'full redesign site',
+        avatar: 'placeholder',
+      },
+      {
+        quote: [
+          '“We used to lose so many bookings in mess generated by manual messaging. Serhii automated the entire flow in a few days. Now calendar fills itself up without a single glitch.”',
+        ],
+        name: 'Daria L.',
+        company: 'Design studio',
+        project: 'redesign site',
         avatar: 'placeholder',
       },
     ] as Testimonial[],
@@ -227,17 +244,18 @@ export const en = {
     label: 'about',
     // \n: the line break both frames use.
     title: 'A craft studio,\nnot a conveyor belt',
-    sub: 'Founded 2022. The founder leads every project personally, start to launch.',
+    sub: 'Building since 2021. A founder leads every project personally, start to launch.',
     // The card title: line 1, then line 2 with its first part medium-weight on desktop (as in Figma).
-    hi: "Hi, I'm Serhii,",
-    role: { em: 'founder of MAVPY', after: ' design agency.' },
+    hi: 'Serhii —',
+    role: { em: 'Co-founder,', after: ' strategy & design' },
     // One string per paragraph; \n is a forced line break.
     paragraphs: [
-      "Three years in, 30+ projects across Ukraine and worldwide.\nI don't want a studio that churns out websites.",
-      'We build one solution for one goal at a time — no wasted steps, no extra people.',
-      'When you work with us, you work with me. Nothing gets lost in a hand-off. Your result is the point — not the website.',
+      'I’m the one you talk to, from the first brief to launch.',
+      'Before any design, I write the plan: the problem, the audience, the offer — and the number we’re trying to move.',
+      'I work out who your clients are and what makes them book — then design the site around it.\nI write the copy too, so every word on the page has a job.',
+      'Five years, 30+ projects across Ukraine and worldwide.',
     ],
-    photoAlt: 'Serhii, founder of MAVPY',
+    photoAlt: 'Serhii, co-founder of MAVPY',
   },
   pricing: {
     label: 'pricing',
@@ -245,9 +263,7 @@ export const en = {
     sub: 'No form, no call to see a number. Find your goal, see where it starts.',
     youGet: 'You get:',
     from: 'from',
-    cta: 'Get my estimate',
-    // Figma prices (Webflow differs: open question). Card 3 uses the desktop title; mobile
-    // Figma says "Refresh an outdated site". TODO(copy): Serhii to confirm.
+    cta: 'Get an estimate',
     items: [
       {
         title: 'Attract new clients',
@@ -258,7 +274,7 @@ export const en = {
           'site design & build',
           'ad setup & automation',
         ],
-        price: '$500',
+        price: '$1000',
       },
       {
         title: 'Launch a new service',
@@ -272,27 +288,31 @@ export const en = {
         price: '$700',
       },
       {
-        title: 'Revamp your website',
-        youGet: "a site you're proud to send — fast, modern, findable.",
+        title: 'Care plan',
+        youGet: 'we keep it fast, safe and up to date after launch.',
         bullets: [
-          'redesign & modern build',
-          'move to an easy platform',
-          'basic SEO',
+          'first 2 weeks free',
+          'fixes within 2–4 hours',
+          'small edits monthly',
         ],
-        price: '$800',
+        price: '$40/m',
       },
     ],
   },
   contact: {
     title: "Tell us your goal, we'll price it",
-    // TODO(copy): "from $500" follows the Figma prices (Webflow starts at $1000).
     sub: "You've seen the ballpark — from $500. Exact figure on a short call. No sales marathon. We reply within 24 hours.",
-    name: 'Your Name',
-    email: 'Your E-mail',
+    name: 'Your name',
+    email: 'Email address',
     goal: 'Your goal',
-    // Goal options are the pricing card titles plus this one.
-    other: 'Other',
-    cta: 'Get my estimate',
+    // Form goal options, keyed by the id the form sends (src/data/goals.ts).
+    goals: {
+      attract: 'Attract new clients',
+      launch: 'Launch a new service',
+      revamp: 'Revamp your website',
+      other: 'Other',
+    },
+    cta: 'Get an estimate',
     errors: {
       required: 'Please fill this in',
       email: 'Enter a valid e-mail',
