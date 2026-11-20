@@ -57,7 +57,7 @@ Components stay presentational: copy comes in through props or `t()`. **No hard-
 
 - Astro Action with a Zod schema. Validate on the client (native constraints plus inline errors) and again on the server
 - Spam protection: a honeypot field plus a minimum time-to-submit
-- Delivery: **Telegram bot** message to the studio chat, optionally plus an email via Resend (to be confirmed with Serhii). Secrets go in env vars (`TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID`, `RESEND_API_KEY`), never committed. Keep `.env.example`
+- Delivery: **Telegram bot** message to the studio group plus an **Airtable** record; a **Resend** auto-reply to the visitor (live once the domain is verified). Secrets go in env vars (see `.env.example`), never committed
 - UX: loading state, success and error messages in both languages, and the form keeps its values on error
 - The delivery code lives in `src/lib/leads.ts`, so another channel (Google Sheet, CRM) can be added later
 
@@ -73,5 +73,6 @@ Components stay presentational: copy comes in through props or `t()`. **No hard-
 - Work one TASKS.md task at a time. When a task is done: run `npm run check` and `npm run build`, tick the box, add a one-line note if something is worth remembering, and commit with a message like `feat(hero): ...`
 - Small commits, one per task or section
 - Don't add dependencies beyond the ones above without saying why
+- Serhii is Nikita's partner, not a client. **Nikita makes every technical decision** (hosting, services, accounts, architecture): recommend and ask Nikita. "Questions for Serhii" is only for copy, translation, prices, contact details and brand content
 - When something is blocked on Serhii, add it to "Questions for Serhii" in TASKS.md and move on to the next task
 - This is a private studio project: don't add my name, personal links or portfolio credits to the site

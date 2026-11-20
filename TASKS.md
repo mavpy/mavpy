@@ -81,8 +81,8 @@ The agent works top to bottom, ticks `[x]` when a task is done, and adds short n
   - Hidden `website` field + under 3 s from page load → fake success, nothing delivered.
 - [x] Telegram + Airtable delivery (`src/lib/leads.ts`), env vars, `.env.example`
   - Both channels in parallel, success if either works. Secrets via `astro:env` (works on Cloudflare too). Personal accounts for now: bot @MavpyLeadsBot → group "Mavpy Leads", Airtable table "Mavpy Leads" (created via the meta API; the token has write scopes only, so it can't read records back). Env vars set on Vercel (Production + Preview).
-- [ ] (Optional) email via Resend
-  - Blocked until the production domain exists (Resend only sends to other people from a verified domain).
+- [x] Auto-reply e-mail to the visitor via Resend
+  - `sendAutoReply` in leads.ts, called after a delivered lead, best effort (never fails the lead), in the visitor's language, Reply goes to the studio Gmail. No `RESEND_API_KEY` = skipped. Until the domain is verified, Resend only delivers to the account owner, so the key is in local `.env` only, **not on Vercel** (otherwise every real lead would log a 403).
 - [x] Success and error states in EN and UK, then an end-to-end test on the preview deploy
   - Tested on production (mavpy-site.vercel.app): lead arrives, no channel errors. Preview URLs sit behind Vercel Authentication; the production domain doesn't.
 
@@ -112,23 +112,24 @@ The agent works top to bottom, ticks `[x]` when a task is done, and adds short n
 - [ ] Apply his fixes
 - [ ] Connect his domain on Vercel, then run a final check in production
 - [ ] Swap Telegram bot/group and Airtable base to Mavpy accounts (only env var values change)
+- [ ] Domain + e-mail sending (later phase): buy the domain (Cloudflare Registrar, at cost), Resend → Domains → add it (one-click DNS on Cloudflare: DKIM, SPF/MX on `send.`, DMARC `p=none`), verify, then set `MAIL_FROM="MAVPY <hello@domain>"` + `RESEND_API_KEY` on the host. Optional: Cloudflare Email Routing to forward hello@ to Gmail. Full steps in the M5 auto-reply plan notes.
 - [ ] Move hosting to Cloudflare (free, commercial use allowed; Vercel Hobby is non-commercial): `@astrojs/cloudflare` instead of `@astrojs/vercel`, re-enter the secrets, point DNS
 - [ ] README: stack, env vars, how to edit copy and translations, plus screenshots (desktop + mobile, EN and UK) saved in `docs/screenshots/` and embedded in the README
   - Take them from the final production build, after Serhii's fixes. Capture at 1440 and 375 px.
 
 ## Asks for Nikita
 
+- Decide: analytics (none / Plausible / GA) and the production domain name.
+
 - Mascot (Figma `1:512`): 2x PNG with a transparent background, cropped as in the desktop frame. The current one is a 1x cut-out from Webflow.
 
 ## Questions for Serhii
 
-- Leads go to a Telegram group (bot) + an Airtable table. Who should be in the group, and whose Airtable workspace should own the base? Is email (Resend) also wanted?
+- Auto-reply e-mail wording (EN + UK drafts in `contact.autoReply`): OK?
 - Final copy and team section: when?
 - Who approves the Ukrainian translation?
-- Analytics: Google Analytics, Plausible, or none?
 - Archivo and BBH Hegarty have no Cyrillic glyphs. What should Ukrainian headings use? (Options: a Cyrillic-capable look-alike for /uk/, or let the browser fall back to a system font.)
 - Helvetica Neue Thin is a commercial Linotype font. Does the studio have a web licence? If not, we need a free substitute.
-- Production domain?
 - Copy direction: we're building Figma's one-founder "design agency" version (decided 2026-11-19). Please confirm the Figma copy where it differs from Webflow: hero line, trust bar, process 01, about, logo text, "since 2021/2022". Details in docs/audit.md §2.
 - Which contact details are current? Figma: mavpy_agency@gmail.com, +380 99 320 84 54. Webflow: mavpy.studio@gmail.com, +38 (099) 220 83 43.
 - Prices: Figma $500 / $700 / $800 (third card "Revamp your website"), or Webflow $1000 / $700 / "Care plan" $40/m? Also, the third card's title differs between Figma desktop and mobile.

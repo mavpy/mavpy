@@ -26,6 +26,8 @@ export default defineConfig({
       TELEGRAM_CHAT_ID: secret(),
       AIRTABLE_TOKEN: secret(),
       AIRTABLE_BASE_ID: secret(),
+      RESEND_API_KEY: secret(),
+      MAIL_FROM: secret(),
       AIRTABLE_TABLE: envField.string({
         context: 'server',
         access: 'secret',

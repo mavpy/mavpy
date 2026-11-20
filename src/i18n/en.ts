@@ -296,6 +296,19 @@ export const en = {
     success: "We've got your request and will reply within 24 hours.",
     // The studio e-mail is appended, so people can still reach us.
     error: "Couldn't send. Please e-mail us:",
+    // Auto-reply e-mail to the person who submitted the form. {name} is replaced.
+    // TODO(copy): draft, check with Serhii.
+    autoReply: {
+      subject: 'Thanks for reaching out to MAVPY',
+      greeting: 'Hi {name},',
+      intro:
+        "Thanks for your interest in working with us. We've got your request.",
+      goal: 'Your goal:',
+      next: "We'll get back to you within 24 hours with next steps and a short call to agree on the exact price.",
+      details:
+        'Want to add details, like a link to your current site, deadlines or examples you like? Just reply to this e-mail.',
+      signoff: 'MAVPY design studio',
+    },
   },
 };
 

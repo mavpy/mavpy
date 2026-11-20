@@ -2,7 +2,8 @@ import { ActionError, defineAction } from 'astro:actions';
 import { z } from 'astro/zod';
 import { goalIds, goalLabel } from '../data/goals';
 import { en } from '../i18n/en';
-import { sendLead } from '../lib/leads';
+import { t } from '../i18n/utils';
+import { sendAutoReply, sendLead } from '../lib/leads';
 
 // Faster than this from page load to submit is a bot.
 const MIN_FILL_MS = 3000;
@@ -34,6 +35,22 @@ export const server = {
           code: 'INTERNAL_SERVER_ERROR',
           message: 'Lead delivery failed',
         });
+
+      // Auto-reply in the visitor's language. Best effort: the lead is already delivered.
+      const d = t(input.locale);
+      const r = d.contact.autoReply;
+      try {
+        await sendAutoReply(input.email, r.subject, [
+          r.greeting.replace('{name}', input.name),
+          r.intro,
+          `${r.goal} ${goalLabel(d, input.goal)}`,
+          r.next,
+          r.details,
+          r.signoff,
+        ]);
+      } catch (err) {
+        console.error('lead: autoreply failed:', err);
+      }
       return { ok: true };
     },
   }),

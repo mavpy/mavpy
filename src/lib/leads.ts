@@ -4,9 +4,12 @@ import {
   AIRTABLE_BASE_ID,
   AIRTABLE_TABLE,
   AIRTABLE_TOKEN,
+  MAIL_FROM,
+  RESEND_API_KEY,
   TELEGRAM_BOT_TOKEN,
   TELEGRAM_CHAT_ID,
 } from 'astro:env/server';
+import { site } from '../data/site';
 
 export type Lead = {
   name: string;
@@ -72,6 +75,32 @@ async function toTelegram(lead: Lead) {
   );
 }
 
+/**
+ * Auto-reply to the person who submitted the form (Resend). Not a delivery channel: it's
+ * separate from sendLead so a failure here never fails a lead. Skipped when no key is set.
+ * Replies go to the studio inbox.
+ */
+export async function sendAutoReply(
+  to: string,
+  subject: string,
+  paragraphs: string[],
+) {
+  if (!RESEND_API_KEY) return;
+  await post(
+    'https://api.resend.com/emails',
+    { Authorization: `Bearer ${RESEND_API_KEY}` },
+    {
+      // Resend's shared test sender until our domain is verified (it only delivers to the account owner).
+      from: MAIL_FROM || 'MAVPY <onboarding@resend.dev>',
+      to,
+      reply_to: site.email,
+      subject,
+      text: paragraphs.join('\n\n'),
+      html: paragraphs.map((p) => `<p>${esc(p)}</p>`).join(''),
+    },
+  );
+}
+
 async function post(
   url: string,
   headers: Record<string, string>,
@@ -87,6 +116,6 @@ async function post(
   if (!res.ok) throw new Error(`${res.status} ${await res.text()}`);
 }
 
-/** Telegram's HTML mode only needs these three escaped. */
+/** Enough HTML escaping for Telegram's HTML mode and our plain email markup. */
 const esc = (s: string) =>
   s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
