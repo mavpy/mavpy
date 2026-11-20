@@ -79,11 +79,12 @@ The agent works top to bottom, ticks `[x]` when a task is done, and adds short n
   - Pages are static, so the form calls `actions.contact` from a script (JS required). Inline errors are our own localized copy, not the browser's `validationMessage` (that follows the browser language, not the page's). Fixed a Button bug on the way: it rendered `type="button" type="submit"`, so the button never submitted.
 - [x] Honeypot + time-to-submit check
   - Hidden `website` field + under 3 s from page load → fake success, nothing delivered.
-- [ ] Telegram + Airtable delivery (`src/lib/leads.ts`), env vars, `.env.example`
-  - Code done: both channels in parallel, success if either works. Secrets via `astro:env` (works on Cloudflare too). Waiting on tokens: Nikita's personal bot/group + Airtable base first, Mavpy accounts later. Then I fetch the chat id, create the Leads table via the Airtable API, and set the Vercel env vars.
+- [x] Telegram + Airtable delivery (`src/lib/leads.ts`), env vars, `.env.example`
+  - Both channels in parallel, success if either works. Secrets via `astro:env` (works on Cloudflare too). Personal accounts for now: bot @MavpyLeadsBot → group "Mavpy Leads", Airtable table "Mavpy Leads" (created via the meta API; the token has write scopes only, so it can't read records back). Env vars set on Vercel (Production + Preview).
 - [ ] (Optional) email via Resend
   - Blocked until the production domain exists (Resend only sends to other people from a verified domain).
-- [ ] Success and error states in EN and UK, then an end-to-end test on the preview deploy
+- [x] Success and error states in EN and UK, then an end-to-end test on the preview deploy
+  - Tested on production (mavpy-site.vercel.app): lead arrives, no channel errors. Preview URLs sit behind Vercel Authentication; the production domain doesn't.
 
 ## M6: Ukrainian
 
