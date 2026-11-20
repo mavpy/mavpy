@@ -143,6 +143,7 @@ Technical and setup calls that are Nikita's alone.
 Copy, translation, prices, contact details and brand content. Nikita and Serhii decide these together. The site is the source of truth; changes come from Serhii through Figma.
 
 **Copy and content**
+
 - Contact subline says "from $500", but the lowest price on the site is now $700 (cards: $1000 / $700 / Care plan $40/m). What should it say?
 - The form's goal list still has "Revamp your website", which no longer has a pricing card. Keep it, or swap it for "Care plan"?
 - Testimonial project lines read oddly in English ("full redesign site", "design and develop", "full design and dev"). Rewrite, e.g. "Full redesign", "Design and development"?
@@ -151,17 +152,21 @@ Copy, translation, prices, contact details and brand content. Nikita and Serhii 
 - Ukrainian translation: review it together (the whole of `uk.ts` is marked `// review: Serhii`).
 
 **Contact details**
+
 - The site shows mavpy_agency@gmail.com and +380 99 320 84 54 (from Figma). Webflow had mavpy.studio@gmail.com and +38 (099) 220 83 43. Which are current?
 
 **Assets**
+
 - Facts and live URLs for cases 2–5 (only the clinic has them), plus a full screenshot of the crypto site (the open crypto card is an upscaled strip until then).
 - Photos: Natalia's avatar in higher resolution; Dmytro, Julia and Daria have grey placeholders.
 
 **Fonts**
+
 - Archivo and BBH Hegarty have no Cyrillic glyphs. What should Ukrainian headings use? (A Cyrillic-capable look-alike for /uk/, or the browser's fallback system font.)
 - Helvetica Neue Thin is a commercial Linotype font. Does the studio have a web licence? If not, we need a free substitute.
 
 **Design choices the build made differently from Figma** (Serhii to update Figma, or ask to revert)
+
 - Contact section: restyled to match the rest of the site (shared heading style, one underline field style on all screens, a full-size button, designed error/loading states). Structure unchanged.
 - Cases on mobile: black link with ↗ and Roboto titles, as on desktop, instead of Figma's orange (#ff6b31, fails contrast on sand) "View live site →".
 - Testimonials on desktop: ‹ › arrows so mouse users can scroll the row (not in Figma).

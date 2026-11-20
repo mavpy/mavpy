@@ -1,4 +1,4 @@
-// All English copy. Source: the live Webflow site (newer than Figma on copy, 2026-11-20). Sections add keys as they are built in M4.
+// All English copy. This file is the source of truth (synced from Webflow once, 2026-11-20); changes now come from Serhii via Figma.
 type Facts = {
   goal: string;
   start: string;

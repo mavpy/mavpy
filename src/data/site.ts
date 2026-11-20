@@ -1,5 +1,5 @@
 // Studio facts that are the same in every language. Source: Figma footer (see the
-// contact-details question in TASKS.md: Webflow has different ones).
+// contact-details question in TASKS.md).
 export const site = {
   brand: 'MAVPY',
   email: 'mavpy_agency@gmail.com',
