@@ -97,10 +97,12 @@ The agent works top to bottom, ticks `[x]` when a task is done, and adds short n
 
 ## M7: Polish
 
-- [ ] Animations and hovers: start from what Webflow does, then go beyond it to design-studio-level motion (decided 2026-11-19). Not a 1:1 port
+- [x] Animations and hovers: start from what Webflow does, then go beyond it to design-studio-level motion (decided 2026-11-19). Not a 1:1 port
   - Before building, audit the Webflow interactions (list them), then propose a motion concept to Nikita for sign-off: scroll-reveals, staggered headline/text reveals, hero entrance, hover/cursor details, section transitions, smooth scroll. Pick what fits the brand; don't animate everything
   - Tooling: decide with Nikita (CSS scroll-driven animations + View Transitions first; a small library such as GSAP/Motion only if CSS can't do it). Say why if adding a dependency
   - Rules: only animate `transform`/`opacity`, no layout shift, no CLS/LCP regression (Lighthouse 95+ still applies), content visible without JS, full `prefers-reduced-motion` fallback (static or simple fades), keyboard/focus states not affected, check both languages
+  - Webflow audit: only the GSAP accordion, the slider, and 0.3s colour hovers (no scroll interactions); all of it was already ported. Nikita signed off on: pure CSS, a hero entrance, scroll reveals, hover details, and a language cross-fade.
+  - `.rise` (hero, load-time, staggered by `--d`; the "MORE" bar wipes in), `.reveal` (`animation-timeline: view()`, staggered per row by `--i`), and `@view-transition` for EN⇄UK; all live in global.css inside `prefers-reduced-motion: no-preference` (verified: 0 animations under reduce). Reveals use `transform`, hover lifts use `translate`, so they compose. h2 reveals come from Heading.astro. Scroll-driven reveals replay when you scroll back up and are static in Firefox. Desktop testimonial cards don't reveal (their view timeline binds to the horizontal scroller), which is harmless. Hovers: card lift (pain, pricing), case-link arrow nudge, underline draw on nav/footer links, mascot tilt. Card got a `style` prop.
 - [ ] Image optimisation, lazy loading, font preloads
 - [ ] Accessibility pass (keyboard, contrast, landmarks, alt text)
 - [ ] Lighthouse 95+ on `/` and `/uk/`, mobile and desktop

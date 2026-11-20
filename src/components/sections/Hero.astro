@@ -14,7 +14,7 @@ const [s1, s2, s3] = hero.statement;
 <section id="top" class="scroll-mt-4">
   <Container class="pt-[39px] pb-[69px] text-center lg:grid lg:grid-cols-[1fr_auto] lg:pt-[64px] lg:pb-[88px] lg:text-left">
     <div class="lg:self-end">
-      <h1 class="text-[23px] leading-[29px] font-medium">
+      <h1 class="rise text-[23px] leading-[29px] font-medium">
         {hero.h1.before}
         <strong class="font-bold">{hero.h1.em}</strong>
         {hero.h1.after}
@@ -22,7 +22,10 @@ const [s1, s2, s3] = hero.statement;
 
       <!-- The bar is the ::before: as tall as the caps (leading 0.7 = cap height, as in the
            footer wordmark) and running off the left edge of the screen, ending 1px before the M's ink. -->
-      <p class="relative mx-auto mt-[46.5px] w-fit font-hegarty text-more leading-[0.7] uppercase before:absolute before:inset-y-0 before:right-[calc(100%-0.03em)] before:w-screen before:bg-ink lg:mx-0 lg:mt-[16.5px] lg:ml-[0.5em]">
+      <p
+        style="--d: 0.1s"
+        class="rise rise-bar relative mx-auto mt-[46.5px] w-fit font-hegarty text-more leading-[0.7] uppercase before:absolute before:inset-y-0 before:right-[calc(100%-0.03em)] before:w-screen before:bg-ink lg:mx-0 lg:mt-[16.5px] lg:ml-[0.5em]"
+      >
         {hero.more}
       </p>
     </div>
@@ -31,7 +34,7 @@ const [s1, s2, s3] = hero.statement;
          lets the word overflow both sides equally; -mr cancels the trailing letter-spacing;
          on desktop Figma's box starts at the column, so the ink sits one side bearing right. -->
     <p
-      class="mt-[calc(27px-0.0525em)] mb-[-0.235em] flex justify-center font-helvetica text-clients font-thin whitespace-nowrap text-ink-soft lg:col-span-2 lg:[--clients-inset:48px] lg:mt-[calc(61px-0.0525em)]"
+      class="rise mt-[calc(27px-0.0525em)] mb-[-0.235em] flex justify-center font-helvetica text-clients font-thin whitespace-nowrap text-ink-soft lg:col-span-2 lg:[--clients-inset:48px] lg:mt-[calc(61px-0.0525em)]"
       style={`--clients-em: ${hero.clientsEm}`}
     >
       <span class="-mr-[0.04em] lg:relative lg:left-[0.014em]">
@@ -39,14 +42,20 @@ const [s1, s2, s3] = hero.statement;
       </span>
     </p>
 
-    <p class="mt-[25px] font-display text-statement font-black text-graphite lg:col-start-2 lg:row-start-1 lg:mt-0 lg:-mb-[0.19em] lg:self-end lg:text-right">
+    <p
+      style="--d: 0.25s"
+      class="rise mt-[25px] font-display text-statement font-black text-graphite lg:col-start-2 lg:row-start-1 lg:mt-0 lg:-mb-[0.19em] lg:self-end lg:text-right"
+    >
       {s1}
       <br class="max-lg:hidden" /> {s2}
       <br />
       {s3}
     </p>
 
-    <div class="mt-[75px] flex flex-col items-center lg:col-span-2 lg:mt-[71px] lg:flex-row lg:justify-end lg:gap-[55px]">
+    <div
+      style="--d: 0.4s"
+      class="rise mt-[75px] flex flex-col items-center lg:col-span-2 lg:mt-[71px] lg:flex-row lg:justify-end lg:gap-[55px]"
+    >
       <p class="text-[23px] leading-[31px] font-medium tracking-[-0.03em]">
         {hero.note[0]}
         <br />
@@ -62,7 +71,8 @@ const [s1, s2, s3] = hero.statement;
     <Container>
       <ul
         aria-label={trust.label}
-        class="divide-y-2 divide-[#e8e8e8] pt-[9px] pb-[14px] text-center text-[23px] lg:tracking-[-0.04em] lg:flex lg:justify-between lg:divide-y-0 lg:pt-[21px] lg:pb-[17px]"
+        style="--d: 0.55s"
+        class="rise divide-y-2 divide-[#e8e8e8] pt-[9px] pb-[14px] text-center text-[23px] lg:tracking-[-0.04em] lg:flex lg:justify-between lg:divide-y-0 lg:pt-[21px] lg:pb-[17px]"
       >
         {trust.items.map((item) => (
           <li class="py-[15.5px] lg:py-0">{item}</li>

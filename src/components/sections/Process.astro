@@ -20,14 +20,14 @@ const copy = t(getLang(Astro.url)).process;
   id="how-we-work"
   class="pt-[161px] pb-[77px] lg:pt-[130px] lg:pb-[113px]"
 >
-  <Card class="relative flow-root px-5 pt-0 pb-[16px] text-center lg:min-h-[276px] lg:pt-[36px] lg:pr-6.5 lg:pb-[68px] lg:pl-[294px] lg:text-left">
+  <Card class="group relative flow-root px-5 pt-0 pb-[16px] text-center lg:min-h-[276px] lg:pt-[36px] lg:pr-6.5 lg:pb-[68px] lg:pl-[294px] lg:text-left">
     <!-- TODO(asset): 1x cut-out from the Webflow build (273x322). Swap for a 2x transparent
          export of Figma 1:512; then the lg crop below can go if the export is pre-cropped. -->
     <div class="mx-auto -mt-[182px] w-fit lg:absolute lg:bottom-0 lg:left-0 lg:m-0 lg:h-[316px] lg:w-[232px] lg:overflow-hidden">
       <Image
         src={mascot}
         alt=""
-        class="h-[182px] w-auto lg:absolute lg:-top-[6px] lg:-right-[14px] lg:h-[322px] lg:max-w-none"
+        class="origin-bottom transition-transform duration-500 ease-out-quart group-hover:-rotate-3 h-[182px] w-auto lg:absolute lg:-top-[6px] lg:-right-[14px] lg:h-[322px] lg:max-w-none"
       />
     </div>
 
@@ -47,7 +47,10 @@ const copy = t(getLang(Astro.url)).process;
 
   <ol class="mt-[19px] grid gap-[19px] text-center lg:mt-[13px] lg:grid-cols-3 lg:gap-x-12 lg:rounded-card lg:bg-white lg:px-[37px] lg:pt-[18px] lg:pb-[53px] lg:text-left">
     {copy.steps.map(({ title, text }, i) => (
-      <li class="rounded-card bg-white px-5 pt-[8.5px] pb-[20px] lg:rounded-none lg:bg-transparent lg:p-0">
+      <li
+        style={`--i: ${i}`}
+        class="reveal rounded-card bg-white px-5 pt-[8.5px] pb-[20px] lg:rounded-none lg:bg-transparent lg:p-0"
+      >
         <p class="text-[16px] lg:text-body" aria-hidden="true">
           {String(i + 1).padStart(2, '0')}
         </p>

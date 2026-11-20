@@ -31,10 +31,11 @@ const { pain } = t(getLang(Astro.url));
   </p>
 
   <ul class="mt-[60px] grid gap-8 text-center lg:mt-[68px] lg:grid-cols-3 lg:gap-x-[26px] lg:gap-y-0 lg:text-left">
-    {pain.cards.map(({ title, text }) => (
+    {pain.cards.map(({ title, text }, i) => (
       <Card
         as="li"
-        class="px-5 py-[17px] lg:row-span-2 lg:grid lg:grid-rows-subgrid lg:content-start lg:px-6.5 lg:pt-[21px] lg:pb-6.5"
+        style={`--i: ${i}`}
+        class="reveal transition-[translate] duration-300 ease-out-quart hover:-translate-y-1 px-5 py-[17px] lg:row-span-2 lg:grid lg:grid-rows-subgrid lg:content-start lg:px-6.5 lg:pt-[21px] lg:pb-6.5"
       >
         <h3 class="text-card font-bold">
           {title[0]}

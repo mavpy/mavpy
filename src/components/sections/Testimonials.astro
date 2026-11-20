@@ -63,8 +63,11 @@ const avatars = { natalia, bram, ivan, placeholder };
     aria-label={tm.listLabel}
     class="mt-[53px] grid gap-[32px] lg:mt-[49px] lg:[--bleed:calc((100cqw-min(var(--container-content),100cqw-2*var(--spacing-gutter)))/2)] lg:-mx-(--bleed) lg:flex lg:snap-x lg:snap-mandatory lg:gap-[24px] lg:overflow-x-auto lg:scroll-smooth lg:scroll-px-(--bleed) lg:px-(--bleed) lg:[scrollbar-width:none] motion-reduce:lg:scroll-auto"
   >
-    {tm.items.map((item) => (
-      <li class="mx-auto w-full max-w-[483px] lg:w-[483px] lg:shrink-0 lg:snap-start">
+    {tm.items.map((item, i) => (
+      <li
+        style={`--i: ${i}`}
+        class="reveal mx-auto w-full max-w-[483px] lg:w-[483px] lg:shrink-0 lg:snap-start"
+      >
         <figure class="flex h-full min-h-[305px] flex-col rounded-card bg-white p-[9px] lg:min-h-[451px] lg:p-[14px] lg:pb-[20px]">
           <blockquote class="px-[11px] pt-[11px] pb-6 text-center text-[20px] leading-[1.172] lg:pr-[3px] lg:pl-[5px] lg:pt-[22px] lg:text-left lg:text-[28px]">
             {item.quote.map((s, i) => (

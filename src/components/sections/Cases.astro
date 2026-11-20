@@ -47,7 +47,7 @@ const factKeys = ['goal', 'start', 'did', 'time', 'result'] as const;
       const shot = shots[i];
       const Link = item.url ? 'a' : 'span';
       return (
-        <li class="group relative grid rounded-card bg-sand pb-[27px] transition-[min-height] duration-300 lg:grid-cols-[437px_1fr] lg:grid-rows-[auto_1fr] lg:pb-[18px] lg:has-open:min-h-[calc((min(var(--container-content),100vw-2*var(--spacing-gutter))-465px)*757/761+69px)]">
+        <li class="reveal group relative grid rounded-card bg-sand pb-[27px] transition-[min-height] duration-300 lg:grid-cols-[437px_1fr] lg:grid-rows-[auto_1fr] lg:pb-[18px] lg:has-open:min-h-[calc((min(var(--container-content),100vw-2*var(--spacing-gutter))-465px)*757/761+69px)]">
           <details
             name="cases"
             open={i === 0}
@@ -94,7 +94,7 @@ const factKeys = ['goal', 'start', 'did', 'time', 'result'] as const;
             href={item.url || undefined}
             target={item.url ? '_blank' : undefined}
             rel={item.url ? 'noopener' : undefined}
-            class="relative z-1 row-start-3 mt-[14px] ml-6 flex w-fit items-center gap-[13px] text-[26px] leading-[1.172] font-bold lg:row-start-2 lg:mt-[39px] lg:ml-[19px] lg:self-end"
+            class="group/link relative z-1 row-start-3 mt-[14px] ml-6 flex w-fit items-center gap-[13px] text-[26px] leading-[1.172] font-bold lg:row-start-2 lg:mt-[39px] lg:ml-[19px] lg:self-end"
           >
             <span class="underline decoration-2 underline-offset-[3px]">
               {cases.link}
@@ -106,7 +106,7 @@ const factKeys = ['goal', 'start', 'did', 'time', 'result'] as const;
             )}
             <svg
               viewBox="0 0 18 18"
-              class="size-[18px] text-orange"
+              class="size-[18px] text-orange transition-transform duration-300 ease-out-quart group-hover/link:translate-x-[3px] group-hover/link:-translate-y-[3px]"
               fill="none"
               stroke="currentColor"
               stroke-width="2"
