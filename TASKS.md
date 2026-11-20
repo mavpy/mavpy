@@ -88,9 +88,12 @@ The agent works top to bottom, ticks `[x]` when a task is done, and adds short n
 
 ## M6: Ukrainian
 
-- [ ] Translate all copy into `uk.ts` (natural Ukrainian), mark it for Serhii's review
-- [ ] Ukrainian OG/meta
-- [ ] Layout check with the UK text at every breakpoint
+- [x] Translate all copy into `uk.ts` (natural Ukrainian), mark it for Serhii's review
+  - Already written section by section in M3–M5. Checked here: same keys and array lengths as `en.ts` (only prices, brand names and URLs are identical), no hard-coded copy in components or `src/data/`, apostrophes normalised to ’. Whole file is marked `// review: Serhii`.
+- [x] Ukrainian OG/meta
+  - Already in `Base.astro`: localized title/description/og:title/og:description, `og:locale` uk_UA + alternate, hreflang en/uk/x-default, canonical per language. og:image is an M7 task.
+- [x] Layout check with the UK text at every breakpoint
+  - Headless Chrome over CDP at 375/768/1024/1280/1440/1920, EN and UK: no horizontal scroll, no clipped text, no wrapped buttons; menu and form error states checked. The hero word's letter-spacing box pokes past the viewport at 768–1280 (the ink doesn't); `html { overflow-x: clip }` already handles that. «Медична клініка» wraps on mobile because the chevron column stays reserved on the open card (intended).
 
 ## M7: Polish
 
