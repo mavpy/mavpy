@@ -3,6 +3,7 @@ import { z } from 'astro/zod';
 import { goalIds, goalLabel } from '../data/goals';
 import { en } from '../i18n/en';
 import { t } from '../i18n/utils';
+import { renderAutoReply } from '../lib/autoreply-email';
 import { sendAutoReply, sendLead } from '../lib/leads';
 
 // Faster than this from page load to submit is a bot.
@@ -37,17 +38,17 @@ export const server = {
         });
 
       // Auto-reply in the visitor's language. Best effort: the lead is already delivered.
-      const d = t(input.locale);
-      const r = d.contact.autoReply;
       try {
-        await sendAutoReply(input.email, r.subject, [
-          r.greeting.replace('{name}', input.name),
-          r.intro,
-          `${r.goal} ${goalLabel(d, input.goal)}`,
-          r.next,
-          r.details,
-          r.signoff,
-        ]);
+        const goal = goalLabel(t(input.locale), input.goal);
+        await sendAutoReply(
+          input.email,
+          renderAutoReply(
+            input.locale,
+            input.name,
+            goal,
+            ctx.site?.href ?? ctx.url.origin,
+          ),
+        );
       } catch (err) {
         console.error('lead: autoreply failed:', err);
       }

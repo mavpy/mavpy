@@ -78,12 +78,11 @@ async function toTelegram(lead: Lead) {
 /**
  * Auto-reply to the person who submitted the form (Resend). Not a delivery channel: it's
  * separate from sendLead so a failure here never fails a lead. Skipped when no key is set.
- * Replies go to the studio inbox.
+ * Replies go to the studio inbox. Content comes from autoreply-email.ts.
  */
 export async function sendAutoReply(
   to: string,
-  subject: string,
-  paragraphs: string[],
+  mail: { subject: string; html: string; text: string },
 ) {
   if (!RESEND_API_KEY) return;
   await post(
@@ -94,9 +93,7 @@ export async function sendAutoReply(
       from: MAIL_FROM || 'MAVPY <onboarding@resend.dev>',
       to,
       reply_to: site.email,
-      subject,
-      text: paragraphs.join('\n\n'),
-      html: paragraphs.map((p) => `<p>${esc(p)}</p>`).join(''),
+      ...mail,
     },
   );
 }
@@ -116,6 +113,6 @@ async function post(
   if (!res.ok) throw new Error(`${res.status} ${await res.text()}`);
 }
 
-/** Enough HTML escaping for Telegram's HTML mode and our plain email markup. */
+/** Telegram's HTML mode only needs these three escaped. */
 const esc = (s: string) =>
   s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');

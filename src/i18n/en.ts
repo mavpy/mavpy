@@ -300,13 +300,16 @@ export const en = {
     // TODO(copy): draft, check with Serhii.
     autoReply: {
       subject: 'Thanks for reaching out to MAVPY',
-      greeting: 'Hi {name},',
+      // Inbox preview line (hidden in the e-mail body).
+      preheader: "We've got your request and will reply within 24 hours.",
+      title: 'Thank you, {name}!',
       intro:
         "Thanks for your interest in working with us. We've got your request.",
-      goal: 'Your goal:',
+      goal: 'Your goal',
       next: "We'll get back to you within 24 hours with next steps and a short call to agree on the exact price.",
       details:
         'Want to add details, like a link to your current site, deadlines or examples you like? Just reply to this e-mail.',
+      cta: 'See our recent work',
       signoff: 'MAVPY design studio',
     },
   },
