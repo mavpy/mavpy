@@ -29,8 +29,8 @@ const { about } = t(getLang(Astro.url));
     <Image
       src={serhii}
       alt={about.photoAlt}
-      widths={[360, 720]}
-      sizes="(min-width: 1024px) 356px, 327px"
+      widths={[360, 560, 720, 843]}
+      sizes="(min-width: 1024px) 356px, calc(100vw - 48px)"
       class="aspect-[327/362] w-full rounded-card bg-white object-cover lg:col-start-2 lg:row-start-1 lg:aspect-auto lg:h-full"
     />
     <div class="rounded-card bg-white px-[15px] pt-[6px] pb-[55px] text-center lg:col-start-1 lg:row-start-1 lg:px-[26px] lg:pt-[39px] lg:pb-[62px] lg:text-left">
