@@ -41,7 +41,7 @@ const linkClass =
       <ul class="flex gap-6 text-nav font-medium lg:gap-10">
         {navLinks.map(([id, key]) => (
           <li>
-            <a href={`#${id}`} class={linkClass}>
+            <a href={localizePath(lang, `#${id}`)} class={linkClass}>
               {nav[key]}
             </a>
           </li>
@@ -106,7 +106,11 @@ const linkClass =
       <ul class="mt-16 flex flex-col items-center gap-8 text-card font-bold">
         {navLinks.map(([id, key]) => (
           <li>
-            <a href={`#${id}`} class={linkClass} data-menu-link>
+            <a
+              href={localizePath(lang, `#${id}`)}
+              class={linkClass}
+              data-menu-link
+            >
               {nav[key]}
             </a>
           </li>

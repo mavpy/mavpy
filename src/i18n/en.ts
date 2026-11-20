@@ -30,6 +30,13 @@ export const en = {
     title: 'MAVPY: conversion-focused websites for growing businesses',
     description:
       'A founder-led design studio. Websites that turn visitors into clients: scoped, priced upfront and delivered end-to-end.',
+    ogImageAlt:
+      'MAVPY: the pixel monkey logo on orange, design and development',
+  },
+  notFound: {
+    title: 'Page not found',
+    text: 'This page doesn’t exist or has moved.',
+    cta: 'Back to the home page',
   },
   a11y: {
     skipToContent: 'Skip to content',

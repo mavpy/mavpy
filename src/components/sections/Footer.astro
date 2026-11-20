@@ -41,7 +41,7 @@ const contacts = [
         <ul class="flex flex-col gap-[21px] uppercase lg:gap-2.5">
           {navLinks.map(([id, key]) => (
             <li>
-              <a href={`#${id}`} class={link}>
+              <a href={localizePath(lang, `#${id}`)} class={link}>
                 {nav[key]}
               </a>
             </li>
