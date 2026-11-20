@@ -1,6 +1,8 @@
 ---
 // Desktop (md+): logo left, nav + language link right. Not sticky, as on Webflow.
 // Mobile: language link | centred logo (as in Figma) | menu button. The menu is a native
+// The language link's sr-only full name uses a system font: in Roboto it would make EN pages
+// download the Cyrillic file just for invisible text.
 // popover: Esc, focus return and top-layer stacking come free; the script only closes it on
 // link click and carries the current section over when switching language.
 import Logo from '../../assets/logos/logo.svg';
@@ -28,7 +30,7 @@ const linkClass =
       ]}
     >
       {langSwitch.short}
-      <span class="sr-only">, {langSwitch.label}</span>
+      <span class="sr-only font-[system-ui]">, {langSwitch.label}</span>
     </a>
 
     <a href={home} aria-label={nav.home} class="md:order-1 md:mr-auto">
@@ -78,7 +80,7 @@ const linkClass =
         class:list={[linkClass, 'justify-self-start text-nav font-medium']}
       >
         {langSwitch.short}
-        <span class="sr-only">, {langSwitch.label}</span>
+        <span class="sr-only font-[system-ui]">, {langSwitch.label}</span>
       </a>
       <a href={home} aria-label={nav.home} data-menu-link>
         <Logo aria-hidden="true" width={157} height={42} />
