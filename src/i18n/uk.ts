@@ -182,7 +182,7 @@ export const uk: Dict = {
         ],
         name: 'Наталія М.',
         company: 'Масажна клініка SRT',
-        project: 'повний редизайн сайту',
+        project: 'Повний редизайн',
         avatar: 'natalia',
       },
       {
@@ -192,7 +192,7 @@ export const uk: Dict = {
         ],
         name: 'Брам В.',
         company: 'Space’M Online',
-        project: 'дизайн і розробка',
+        project: 'Дизайн і розробка',
         avatar: 'bram',
       },
       {
@@ -204,7 +204,7 @@ export const uk: Dict = {
         ],
         name: 'Іван В.',
         company: 'Doctor LOR',
-        project: 'повний цикл: дизайн і розробка',
+        project: 'Дизайн і розробка',
         avatar: 'ivan',
       },
       {
@@ -213,7 +213,7 @@ export const uk: Dict = {
         ],
         name: 'Дмитро В.',
         company: 'Стоматологічна клініка',
-        project: 'повний редизайн сайту',
+        project: 'Повний редизайн',
         avatar: 'placeholder',
       },
       {
@@ -222,7 +222,7 @@ export const uk: Dict = {
         ],
         name: 'Юлія Г.',
         company: 'Інтернет-магазин',
-        project: 'повний редизайн сайту',
+        project: 'Повний редизайн',
         avatar: 'placeholder',
       },
       {
@@ -231,7 +231,7 @@ export const uk: Dict = {
         ],
         name: 'Дарія Л.',
         company: 'Дизайн-студія',
-        project: 'редизайн сайту',
+        project: 'Повний редизайн',
         avatar: 'placeholder',
       },
     ],

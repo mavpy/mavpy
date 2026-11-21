@@ -204,7 +204,7 @@ export const en = {
         ],
         name: 'Natalia M.',
         company: 'SRT Massage clinic',
-        project: 'full redesign site',
+        project: 'Full redesign',
         avatar: 'natalia',
       },
       {
@@ -214,7 +214,7 @@ export const en = {
         ],
         name: 'Bram V.',
         company: 'Space’M Online',
-        project: 'design and develop',
+        project: 'Design and development',
         avatar: 'bram',
       },
       {
@@ -226,7 +226,7 @@ export const en = {
         ],
         name: 'Ivan V.',
         company: 'Doctor LOR',
-        project: 'full design and dev',
+        project: 'Design and development',
         avatar: 'ivan',
       },
       {
@@ -235,7 +235,7 @@ export const en = {
         ],
         name: 'Dmytro V.',
         company: 'Dental clinic',
-        project: 'full redesign site',
+        project: 'Full redesign',
         avatar: 'placeholder',
       },
       {
@@ -244,7 +244,7 @@ export const en = {
         ],
         name: 'Julia G.',
         company: 'Online store',
-        project: 'full redesign site',
+        project: 'Full redesign',
         avatar: 'placeholder',
       },
       {
@@ -253,7 +253,7 @@ export const en = {
         ],
         name: 'Daria L.',
         company: 'Design studio',
-        project: 'redesign site',
+        project: 'Full redesign',
         avatar: 'placeholder',
       },
     ] as Testimonial[],
