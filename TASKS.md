@@ -148,14 +148,14 @@ The agent works top to bottom, ticks `[x]` when a task is done, and adds short n
 Technical and setup calls that are Nikita's alone.
 
 - Production domain name (registrar: Cloudflare, at cost, per M8).
-- Mavpy-owned accounts for the Telegram bot and group, Airtable, Resend and hosting: who creates and owns them? (M8 swaps the personal ones out; only env var values change.)
+- Studio accounts (Telegram bot and group, Airtable, Resend, hosting) move to mavpy.studio@gmail.com in M8 (agreed with Serhii 2026-11-21). Only env var values change.
 - When to move hosting from Vercel Hobby (non-commercial) to Cloudflare: before launch, or right after?
 
 ## To settle with Serhii
 
 Copy, translation, prices, contact details and brand content. Nikita and Serhii decide these together. The site is the source of truth; changes come from Serhii through Figma.
 
-- Testimonial project lines read oddly in English ("full redesign site", "design and develop", "full design and dev").
-- Auto-reply e-mail wording (`contact.autoReply`) and the Ukrainian translation review (`uk.ts`, `// review: Serhii`), plus the new cookie banner copy.
-- Contact details: Figma's mavpy_agency@gmail.com / +380 99 320 84 54 vs Webflow's mavpy.studio@gmail.com / +38 (099) 220 83 43.
-- Assets: facts and live URLs for cases 2–5, a full crypto screenshot, Natalia's avatar in higher resolution, real photos for Dmytro, Julia and Daria.
+- Cases 2–5: waiting for Serhii's data (facts, live URLs); replace the non-real cases.
+- UK translation: review on a call (`uk.ts`, `// review: Serhii`).
+- Auto-reply e-mail wording (`contact.autoReply`) and the cookie banner copy.
+- Assets: a full crypto screenshot, Natalia's avatar in higher resolution, real photos for Dmytro, Julia and Daria.
