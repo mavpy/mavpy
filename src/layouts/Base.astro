@@ -11,6 +11,7 @@ import hegartyLatin from '@fontsource/bbh-hegarty/files/bbh-hegarty-latin-400-no
 import robotoLatin500 from '@fontsource/roboto/files/roboto-latin-500-normal.woff2?url';
 import robotoCyr400 from '@fontsource/roboto/files/roboto-cyrillic-400-normal.woff2?url';
 import robotoCyr500 from '@fontsource/roboto/files/roboto-cyrillic-500-normal.woff2?url';
+import unboundedCyr from '@fontsource/unbounded/files/unbounded-cyrillic-900-normal.woff2?url';
 
 interface Props {
   /** Overrides the localized page title (e.g. the 404). */
@@ -26,10 +27,10 @@ const ogImage = new URL('/og.jpg', Astro.site ?? Astro.url).href;
 const site = Astro.site ?? Astro.url;
 const canonical = new URL(Astro.url.pathname, site).href;
 const ogLocale = { en: 'en_US', uk: 'uk_UA' } as const;
-// Helvetica Thin is "clients" (the LCP) on both pages. On /uk/ "БІЛЬШЕ" falls back to Roboto (no Cyrillic in Hegarty).
+// Helvetica Thin is "clients" (the LCP) on both pages. On /uk/ "БІЛЬШЕ" is Unbounded (no Cyrillic in Hegarty).
 const preloadFonts =
   lang === 'uk'
-    ? ['/fonts/HelveticaNeue-Thin-cyrillic.woff2', robotoCyr400, robotoCyr500]
+    ? ['/fonts/HelveticaNeue-Thin-cyrillic.woff2', unboundedCyr, robotoCyr500]
     : ['/fonts/HelveticaNeue-Thin-latin.woff2', hegartyLatin, robotoLatin500];
 ---
 

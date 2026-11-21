@@ -144,6 +144,13 @@
     @apply bg-paper font-sans text-body text-black antialiased;
   }
 
+  /* Archivo and BBH Hegarty have no Cyrillic (fonts.css). /uk/ headings use Inter Tight throughout;
+     Hegarty stays first so Latin (the footer wordmark) keeps it and only Cyrillic falls to Unbounded. */
+  :root:lang(uk) {
+    --font-display: 'Inter Tight', 'Roboto', system-ui, sans-serif;
+    --font-hegarty: 'BBH Hegarty', 'Unbounded', 'Roboto', system-ui, sans-serif;
+  }
+
   /* Orange on the light backgrounds is under 3:1, so the focus ring is black with an orange
      halo: brand-coloured but always visible. */
   :focus-visible {
