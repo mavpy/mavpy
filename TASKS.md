@@ -125,11 +125,27 @@ The agent works top to bottom, ticks `[x]` when a task is done, and adds short n
   - Take them from the final production build, after Serhii's fixes. Capture at 1440 and 375 px.
   - README written (2026-11-20). Screenshots: desktop only (Nikita, 2026-11-20), 1440 px @1x from production: hero EN + UK, plus how-we-work, cases, pricing, contact sections (DevTools script: scrolls the page first for lazy images, grows the viewport to the section height or off-screen parts render blank). Retake after Serhii's fixes.
 
+## M9: Review answers (2026-11-21)
+
+- [x] Contact subline: "from $500" -> "from $700"
+- [x] Form goal "Revamp your website" -> "Care plan" (id `care`)
+  - Airtable already sends with `typecast: true`, so the new "Care plan" select option is created on the first lead; old records keep "Revamp your website".
+- [x] About "Five years" computed from 2021 at build time
+  - `studioYears` in en.ts; words for 5–10, digits after that; uk plural via `Intl.PluralRules('uk')` (рік/роки/років). Pages are static, so it updates on the next deploy after New Year. The footer's "2021-2026" is still hard-coded.
+- [x] Testimonials: swipeable scroll-snap carousel on mobile
+  - One scroller at every size now: mobile cards are 88% wide so the next one peeks, plus a "2 / 6" counter below; desktop arrows unchanged. `.reveal` moved from the cards to the list (a view timeline inside a horizontal scroller never fires). Reduced motion: `scroll-behavior: auto`.
+- [x] Placeholder avatars (Dmytro, Julia, Daria): initials circles in orange-ramp tints, `TODO(photo)`
+  - Rendered from the name (Cyrillic initials on /uk/), no image files; `placeholder.svg` deleted.
+- [ ] Ukrainian heading fonts: Cyrillic look-alikes for Archivo and BBH Hegarty, only on `lang="uk"`
+  - Previews shown to Nikita: A = Inter Tight + Unbounded 900, B = Onest + Dela Gothic One. Waiting for the pick.
+- [x] GA4 prepped but off: `PUBLIC_GA_ID` + cookie banner (EN/UK)
+  - `components/Consent.astro`, rendered from Base only when the var is set. Consent Mode v2 defaults all denied; Accept grants `analytics_storage` only (no ads). gtag.js is never requested before Accept; choice in localStorage (`mavpy-consent`). No "change cookie settings" link yet: clearing site data brings the banner back.
+
 ## Decisions for Nikita
 
 Technical and setup calls that are Nikita's alone.
 
-- Analytics: none, Plausible or GA?
+- ~~Analytics~~: GA4, prepped and off until `PUBLIC_GA_ID` is set (M9). Create the GA property when ready.
 - Production domain name (registrar: Cloudflare, at cost, per M8).
 - Mavpy-owned accounts for the Telegram bot and group, Airtable, Resend and hosting: who creates and owns them? (M8 swaps the personal ones out; only env var values change.)
 - When to move hosting from Vercel Hobby (non-commercial) to Cloudflare: before launch, or right after?
@@ -138,32 +154,11 @@ Technical and setup calls that are Nikita's alone.
 
 Copy, translation, prices, contact details and brand content. Nikita and Serhii decide these together. The site is the source of truth; changes come from Serhii through Figma.
 
-**Copy and content**
+Answered in the review poll (2026-11-21): see **M9: Review answers** above for what changed. Kept as is: Helvetica Neue Thin, the restyled contact section, the mobile case links, the desktop testimonial arrows and the Webflow copy.
 
-- Contact subline says "from $500", but the lowest price on the site is now $700 (cards: $1000 / $700 / Care plan $40/m). What should it say?
-- The form's goal list still has "Revamp your website", which no longer has a pricing card. Keep it, or swap it for "Care plan"?
-- Testimonial project lines read oddly in English ("full redesign site", "design and develop", "full design and dev"). Rewrite, e.g. "Full redesign", "Design and development"?
-- About says "Five years" (since 2021). Fine to hard-code, or should the count update itself each year?
-- Auto-reply e-mail wording (EN + UK drafts in `contact.autoReply`): OK?
-- Ukrainian translation: review it together (the whole of `uk.ts` is marked `// review: Serhii`).
+Not covered by the poll, still open:
 
-**Contact details**
-
-- The site shows mavpy_agency@gmail.com and +380 99 320 84 54 (from Figma). Webflow had mavpy.studio@gmail.com and +38 (099) 220 83 43. Which are current?
-
-**Assets**
-
-- Facts and live URLs for cases 2–5 (only the clinic has them), plus a full screenshot of the crypto site (the open crypto card is an upscaled strip until then).
-- Photos: Natalia's avatar in higher resolution; Dmytro, Julia and Daria have grey placeholders.
-
-**Fonts**
-
-- Archivo and BBH Hegarty have no Cyrillic glyphs. What should Ukrainian headings use? (A Cyrillic-capable look-alike for /uk/, or the browser's fallback system font.)
-- Helvetica Neue Thin is a commercial Linotype font. Does the studio have a web licence? If not, we need a free substitute.
-
-**Design choices the build made differently from Figma** (Serhii to update Figma, or ask to revert)
-
-- Contact section: restyled to match the rest of the site (shared heading style, one underline field style on all screens, a full-size button, designed error/loading states). Structure unchanged.
-- Cases on mobile: black link with ↗ and Roboto titles, as on desktop, instead of Figma's orange (#ff6b31, fails contrast on sand) "View live site →".
-- Testimonials on desktop: ‹ › arrows so mouse users can scroll the row (not in Figma).
-- Copy was synced from Webflow (hero note, trust bar, pain card 3, process, 6 testimonials, about card, pricing, form labels, footer years), so Figma's text is now out of date in those places.
+- Testimonial project lines read oddly in English ("full redesign site", "design and develop", "full design and dev").
+- Auto-reply e-mail wording (`contact.autoReply`) and the Ukrainian translation review (`uk.ts`, `// review: Serhii`), plus the new cookie banner copy.
+- Contact details: Figma's mavpy_agency@gmail.com / +380 99 320 84 54 vs Webflow's mavpy.studio@gmail.com / +38 (099) 220 83 43.
+- Assets: facts and live URLs for cases 2–5, a full crypto screenshot, Natalia's avatar in higher resolution, real photos for Dmytro, Julia and Daria.

@@ -44,15 +44,16 @@ npm run dev            # http://localhost:4321
 
 Set them in `.env` locally and in the host's project settings for production. All are optional: a channel with missing values is skipped, and a lead counts as delivered if at least one channel accepts it.
 
-| Variable             | Used for                                                                                                     |
-| -------------------- | ------------------------------------------------------------------------------------------------------------ |
-| `TELEGRAM_BOT_TOKEN` | Bot token from @BotFather                                                                                    |
-| `TELEGRAM_CHAT_ID`   | Chat id of the studio group the bot is in (a negative number)                                                |
-| `AIRTABLE_TOKEN`     | Personal access token with `data.records:write` on the base                                                  |
-| `AIRTABLE_BASE_ID`   | Base id (`app...`)                                                                                           |
-| `AIRTABLE_TABLE`     | Table name, default `Leads`. Fields: Name, Email, Goal, Locale, Page, Status                                 |
-| `RESEND_API_KEY`     | Auto-reply e-mail to the visitor. No key means no auto-reply                                                 |
-| `MAIL_FROM`          | Sender, e.g. `MAVPY <hello@your-domain>`. Needs a domain verified in Resend; empty uses Resend's test sender |
+| Variable             | Used for                                                                                                                      |
+| -------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `TELEGRAM_BOT_TOKEN` | Bot token from @BotFather                                                                                                     |
+| `TELEGRAM_CHAT_ID`   | Chat id of the studio group the bot is in (a negative number)                                                                 |
+| `AIRTABLE_TOKEN`     | Personal access token with `data.records:write` on the base                                                                   |
+| `AIRTABLE_BASE_ID`   | Base id (`app...`)                                                                                                            |
+| `AIRTABLE_TABLE`     | Table name, default `Leads`. Fields: Name, Email, Goal, Locale, Page, Status                                                  |
+| `RESEND_API_KEY`     | Auto-reply e-mail to the visitor. No key means no auto-reply                                                                  |
+| `MAIL_FROM`          | Sender, e.g. `MAVPY <hello@your-domain>`. Needs a domain verified in Resend; empty uses Resend's test sender                  |
+| `PUBLIC_GA_ID`       | GA4 measurement id (`G-...`). Empty = no analytics. Set = cookie banner; gtag loads only after Accept. Baked in at build time |
 
 Delivery code is in `src/lib/leads.ts`; the form action and its validation are in `src/actions/index.ts`.
 
