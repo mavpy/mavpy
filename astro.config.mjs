@@ -28,6 +28,12 @@ export default defineConfig({
       AIRTABLE_BASE_ID: secret(),
       RESEND_API_KEY: secret(),
       MAIL_FROM: secret(),
+      // GA4 measurement id (G-...). Unset = no banner, no gtag. Public: it ends up in the page anyway.
+      PUBLIC_GA_ID: envField.string({
+        context: 'client',
+        access: 'public',
+        optional: true,
+      }),
       AIRTABLE_TABLE: envField.string({
         context: 'server',
         access: 'secret',

@@ -52,6 +52,13 @@ export const en = {
   a11y: {
     skipToContent: 'Skip to content',
   },
+  // Cookie banner; only shown when GA is configured (PUBLIC_GA_ID).
+  consent: {
+    label: 'Cookie consent',
+    text: 'We use cookies for anonymous analytics (Google Analytics) to improve the site.',
+    accept: 'Accept',
+    decline: 'Decline',
+  },
   nav: {
     label: 'Main',
     home: 'MAVPY, home',

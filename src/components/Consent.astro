@@ -1,0 +1,80 @@
+---
+// Cookie banner + GA4. Rendered only when PUBLIC_GA_ID is set. Nothing from Google loads until the
+// visitor accepts; the choice is kept in localStorage. Consent Mode v2: everything defaults to
+// denied, accepting grants analytics_storage only (no ads on this site, so ad_* stay denied).
+import Button from './ui/Button.astro';
+import { getLang, t } from '../i18n/utils';
+
+const { gaId } = Astro.props as { gaId: string };
+const { consent } = t(getLang(Astro.url));
+---
+
+<div
+  id="consent"
+  role="region"
+  aria-label={consent.label}
+  data-ga={gaId}
+  hidden
+  class="fixed inset-x-4 bottom-4 z-40 mx-auto max-w-[480px] rounded-card bg-white p-5 text-[15px] leading-[1.35] shadow-[0_4px_24px_rgb(0_0_0/0.15)] sm:right-6 sm:left-auto"
+>
+  <p>{consent.text}</p>
+  <div class="mt-4 flex items-center gap-5">
+    <Button size="sm" data-consent="granted">
+      {consent.accept}
+    </Button>
+    <button
+      type="button"
+      data-consent="denied"
+      class="cursor-pointer underline underline-offset-4 hover:no-underline"
+    >
+      {consent.decline}
+    </button>
+  </div>
+</div>
+
+<script>
+  const banner = document.getElementById('consent')!;
+  const id = banner.dataset.ga!;
+  const KEY = 'mavpy-consent';
+  const w = window as unknown as { dataLayer: unknown[] };
+  w.dataLayer ||= [];
+  // gtag must push the `arguments` object itself, not an array.
+  function gtag(..._: unknown[]) {
+    w.dataLayer.push(arguments);
+  }
+  gtag('consent', 'default', {
+    ad_storage: 'denied',
+    ad_user_data: 'denied',
+    ad_personalization: 'denied',
+    analytics_storage: 'denied',
+  });
+
+  const load = () => {
+    gtag('consent', 'update', { analytics_storage: 'granted' });
+    gtag('js', new Date());
+    gtag('config', id);
+    const s = document.createElement('script');
+    s.async = true;
+    s.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(id)}`;
+    document.head.append(s);
+  };
+
+  // Storage can throw (private mode, blocked site data): then the banner just asks again.
+  let choice: string | null = null;
+  try {
+    choice = localStorage.getItem(KEY);
+  } catch {}
+  if (choice === 'granted') load();
+  else if (choice !== 'denied') banner.hidden = false;
+
+  banner.querySelectorAll<HTMLButtonElement>('[data-consent]').forEach((b) =>
+    b.addEventListener('click', () => {
+      const v = b.dataset.consent!;
+      try {
+        localStorage.setItem(KEY, v);
+      } catch {}
+      banner.hidden = true;
+      if (v === 'granted') load();
+    }),
+  );
+</script>

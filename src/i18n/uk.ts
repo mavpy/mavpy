@@ -32,6 +32,12 @@ export const uk: Dict = {
   a11y: {
     skipToContent: 'Перейти до змісту',
   },
+  consent: {
+    label: 'Згода на cookie',
+    text: 'Ми використовуємо cookie для анонімної аналітики (Google Analytics), щоб покращувати сайт.',
+    accept: 'Прийняти',
+    decline: 'Відхилити',
+  },
   nav: {
     label: 'Головне',
     home: 'MAVPY, на головну',
