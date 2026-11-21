@@ -1,8 +1,8 @@
 ---
-// Testimonials ("What it's like to work with us"). Mobile: cards stacked. lg: one row that
-// bleeds off the right edge (as in the desktop frame), as a CSS scroll-snap scroller: swipe,
-// trackpad and keyboard work natively; two arrow buttons (Webflow has them, Figma doesn't)
-// cover mouse users. Negative margin + matching padding (and scroll-padding) let the list run
+// Testimonials ("What it's like to work with us"). One CSS scroll-snap row at every size:
+// swipe, trackpad and keyboard work natively. Mobile: one card per view, the next one peeking
+// in the gutter, plus a "2 / 6" counter. lg: the row bleeds off the right edge (as in the
+// desktop frame); two arrow buttons (Webflow has them, Figma doesn't) cover mouse users. Negative margin + matching padding (and scroll-padding) let the list run
 // edge to edge while cards still snap to the column; cqw (the section is a size container)
 // is used instead of vw, which would include the scrollbar.
 import { Image } from 'astro:assets';
@@ -61,13 +61,10 @@ const avatars = { natalia, bram, ivan, placeholder };
   <ul
     id="testimonials-list"
     aria-label={tm.listLabel}
-    class="mt-[53px] grid gap-[32px] lg:mt-[49px] lg:[--bleed:calc((100cqw-min(var(--container-content),100cqw-2*var(--spacing-gutter)))/2)] lg:-mx-(--bleed) lg:flex lg:snap-x lg:snap-mandatory lg:gap-[24px] lg:overflow-x-auto lg:scroll-smooth lg:scroll-px-(--bleed) lg:px-(--bleed) lg:[scrollbar-width:none] motion-reduce:lg:scroll-auto"
+    class="reveal mt-[53px] flex snap-x snap-mandatory scroll-px-(--bleed) gap-[16px] overflow-x-auto scroll-smooth px-(--bleed) [--bleed:calc((100cqw-min(var(--container-content),100cqw-2*var(--spacing-gutter)))/2)] [scrollbar-width:none] -mx-(--bleed) motion-reduce:scroll-auto lg:mt-[49px] lg:gap-[24px]"
   >
-    {tm.items.map((item, i) => (
-      <li
-        style={`--i: ${i}`}
-        class="reveal mx-auto w-full max-w-[483px] lg:w-[483px] lg:shrink-0 lg:snap-start"
-      >
+    {tm.items.map((item) => (
+      <li class="w-[88%] max-w-[483px] shrink-0 snap-start lg:w-[483px]">
         <figure class="flex h-full min-h-[305px] flex-col rounded-card bg-white p-[9px] lg:min-h-[451px] lg:p-[14px] lg:pb-[20px]">
           <blockquote class="px-[11px] pt-[11px] pb-6 text-center text-[20px] leading-[1.172] lg:pr-[3px] lg:pl-[5px] lg:pt-[22px] lg:text-left lg:text-[28px]">
             {item.quote.map((s, i) => (
@@ -95,20 +92,34 @@ const avatars = { natalia, bram, ivan, placeholder };
       </li>
     ))}
   </ul>
+  <p
+    class="mt-[24px] text-center text-[15px] tabular-nums lg:hidden"
+    data-counter
+  >
+    1 / {tm.items.length}
+  </p>
 </Section>
 
 <script>
-  // Arrows scroll by one card (+ gap) and disable at the ends.
+  // Arrows (lg) scroll by one card (+ gap) and disable at the ends; the counter (mobile)
+  // shows the card snapped at the start.
   const list = document.getElementById('testimonials-list')!;
+  const counter = document.querySelector<HTMLElement>('[data-counter]')!;
   const [prev, next] = document.querySelectorAll<HTMLButtonElement>(
     '[data-arrows] button',
   );
-  const step = () => (list.firstElementChild as HTMLElement).offsetWidth + 24;
+  const step = () =>
+    (list.firstElementChild as HTMLElement).offsetWidth +
+    parseFloat(getComputedStyle(list).columnGap);
   const update = () => {
-    // Focusable (for keyboard scrolling) only while it actually scrolls, i.e. on lg.
+    // Focusable (arrow keys scroll it) only while it actually scrolls.
     list.tabIndex = list.scrollWidth > list.clientWidth ? 0 : -1;
     prev.disabled = list.scrollLeft <= 1;
-    next.disabled = list.scrollLeft + list.clientWidth >= list.scrollWidth - 1;
+    const atEnd = list.scrollLeft + list.clientWidth >= list.scrollWidth - 1;
+    next.disabled = atEnd;
+    const n = list.children.length;
+    const i = atEnd ? n : Math.round(list.scrollLeft / step()) + 1;
+    counter.textContent = `${i} / ${n}`;
   };
   prev.addEventListener('click', () => list.scrollBy({ left: -step() }));
   next.addEventListener('click', () => list.scrollBy({ left: step() }));
