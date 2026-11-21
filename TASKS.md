@@ -138,6 +138,8 @@ The agent works top to bottom, ticks `[x]` when a task is done, and adds short n
   - Rendered from the name (Cyrillic initials on /uk/), no image files; `placeholder.svg` deleted.
 - [x] Ukrainian heading fonts: Cyrillic look-alikes for Archivo and BBH Hegarty, only on `lang="uk"`
   - Nikita picked Inter Tight + Unbounded 900 (over Onest + Dela Gothic One). `:root:lang(uk)` swaps the tokens in global.css: Inter Tight for whole display headings; Hegarty stays first with Unbounded behind it (Cyrillic faces only), so the Latin footer wordmark keeps Hegarty. Unbounded's 900 file is declared as weight 400 because Hegarty text asks for 400. On /uk/ it's preloaded instead of Roboto Cyrillic 400. «БІЛЬШЕ» fits from 320 to 1920 with no overlap; EN loads none of the new files.
+- [x] Hero bar merged with the first letter of MORE / БІЛЬШЕ, same height as the letters (Nikita, 2026-11-21)
+  - The bar is a run of the font's own I glyphs (`aria-hidden`), not a box: Chrome snaps box backgrounds to whole pixels but draws text at sub-pixel positions, so a box was up to 1 device px off. Glyphs step by exactly half their ink width so every pixel is covered twice and the edges stay smooth. Measured at 2x from 320 to 1920 in both languages: same top and bottom rows as the letters; effective edges within 0.25 device px. `--color-ink` removed (the bar now uses the text colour).
 - [x] GA4 prepped but off: `PUBLIC_GA_ID` + cookie banner (EN/UK)
   - `components/Consent.astro`, rendered from Base only when the var is set. Consent Mode v2 defaults all denied; Accept grants `analytics_storage` only (no ads). gtag.js is never requested before Accept; choice in localStorage (`mavpy-consent`). No "change cookie settings" link yet: clearing site data brings the banner back.
 

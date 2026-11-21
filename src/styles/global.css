@@ -190,7 +190,7 @@
       animation: rise 0.9s var(--ease-out-quart) var(--d, 0s) both;
     }
     /* The bar left of "MORE" wipes in from the screen edge. */
-    .rise-bar::before {
+    .rise-bar > span {
       transform-origin: left;
       animation: bar 1s var(--ease-out-quart) both;
     }

@@ -9,6 +9,16 @@ import { getLang, t } from '../../i18n/utils';
 
 const { hero, trust } = t(getLang(Astro.url));
 const [s1, s2, s3] = hero.statement;
+// The bar beside "MORE" is drawn with the font's own I (a plain cap-height rectangle in both
+// fonts), so its top and bottom are rasterised exactly like the letters. A box background
+// can't match: Chrome snaps it to whole pixels while text sits on a sub-pixel position.
+// Cyrillic І on /uk/ resolves to Unbounded (caps 0.75em), Latin I to Hegarty (0.7em).
+// Tracking sets the step to exactly half the I's ink width (Hegarty: advance 0.36, ink 0.28;
+// Unbounded: 0.378, 0.258), so every pixel is under exactly two glyphs and the anti-aliased
+// top and bottom rows stay even (uneven overlaps would show as faint dots along the edge).
+const bar = /[\u0400-\u04ff]/.test(hero.more)
+  ? { glyph: 'І', tracking: '-0.249em' }
+  : { glyph: 'I', tracking: '-0.22em' };
 ---
 
 <section id="top" class="scroll-mt-4">
@@ -20,14 +30,20 @@ const [s1, s2, s3] = hero.statement;
         {hero.h1.after}
       </h1>
 
-      <!-- The bar is the ::before: as tall as the caps (leading 0.7 = Hegarty's cap height, as in the
-           footer wordmark), running off the left edge of the screen and 0.1em into the first letter
-           (past its 0.04em side bearing), in the text colour, so bar and letter read as one shape.
-           /uk/ (Unbounded, caps 0.75em, same baseline) grows the bar 0.05em upwards. -->
+      <!-- Bar: a run of overlapping I glyphs (see `bar` above), ~14em long, so it runs off the left
+           edge of the screen. Its right ink edge lands ~0.12em into the first letter (past the
+           letter's 0.04em side bearing), so bar and letter read as one shape. -->
       <p
         style="--d: 0.1s"
-        class="rise rise-bar relative mx-auto mt-[46.5px] w-fit font-hegarty text-more leading-[0.7] uppercase before:absolute before:inset-y-0 before:right-[calc(100%-0.1em)] before:w-screen before:bg-current [&:lang(uk)]:before:-top-[0.05em] lg:mx-0 lg:mt-[16.5px] lg:ml-[0.5em]"
+        class="rise rise-bar relative mx-auto mt-[46.5px] w-fit font-hegarty text-more leading-[0.7] uppercase lg:mx-0 lg:mt-[16.5px] lg:ml-[0.5em]"
       >
+        <span
+          aria-hidden="true"
+          class="absolute top-0 right-[calc(100%+0.06em)] whitespace-nowrap select-none"
+          style={`letter-spacing: ${bar.tracking}`}
+        >
+          {bar.glyph.repeat(100)}
+        </span>
         {hero.more}
       </p>
     </div>
