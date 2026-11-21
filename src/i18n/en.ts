@@ -301,7 +301,7 @@ export const en = {
   },
   contact: {
     title: "Tell us your goal, we'll price it",
-    sub: "You've seen the ballpark — from $500. Exact figure on a short call. No sales marathon. We reply within 24 hours.",
+    sub: "You've seen the ballpark — from $700. Exact figure on a short call. No sales marathon. We reply within 24 hours.",
     name: 'Your name',
     email: 'Email address',
     goal: 'Your goal',
