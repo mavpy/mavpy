@@ -28,7 +28,7 @@ export type Testimonial = {
   name: string;
   company: string;
   project: string;
-  avatar: 'natalia' | 'bram' | 'ivan' | 'placeholder';
+  avatar: 'natalia' | 'bram' | 'ivan' | 'placeholder'; // placeholder = initials circle, TODO(photo)
 };
 // TODO(copy): placeholder until Serhii sends the real facts for a case.
 export const tbd = (lang: 'en' | 'uk' = 'en'): Facts => {

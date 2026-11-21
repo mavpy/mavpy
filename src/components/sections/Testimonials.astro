@@ -8,15 +8,18 @@
 import { Image } from 'astro:assets';
 import Heading from '../ui/Heading.astro';
 import Section from '../ui/Section.astro';
-// TODO(asset): Natalia's avatar is 95px (1x); Dmytro has no photo yet.
+// TODO(asset): Natalia's avatar is 95px (1x).
+// TODO(photo): Dmytro, Julia and Daria have no photos yet; they get initials circles (avatar: 'placeholder').
 import natalia from '../../assets/images/avatars/natalia.png';
 import bram from '../../assets/images/avatars/bram.png';
 import ivan from '../../assets/images/avatars/ivan.jpg';
-import placeholder from '../../assets/images/avatars/placeholder.svg';
 import { getLang, t } from '../../i18n/utils';
 
 const { testimonials: tm } = t(getLang(Astro.url));
-const avatars = { natalia, bram, ivan, placeholder };
+const avatars = { natalia, bram, ivan };
+// "Dmytro V." -> "DV" (Cyrillic on /uk/). Placeholder tints cycle through the orange ramp.
+const initials = (name: string) => name.match(/\p{Lu}/gu)?.join('') ?? '';
+const tints = ['bg-orange-200', 'bg-orange', 'bg-orange-300'];
 ---
 
 <Section
@@ -63,7 +66,7 @@ const avatars = { natalia, bram, ivan, placeholder };
     aria-label={tm.listLabel}
     class="reveal mt-[53px] flex snap-x snap-mandatory scroll-px-(--bleed) gap-[16px] overflow-x-auto scroll-smooth px-(--bleed) [--bleed:calc((100cqw-min(var(--container-content),100cqw-2*var(--spacing-gutter)))/2)] [scrollbar-width:none] -mx-(--bleed) motion-reduce:scroll-auto lg:mt-[49px] lg:gap-[24px]"
   >
-    {tm.items.map((item) => (
+    {tm.items.map((item, i) => (
       <li class="w-[88%] max-w-[483px] shrink-0 snap-start lg:w-[483px]">
         <figure class="flex h-full min-h-[305px] flex-col rounded-card bg-white p-[9px] lg:min-h-[451px] lg:p-[14px] lg:pb-[20px]">
           <blockquote class="px-[11px] pt-[11px] pb-6 text-center text-[20px] leading-[1.172] lg:pr-[3px] lg:pl-[5px] lg:pt-[22px] lg:text-left lg:text-[28px]">
@@ -80,13 +83,25 @@ const avatars = { natalia, bram, ivan, placeholder };
               <b class="block">{item.company},</b>
               {item.project}
             </span>
-            <Image
-              src={avatars[item.avatar]}
-              alt=""
-              width={190}
-              height={190}
-              class="size-[60px] shrink-0 rounded-full object-cover lg:size-[95px]"
-            />
+            {item.avatar === 'placeholder' ? (
+              <span
+                aria-hidden="true"
+                class:list={[
+                  'grid size-[60px] shrink-0 place-items-center rounded-full text-[20px] font-medium lg:size-[95px] lg:text-[32px]',
+                  tints[i % tints.length],
+                ]}
+              >
+                {initials(item.name)}
+              </span>
+            ) : (
+              <Image
+                src={avatars[item.avatar]}
+                alt=""
+                width={190}
+                height={190}
+                class="size-[60px] shrink-0 rounded-full object-cover lg:size-[95px]"
+              />
+            )}
           </figcaption>
         </figure>
       </li>
