@@ -20,11 +20,13 @@ const [s1, s2, s3] = hero.statement;
         {hero.h1.after}
       </h1>
 
-      <!-- The bar is the ::before: as tall as the caps (leading 0.7 = cap height, as in the
-           footer wordmark) and running off the left edge of the screen, ending 1px before the M's ink. -->
+      <!-- The bar is the ::before: as tall as the caps (leading 0.7 = Hegarty's cap height, as in the
+           footer wordmark), running off the left edge of the screen and 0.1em into the first letter
+           (past its 0.04em side bearing), in the text colour, so bar and letter read as one shape.
+           /uk/ (Unbounded, caps 0.75em, same baseline) grows the bar 0.05em upwards. -->
       <p
         style="--d: 0.1s"
-        class="rise rise-bar relative mx-auto mt-[46.5px] w-fit font-hegarty text-more leading-[0.7] uppercase before:absolute before:inset-y-0 before:right-[calc(100%-0.03em)] before:w-screen before:bg-ink lg:mx-0 lg:mt-[16.5px] lg:ml-[0.5em]"
+        class="rise rise-bar relative mx-auto mt-[46.5px] w-fit font-hegarty text-more leading-[0.7] uppercase before:absolute before:inset-y-0 before:right-[calc(100%-0.1em)] before:w-screen before:bg-current [&:lang(uk)]:before:-top-[0.05em] lg:mx-0 lg:mt-[16.5px] lg:ml-[0.5em]"
       >
         {hero.more}
       </p>
