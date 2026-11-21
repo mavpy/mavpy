@@ -136,8 +136,8 @@ The agent works top to bottom, ticks `[x]` when a task is done, and adds short n
   - One scroller at every size now: mobile cards are 88% wide so the next one peeks, plus a "2 / 6" counter below; desktop arrows unchanged. `.reveal` moved from the cards to the list (a view timeline inside a horizontal scroller never fires). Reduced motion: `scroll-behavior: auto`.
 - [x] Placeholder avatars (Dmytro, Julia, Daria): initials circles in orange-ramp tints, `TODO(photo)`
   - Rendered from the name (Cyrillic initials on /uk/), no image files; `placeholder.svg` deleted.
-- [ ] Ukrainian heading fonts: Cyrillic look-alikes for Archivo and BBH Hegarty, only on `lang="uk"`
-  - Previews shown to Nikita: A = Inter Tight + Unbounded 900, B = Onest + Dela Gothic One. Waiting for the pick.
+- [x] Ukrainian heading fonts: Cyrillic look-alikes for Archivo and BBH Hegarty, only on `lang="uk"`
+  - Nikita picked Inter Tight + Unbounded 900 (over Onest + Dela Gothic One). `:root:lang(uk)` swaps the tokens in global.css: Inter Tight for whole display headings; Hegarty stays first with Unbounded behind it (Cyrillic faces only), so the Latin footer wordmark keeps Hegarty. Unbounded's 900 file is declared as weight 400 because Hegarty text asks for 400. On /uk/ it's preloaded instead of Roboto Cyrillic 400. «БІЛЬШЕ» fits from 320 to 1920 with no overlap; EN loads none of the new files.
 - [x] GA4 prepped but off: `PUBLIC_GA_ID` + cookie banner (EN/UK)
   - `components/Consent.astro`, rendered from Base only when the var is set. Consent Mode v2 defaults all denied; Accept grants `analytics_storage` only (no ads). gtag.js is never requested before Accept; choice in localStorage (`mavpy-consent`). No "change cookie settings" link yet: clearing site data brings the banner back.
 
@@ -145,7 +145,6 @@ The agent works top to bottom, ticks `[x]` when a task is done, and adds short n
 
 Technical and setup calls that are Nikita's alone.
 
-- ~~Analytics~~: GA4, prepped and off until `PUBLIC_GA_ID` is set (M9). Create the GA property when ready.
 - Production domain name (registrar: Cloudflare, at cost, per M8).
 - Mavpy-owned accounts for the Telegram bot and group, Airtable, Resend and hosting: who creates and owns them? (M8 swaps the personal ones out; only env var values change.)
 - When to move hosting from Vercel Hobby (non-commercial) to Cloudflare: before launch, or right after?
@@ -153,10 +152,6 @@ Technical and setup calls that are Nikita's alone.
 ## To settle with Serhii
 
 Copy, translation, prices, contact details and brand content. Nikita and Serhii decide these together. The site is the source of truth; changes come from Serhii through Figma.
-
-Answered in the review poll (2026-11-21): see **M9: Review answers** above for what changed. Kept as is: Helvetica Neue Thin, the restyled contact section, the mobile case links, the desktop testimonial arrows and the Webflow copy.
-
-Not covered by the poll, still open:
 
 - Testimonial project lines read oddly in English ("full redesign site", "design and develop", "full design and dev").
 - Auto-reply e-mail wording (`contact.autoReply`) and the Ukrainian translation review (`uk.ts`, `// review: Serhii`), plus the new cookie banner copy.
