@@ -309,7 +309,7 @@ export const en = {
     goals: {
       attract: 'Attract new clients',
       launch: 'Launch a new service',
-      revamp: 'Revamp your website',
+      care: 'Care plan',
       other: 'Other',
     },
     cta: 'Get an estimate',

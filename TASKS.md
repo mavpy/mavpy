@@ -71,7 +71,7 @@ The agent works top to bottom, ticks `[x]` when a task is done, and adds short n
   - **Mobile:** the field right inset is larger than the left. Use symmetric card padding, the same as the other mobile cards.
   - **States the frame doesn't show:** design hover, focus-visible, invalid with an inline error, disabled/loading on the button, and a slot for the form-level success/error message. Reserve space so the layout doesn't jump. Use the existing tokens only (`error`, the orange ramp, greys).
   - Process: show Nikita a screenshot of the polished version (desktop + mobile, EN + UK) for sign-off before ticking. List the deviations from Figma under "To settle with Serhii".
-  - Signed off by Nikita. Outer rhythm within ~1px of both frames; cards are taller (desktop sand card 639 vs 609) because labels sit above fields and error lines are reserved. lg form is a 2-col grid of 3-row subgrids (label/control/error), so the button sits on the select row; the form message reuses the button's error row. Mobile has no sand card (as in the frame). Goal values are `attract|launch|revamp|other`. Heading got a `center` prop. Screenshots were taken via headless Chrome over CDP when the extension dropped.
+  - Signed off by Nikita. Outer rhythm within ~1px of both frames; cards are taller (desktop sand card 639 vs 609) because labels sit above fields and error lines are reserved. lg form is a 2-col grid of 3-row subgrids (label/control/error), so the button sits on the select row; the form message reuses the button's error row. Mobile has no sand card (as in the frame). Goal values are `attract|launch|care|other`. Heading got a `center` prop. Screenshots were taken via headless Chrome over CDP when the extension dropped.
 
 ## M5: Contact form
 
