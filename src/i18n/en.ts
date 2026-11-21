@@ -1,4 +1,15 @@
 // All English copy. This file is the source of truth (synced from Webflow once, 2026-11-20); changes now come from Serhii via Figma.
+// Years since the studio started, counted at build time (pages are prerendered).
+export const studioYears = new Date().getFullYear() - 2021;
+const yearsEn: Record<number, string> = {
+  5: 'Five',
+  6: 'Six',
+  7: 'Seven',
+  8: 'Eight',
+  9: 'Nine',
+  10: 'Ten',
+};
+
 type Facts = {
   goal: string;
   start: string;
@@ -253,7 +264,7 @@ export const en = {
       'I’m the one you talk to, from the first brief to launch.',
       'Before any design, I write the plan: the problem, the audience, the offer — and the number we’re trying to move.',
       'I work out who your clients are and what makes them book — then design the site around it.\nI write the copy too, so every word on the page has a job.',
-      'Five years, 30+ projects across Ukraine and worldwide.',
+      `${yearsEn[studioYears] ?? studioYears} years, 30+ projects across Ukraine and worldwide.`,
     ],
     photoAlt: 'Serhii, co-founder of MAVPY',
   },

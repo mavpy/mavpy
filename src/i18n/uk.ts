@@ -1,4 +1,19 @@
-import { tbd, type Dict } from './en';
+import { studioYears, tbd, type Dict } from './en';
+
+const yearsUk: Record<number, string> = {
+  5: 'П’ять',
+  6: 'Шість',
+  7: 'Сім',
+  8: 'Вісім',
+  9: 'Дев’ять',
+  10: 'Десять',
+};
+// рік / роки / років by Ukrainian plural rules (1, 21 рік; 2–4, 22 роки; 5–20, 25 років).
+const yearWord = { one: 'рік', few: 'роки', many: 'років' } as Record<
+  string,
+  string
+>;
+const ukYears = `${yearsUk[studioYears] ?? studioYears} ${yearWord[new Intl.PluralRules('uk').select(studioYears)]}`;
 
 // review: Serhii (whole file is a draft translation until he approves it).
 export const uk: Dict = {
@@ -226,7 +241,7 @@ export const uk: Dict = {
       'Саме зі мною ви спілкуєтеся — від першого брифу до запуску.',
       'Ще до дизайну я пишу план: проблема, аудиторія, пропозиція — і показник, який ми хочемо зрушити.',
       'Я з’ясовую, хто ваші клієнти і що спонукає їх записатися, — і будую сайт навколо цього.\nТексти теж пишу я, тож кожне слово на сторінці має свою роботу.',
-      'П’ять років, 30+ проєктів в Україні та світі.',
+      `${ukYears}, 30+ проєктів в Україні та світі.`,
     ],
     photoAlt: 'Сергій, співзасновник MAVPY',
   },
