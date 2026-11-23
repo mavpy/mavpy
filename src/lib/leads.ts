@@ -78,25 +78,55 @@ async function toAirtable(lead: Lead): Promise<string> {
   return record.id;
 }
 
-/**
- * Saves the visitor's Telegram chat id on their lead and returns the lead's name and locale
- * (the PATCH response carries the record, so the write-only token is enough).
- * Throws if the record doesn't exist.
- */
-export async function linkTelegram(leadId: string, chatId: number) {
+/** Updates a lead's fields and returns all its fields (the PATCH response carries the record). */
+export async function updateLead(
+  leadId: string,
+  fields: Record<string, string | undefined>,
+) {
   if (!AIRTABLE_TOKEN || !AIRTABLE_BASE_ID) throw new Error('not configured');
   const record = await send(
     `${airtableUrl()}/${leadId}`,
     { Authorization: `Bearer ${AIRTABLE_TOKEN}` },
-    { fields: { TelegramChatId: String(chatId) } },
+    { typecast: true, fields },
     'PATCH',
   );
-  return record.fields as { Name?: string; Locale?: string };
+  return record.fields as Record<string, string | undefined>;
+}
+
+/**
+ * The lead whose bot questionnaire is in progress in this chat (Step set and not "done").
+ * Needs data.records:read on the token.
+ */
+export async function findActiveLead(chatId: number) {
+  if (!AIRTABLE_TOKEN || !AIRTABLE_BASE_ID) throw new Error('not configured');
+  const formula = `AND({TelegramChatId}='${chatId}', {Step}!='', {Step}!='done')`;
+  const res = await fetch(
+    `${airtableUrl()}?filterByFormula=${encodeURIComponent(formula)}&sort%5B0%5D%5Bfield%5D=Created`,
+    {
+      headers: { Authorization: `Bearer ${AIRTABLE_TOKEN}` },
+      signal: AbortSignal.timeout(8000),
+    },
+  );
+  if (!res.ok) throw new Error(`${res.status} ${await res.text()}`);
+  const { records } = (await res.json()) as {
+    records: { id: string; fields: Record<string, string | undefined> }[];
+  };
+  // Two unfinished questionnaires in one chat (two requests): the newest one.
+  return records.at(-1);
+}
+
+/** Calls a Telegram Bot API method with the bot token. */
+export async function telegram(method: string, body: unknown) {
+  if (!TELEGRAM_BOT_TOKEN) throw new Error('not configured');
+  return send(
+    `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/${method}`,
+    {},
+    body,
+  );
 }
 
 async function toTelegram(lead: Lead) {
-  if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID)
-    throw new Error('not configured');
+  if (!TELEGRAM_CHAT_ID) throw new Error('not configured');
   const lines = [
     `<b>New lead</b> (${lead.locale.toUpperCase()})`,
     `Name: ${esc(lead.name)}`,
@@ -104,16 +134,18 @@ async function toTelegram(lead: Lead) {
     `Email: ${esc(lead.email)}`,
   ];
   if (lead.page) lines.push(`Page: ${esc(lead.page)}`);
-  await send(
-    `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,
-    {},
-    {
-      chat_id: TELEGRAM_CHAT_ID,
-      text: lines.join('\n'),
-      parse_mode: 'HTML',
-      link_preview_options: { is_disabled: true },
-    },
-  );
+  await toStudio(lines.join('\n'));
+}
+
+/** HTML message to the studio group. */
+export async function toStudio(html: string) {
+  if (!TELEGRAM_CHAT_ID) throw new Error('not configured');
+  await telegram('sendMessage', {
+    chat_id: TELEGRAM_CHAT_ID,
+    text: html,
+    parse_mode: 'HTML',
+    link_preview_options: { is_disabled: true },
+  });
 }
 
 /**
@@ -157,5 +189,5 @@ async function send(
 }
 
 /** Telegram's HTML mode only needs these three escaped. */
-const esc = (s: string) =>
+export const esc = (s: string) =>
   s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');

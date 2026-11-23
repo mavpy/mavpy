@@ -365,6 +365,52 @@ export const en = {
       // /start without a valid lead (opened the bot directly, or an old link).
       hello:
         "Hi! This is the MAVPY studio bot. Leave a request on our site and we'll get in touch: {site}",
+      // Pre-call questionnaire, sent after `confirmed` (the first question in the same message).
+      // Button labels are saved to Airtable in English. TODO(copy): agree with Serhii.
+      intro:
+        'A few quick questions help us prepare for the call (each can be skipped).',
+      skip: 'Skip',
+      other: 'Other',
+      otherPrompt: 'Type your answer:',
+      done: "Done, thank you! That helps us prepare. We'll contact you soon.",
+      questions: {
+        slot: {
+          text: 'What time suits you best for the call? (Kyiv time)',
+          options: ['11:00–13:00', '15:00–16:00', '18:00–19:00'],
+          other: true,
+        },
+        business: {
+          text: "What's your business area?",
+          options: [
+            'Healthcare',
+            'Beauty & wellness',
+            'E-commerce',
+            'Education',
+            'Services',
+          ],
+          other: true,
+        },
+        site: {
+          text: 'Do you have a website now? Send the link, or tap "No website".',
+          options: ['No website'],
+          other: false,
+        },
+        budget: {
+          text: "What's your budget?",
+          options: [
+            'Under 10 000 UAH',
+            '10 000–20 000 UAH',
+            'More than 20 000 UAH',
+            'Not sure yet',
+          ],
+          other: false,
+        },
+        timing: {
+          text: 'When do you want to launch?',
+          options: ['Urgently', 'In 1–2 months', 'No rush'],
+          other: false,
+        },
+      },
     },
   },
 };
