@@ -369,6 +369,9 @@ export const en = {
       // Button labels are saved to Airtable in English. TODO(copy): agree with Serhii.
       intro:
         'A few quick questions help us prepare for the call (each can be skipped).',
+      // /start again after the questionnaire is finished. {name} is replaced.
+      already:
+        "Thanks, {name}! We already have your answers. We'll contact you soon.",
       skip: 'Skip',
       other: 'Other',
       otherPrompt: 'Type your answer:',

@@ -131,15 +131,25 @@ export const POST: APIRoute = async ({ request, site, url }) => {
     if (start) {
       const payload = start[1];
       if (payload && isLeadId(payload)) {
-        // (Re)starts the questionnaire from the first question.
+        // Saves the chat id; the returned record says how far the questionnaire got.
         const lead = await updateLead(payload, {
           TelegramChatId: String(chatId),
-          Step: steps[0],
         }).catch((err) => console.error('telegram: link failed:', err));
         if (lead) {
           const lang = langOf(lead.Locale, userLang);
           const bot = t(lang).contact.bot;
           const confirmed = bot.confirmed.replace('{name}', lead.Name ?? '');
+          // Opened again (e.g. from the e-mail) after finishing: no second questionnaire.
+          if (lead.Step === 'done')
+            return reply({
+              method: 'sendMessage',
+              chat_id: chatId,
+              text: bot.already.replace('{name}', lead.Name ?? ''),
+            });
+          // Half done: carry on from the current question.
+          if (isStep(lead.Step))
+            return reply(ask(lang, lead.Step, chatId, `${confirmed}\n\n`));
+          await updateLead(payload, { Step: steps[0] });
           return reply(
             ask(lang, steps[0], chatId, `${confirmed}\n\n${bot.intro}\n\n`),
           );
