@@ -6,6 +6,8 @@ import type { HTMLAttributes } from 'astro/types';
 // Renders an <a> when href is given, otherwise a <button>.
 type Props = {
   size?: 'lg' | 'sm';
+  /** telegram: Telegram's brand blue with white text (the bot link). */
+  tone?: 'orange' | 'telegram';
   /** Full width (used on mobile). Pass responsive classes via `class` to undo it on desktop. */
   block?: boolean;
   class?: string;
@@ -14,6 +16,7 @@ type Props = {
 // `type` is pulled out: spreading it after a default would render the attribute twice (first wins).
 const {
   size = 'lg',
+  tone = 'orange',
   block = false,
   class: className,
   type,
@@ -23,10 +26,17 @@ const sizes = {
   lg: 'text-btn px-[38px] py-[15.5px]',
   sm: 'text-btn-sm px-[18px] py-[11px]',
 };
+const tones = {
+  orange:
+    'bg-orange text-black hover:bg-orange-300 active:bg-orange-700 disabled:bg-orange-200',
+  // Deeper than Telegram's #2AABEE: white on that is 2.6:1; #0077B5 is 4.9:1 (AA).
+  telegram: 'bg-[#0077B5] text-white hover:bg-[#006DAD] active:bg-[#005F96]',
+};
 const classes = [
-  'inline-flex items-center justify-center gap-2 rounded-btn bg-orange text-center font-medium text-black shadow-btn',
-  'transition-colors duration-300 hover:bg-orange-300 active:bg-orange-700',
-  'disabled:cursor-not-allowed disabled:bg-orange-200 disabled:shadow-none aria-busy:cursor-wait',
+  'inline-flex items-center justify-center gap-2 rounded-btn text-center font-medium shadow-btn',
+  'transition-colors duration-300',
+  'disabled:cursor-not-allowed disabled:shadow-none aria-busy:cursor-wait',
+  tones[tone],
   sizes[size],
   block && 'w-full',
   className,
