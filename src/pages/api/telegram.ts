@@ -107,7 +107,7 @@ async function answer(
   const line = (label: string, v?: string) => `${label}: ${esc(v || '—')}`;
   await toStudio(
     [
-      `<b>Questionnaire</b>: ${esc(lead.Name ?? '')} ${esc(lead.Phone ?? '')}`,
+      `<b>Questionnaire${lead.Redone ? ' (updated)' : ''}</b>: ${esc(lead.Name ?? '')} ${esc(lead.Phone ?? '')}`,
       line('Call', lead.CallSlot),
       line('Business', lead.Business),
       line('Site', lead.CurrentSite),
@@ -225,7 +225,15 @@ async function onButton(cb: NonNullable<Update['callback_query']>) {
         message_id: msg.message_id,
       }).catch((err) => console.error('telegram: edit failed:', err)),
     ]);
-    return reply(await begin(lead.id, lang, msg.chat.id));
+    // Marks the redo so the next summary says "updated". Separate and non-fatal: without the
+    // Airtable "Redone" column (single line text) the restart still works, just unlabelled.
+    const [, next] = await Promise.all([
+      updateLead(lead.id, { Redone: 'yes' }).catch((err) =>
+        console.error('telegram: Redone failed:', err),
+      ),
+      begin(lead.id, lang, msg.chat.id),
+    ]);
+    return reply(next);
   }
 
   const [, step, choice] = cb.data?.split(':') ?? [];
