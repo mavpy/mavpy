@@ -100,7 +100,7 @@ Notes are kept: they explain why things are built the way they are.
 - [x] Sort `_raw-assets/` (from Serhii's Drive): pictures -> `src/assets/images/`, logos/icons -> `src/assets/logos|icons/`, fonts -> `public/fonts/` + `@font-face` (or Fontsource if available; check Cyrillic), favicon.svg + favicon_dark.svg -> `public/` (dark via `media="(prefers-color-scheme: dark)"`), webclip.svg -> `public/apple-touch-icon.png` 180x180. Then delete `_raw-assets/`
   - Fonts: Roboto 400/500/700, Archivo 800/900 and BBH Hegarty 400 come from Fontsource (imported in global.css). Helvetica Neue Thin isn't on Fontsource, so it's self-hosted as `public/fonts/HelveticaNeue-Thin.woff2`. **Archivo and BBH Hegarty have no Cyrillic** (neither the files nor Fontsource). Image filenames are slugified; the arrow variants are in `src/assets/icons/arrows*/`.
 - [x] Private GitHub repo `mavpy-site`, first push, Vercel preview deploy
-  - github.com/mavpy/mavpy (private). Deployed by hand at https://mavpy-site.vercel.app/ (matches `site` in astro.config.mjs).
+  - github.com/mavpy/mavpy (private). Auto-deploys from `main` via Vercel Git (previews for other branches) at https://mavpy-site.vercel.app/ (matches `site` in astro.config.mjs).
 
 ### M1: Audit (no code)
 
