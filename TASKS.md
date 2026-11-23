@@ -4,7 +4,6 @@ How this file works: the agent takes the first unchecked task under **Now**, tic
 
 ## Now (unblocked)
 
-- [ ] Footer "2021-2026": compute the end year at build time, like `studioYears` (it's hard-coded in `en.ts`/`uk.ts`).
 - [ ] Lighthouse re-check on production, `/` and `/uk/`, mobile + desktop (last run 2026-11-20; since then: phone picker, bot links, carousel autoplay).
 - [ ] Move hosting to Cloudflare (M8): `@astrojs/cloudflare` instead of `@astrojs/vercel`, re-enter the secrets, deploy to a `*.workers.dev` preview, re-register the Telegram webhook there. Doesn't need the domain; the domain is attached later. Vercel Hobby is non-commercial, Cloudflare's free tier allows commercial use.
 
@@ -244,6 +243,10 @@ Notes are kept: they explain why things are built the way they are.
   - Done 2026-11-23: items render 3× (outer copies `inert`), start on the middle copy, jump back one copy's width 150 ms after scrolling stops. On desktop the previous card now peeks into the left gutter. Also drifts left on its own (`SPEED` = 30 px/s; Nikita, 2026-11-23): paused on hover, focus, for 3 s after a touch, off-screen; off with reduced motion.
 - [x] Testimonial #1 (Natalia) project line: "Full redesign" → "Design and development" in EN and UK.
 - [x] Rename the bot to "Mavpy bot" in @BotFather (Nikita; shows as "Mavpy Bot").
+
+### After the reorganisation (2026-11-23)
+
+- [x] Footer "2021-2026": end year computed at build time (`yearRange` in en.ts, shared with uk.ts). Static pages, so it changes on the first deploy after New Year.
 
 ### M8: Launch (done so far)
 

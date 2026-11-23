@@ -1,6 +1,8 @@
 // All English copy. This file is the source of truth (synced from Webflow once, 2026-11-20); changes now come from Serhii via Figma.
 // Years since the studio started, counted at build time (pages are prerendered).
-export const studioYears = new Date().getFullYear() - 2021;
+const thisYear = new Date().getFullYear();
+export const studioYears = thisYear - 2021;
+export const yearRange = `2021-${thisYear},`;
 const yearsEn: Record<number, string> = {
   5: 'Five',
   6: 'Six',
@@ -77,7 +79,7 @@ export const en = {
     email: 'EMAIL:',
     phone: 'PHONE:',
     instagram: 'INST:',
-    years: '2021-2026,',
+    years: yearRange,
     studio: 'MAVPY DESIGN & DEVELOPMENT STUDIO',
   },
   hero: {

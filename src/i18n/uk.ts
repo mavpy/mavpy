@@ -1,4 +1,4 @@
-import { studioYears, tbd, type Dict } from './en';
+import { studioYears, tbd, yearRange, type Dict } from './en';
 
 const yearsUk: Record<number, string> = {
   5: 'П’ять',
@@ -55,7 +55,7 @@ export const uk: Dict = {
     email: 'EMAIL:',
     phone: 'ТЕЛЕФОН:',
     instagram: 'INST:',
-    years: '2021-2026,',
+    years: yearRange,
     studio: 'СТУДІЯ ДИЗАЙНУ Й РОЗРОБКИ MAVPY',
   },
   hero: {
