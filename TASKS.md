@@ -138,23 +138,32 @@ The agent works top to bottom, ticks `[x]` when a task is done, and adds short n
   - Required phone (placeholder/hint `+380…`, accepts any international number, validated by Zod on the server too); email becomes optional; the form rejects a submit with neither phone nor email filled, with an inline error in EN and UK.
   - Phone appears in the Telegram message and in a new Airtable "Phone" field (add the column by hand first: `typecast` creates select options, not fields).
   - Changed on the way (Nikita, 2026-11-23): phone **and** email are both required, and the goal field is gone (the bot asks it). Phone = country-code picker (transparent native select over a "🇺🇦 +380" label; names from `Intl.DisplayNames`, flags from the ISO code; RU/BY left out) + national number. `toE164` in `src/data/phone.ts` is shared by the form and the server: drops a trunk 0 (not for IT), a typed "+…" wins over the picker, 8–15 digits; leads carry `+380671234567`. Auto-reply lost its goal box. Fields now show focus as a 2px underline instead of the global ring. **Before deploying: add the Airtable "Phone" column** (the old "Goal" column is no longer written).
-- [ ] Telegram confirmation for the visitor
+- [x] Telegram confirmation for the visitor
   - Each lead gets a `leadId`; the success card shows an "Open in Telegram" button linking to `t.me/<BOT_USERNAME>?start=<leadId>` (`TELEGRAM_BOT_USERNAME` in env and `.env.example`).
-  - Bot webhook as an Astro API route, rejecting requests without the right `X-Telegram-Bot-Api-Secret-Token`: on `/start <leadId>` it replies with a confirmation in the lead's language and saves the chat id to that Airtable record. No time booking, no Make. (A bot can't message someone by phone number; they have to start the bot first.)
+  - Bot webhook as an Astro API route, rejecting requests without the right `X-Telegram-Bot-Api-Secret-Token`: on `/start <leadId>` it replies with a confirmation in the lead's language and saves the chat id to that Airtable record. No Make. (A bot can't message someone by phone number; they have to start the bot first.)
+  - The auto-reply e-mail carries the same "Open in Telegram" link (`t.me/<BOT_USERNAME>?start=<leadId>`) as the success card (Nikita, 2026-11-23). It goes live with the e-mail once the domain is verified in Resend (M8).
+  - Done: leadId = the Airtable record id (no Airtable = no id = no button). Webhook `src/pages/api/telegram.ts`: private chats only, replies in the response body (no extra API call), saves the chat id with a PATCH whose response also gives Name + Locale (the write-only token is enough). Unknown or missing lead → a "leave a request" reply with the site link. Tested locally: 401 without the secret, group ignored, unknown/bad ids → hello in en/uk. **Not tested yet: the happy path with a real lead.** Before deploying: add an Airtable text column "TelegramChatId"; set `TELEGRAM_BOT_USERNAME` + `TELEGRAM_WEBHOOK_SECRET` on the host (the secret is in local `.env`); run the `setWebhook` curl from `.env.example` against the production URL.
 - [ ] Bot pre-call questionnaire (depends on the Telegram confirmation task)
-  - After `/start <leadId>` and the confirmation, the bot asks 4 short questions, mostly inline buttons, each with "Skip": (1) business type: clinic / dentistry / salon / other (free text); (2) current website: link or "none"; (3) budget: under 10 000 UAH / 10–20 000 / more / not sure; (4) launch timing: urgent / 1–2 months / no rush. Ends with "Done, we'll get back to you within 24 hours." All copy in en.ts/uk.ts, sent in the lead's language.
-  - Answers go to the same Airtable record (new fields: Business, CurrentSite, Budget, Timing, Step). The current question is stored in "Step", so the serverless webhook stays stateless. One summary message goes to the studio group when the lead finishes or abandons (e.g. "Lead X added: dentistry, no site, 10–20k UAH"). Max 4–5 questions, no time booking, no Make.
+  - Flow updated 2026-11-23 (Nikita). After `/start <leadId>` and the confirmation, in the lead's language, each step with "Skip":
+    1. "Thanks! We'll contact you soon, the call takes 15 minutes max. What time suits you best?" Buttons: 11:00–13:00 / 15:00–16:00 / 18:00–19:00 / Other. Saved as "CallSlot": a preferred slot only, no calendar booking.
+    2. Business domain, broad rather than specific: Healthcare / Beauty & wellness / E-commerce / Education / Services / Other (free text).
+    3. Current website: link or "none".
+    4. Budget: under 10 000 UAH / 10–20 000 / more / not sure.
+    5. Launch timing: urgent / 1–2 months / no rush.
+    Ends with a short "Done" message. All copy in en.ts/uk.ts.
+  - Answers go to the same Airtable record (new fields: CallSlot, Business, CurrentSite, Budget, Timing, Step). The current question is stored in "Step", so the serverless webhook stays stateless. One summary message goes to the studio group when the lead finishes or abandons (e.g. "Lead X: 15–16, healthcare, no site, 10–20k UAH"). No Make.
 - [ ] Agree the question list and button options with Serhii before building the questionnaire (listed under "To settle with Serhii")
 - [ ] Later (idea, not now): AI follow-up questions and a short lead summary for the call
-- [ ] Testimonials carousel loops
+- [ ] Testimonials: infinite carousel
   - Arrows and swipe wrap around (last → first, first → last); arrows are never disabled; the "n / N" counter stays correct.
 - [x] Testimonial #1 (Natalia) project line: "Full redesign" → "Design and development" in EN and UK.
 
 ### Waiting on Serhii
 
 - [ ] Updated Figma: UX, language switcher placement, accordion arrow (a proper arrow, maybe in a circle, maybe on the right), case image sizes (the next card's edge visible), per-block animation notes with references.
+  - Changelist received 2026-11-23; the dev work is in M11. Serhii's design cards on Trello: Update Figma, Block Design, Animations & Micro-interactions, Responsive / Adaptive.
 - [ ] Team block in two variants (two founders / founder + 4 roles); Nikita decides whether his photo is shown.
-- [ ] Real cases: ENT clinic first, then AOM (college platform), shop, maybe the tea site. 3 cases is enough; Gvozdi is not a case. Serhii's Webflow cases are fine as a stopgap.
+- [ ] Real cases: 4 cases, 2 from Serhii + 2 from Nikita, each captioned task → solution → result (changelist 2026-11-23). Earlier list: ENT clinic first, then AOM (college platform), shop, maybe the tea site. 3 cases is enough; Gvozdi is not a case. Serhii's Webflow cases are fine as a stopgap.
   - Replaces cases 2–5 and their "to be confirmed" facts; drop the crypto case if it isn't one of them.
 - [ ] Real testimonials to replace #4–6 (Dmytro, Julia, Daria; only the first 3 are real), with photos.
 - [ ] Current studio email, plus access to mavpy.studio@gmail.com for moving services (M8 account swap).
@@ -162,8 +171,8 @@ The agent works top to bottom, ticks `[x]` when a task is done, and adds short n
 ### After the new Figma
 
 - [ ] Rebuild the sections that changed
-- [ ] Trust bar becomes a moving strip of client logos (respects `prefers-reduced-motion`)
-- [ ] Review hover effects: the mascot rotation is removed or redone
+- [ ] Trust bar becomes a moving strip of client logos running left endlessly, pausing on hover (respects `prefers-reduced-motion`)
+- [ ] ~~Review hover effects: the mascot rotation is removed or redone~~ → moved to M11 (Process)
 - [ ] Micro-animations per Serhii's references
 
 ### Deferred until the design is final
@@ -174,6 +183,58 @@ The agent works top to bottom, ticks `[x]` when a task is done, and adds short n
 ### Manual (Nikita)
 
 - [ ] Rename the bot to "Mavpy bot" in @BotFather.
+
+## M11: Figma changelist (2026-11-23)
+
+From Serhii's Figma changelist. Most items wait on his design cards on Trello (Update Figma, Block Design, Animations & Micro-interactions, Responsive / Adaptive); each item says what it's blocked by.
+
+### Header
+- [ ] Language switcher on the right, before a new CTA button; text (EN / UA), active language highlighted. *Blocked by: Update Figma.*
+
+### Hero
+- [ ] Entrance: heading slides up line by line from under a mask; subheading appears from blur; order heading → subheading → button → background. *Blocked by: Animations.*
+- [ ] Button: arrow nudges right on hover. *Blocked by: Animations.*
+- [ ] Background: thin grid that glows around the cursor; static fallback on touch. *Blocked by: Block Design.*
+
+### Trust bar
+- [ ] Logos run in an endless line to the left; pauses on hover (same item as M10 "Trust bar"). *Blocked by: Block Design (client logos).*
+
+### Situation
+- [ ] Orange border on card hover. *Blocked by: Animations.*
+
+### Process
+- [ ] Mascot: remove the current animation; replace with a scale-up from the bottom-left corner. *Blocked by: Animations.*
+- [ ] Subheading stretched across the full width. *Blocked by: Block Design.*
+- [ ] Cards: lift + orange border on hover. *Blocked by: Animations.*
+
+### Cases
+- [ ] 4 cases (2 Serhii + 2 Nikita), each captioned task → solution → result. *Blocked by: content (M10 "Real cases").*
+- [ ] Accordion: "+" that rotates into "×" instead of arrows; smooth open; first case open by default. *Blocked by: Block Design.*
+
+### Testimonials
+- [ ] Infinite carousel (same item as M10). *Can start now.*
+- [ ] Card lifts on hover; author photos. *Blocked by: Block Design + real testimonials.*
+
+### About
+- [ ] Build the chosen variant. A: two founders, photo + text each. B: one founder large, team in small photos, text below. *Blocked by: Block Design + Nikita's photo decision.*
+
+### Pricing
+- [ ] Card hover animation; gradient border or cursor spotlight. *Blocked by: Animations / Block Design.*
+- [ ] Recommended tier: badge + orange border. *Blocked by: Block Design + decision on which tier.*
+
+### Form
+- [x] Phone field added, goal field removed (M10).
+- [ ] Connect the bot (M10 Telegram confirmation + questionnaire).
+
+### Footer
+- [ ] Slightly darker background. *Blocked by: Block Design.*
+
+### Later
+- [ ] Ukrainian version: proofread the copy. (Serhii also lists "replace fonts": already done in M9, Inter Tight + Unbounded; ask him what he means.)
+- [ ] Mobile build pass. *Blocked by: Responsive / Adaptive.*
+- [ ] Copy pass over all texts.
+- [ ] "Technologies we use" block. *Blocked by: Block Design.*
+- [ ] Bot script: the questionnaire above (M10).
 
 ## M8: Launch (after M10)
 
@@ -208,4 +269,8 @@ Copy, translation, prices, contact details and brand content. Nikita and Serhii 
 - Cases, testimonials, team block, studio email, UK review: tracked in M10.
 - Auto-reply e-mail wording (`contact.autoReply`) and the cookie banner copy.
 - Natalia's avatar in higher resolution.
-- Bot questionnaire: the 4 questions and their button options (M10), before it's built.
+- Bot questionnaire: confirm the flow in M10 (call slot + 4 questions) and its button options before it's built. Bot = Mavpy bot; Nikita builds it.
+- Default language, and whether to remember the visitor's choice.
+- Hero: add a stats line ("X projects · Y years · Upwork rating") and a second "See cases" button?
+- Which pricing tier is recommended.
+- Button extra effects: shine or magnetic?

@@ -164,6 +164,18 @@ const short = (c: keyof typeof dialCodes) => `${flag(c)} +${dialCodes[c]}`;
         {contact.successTitle}
       </Heading>
       <p class="mt-3 max-w-[24em] text-body text-grey">{contact.success}</p>
+      <!-- Bot confirmation (t.me deep link with the lead id). Shown by the script when the server
+           returns a link; leads without an id (Airtable down) just don't get the button. -->
+      <Button
+        href="#"
+        data-telegram
+        hidden
+        target="_blank"
+        rel="noopener"
+        class="mt-6 [&[hidden]]:hidden"
+      >
+        {contact.telegram}
+      </Button>
     </div>
   </div>
 </Section>
@@ -245,8 +257,11 @@ const short = (c: keyof typeof dialCodes) => `${flag(c)} +${dialCodes[c]}`;
     button.disabled = true;
     button.setAttribute('aria-busy', 'true');
     let error: unknown;
+    let telegram: string | undefined;
     try {
-      ({ error } = await actions.contact(data));
+      let result;
+      ({ data: result, error } = await actions.contact(data));
+      telegram = result?.telegram;
     } catch (err) {
       error = err; // offline / network failure
     }
@@ -257,6 +272,11 @@ const short = (c: keyof typeof dialCodes) => `${flag(c)} +${dialCodes[c]}`;
       // Swap the form for the thank-you card at the same height, so the page doesn't jump,
       // and move focus there so screen readers announce it.
       success.style.minHeight = `${form.offsetHeight}px`;
+      const link = success.querySelector<HTMLAnchorElement>('[data-telegram]')!;
+      if (telegram) {
+        link.href = telegram;
+        link.hidden = false;
+      }
       form.hidden = true;
       success.hidden = false;
       success.focus();

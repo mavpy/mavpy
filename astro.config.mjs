@@ -24,6 +24,10 @@ export default defineConfig({
     schema: {
       TELEGRAM_BOT_TOKEN: secret(),
       TELEGRAM_CHAT_ID: secret(),
+      // Bot @username without the @: the visitor's "Open in Telegram" link (t.me/<name>?start=<leadId>).
+      TELEGRAM_BOT_USERNAME: secret(),
+      // Random string, also passed to setWebhook as secret_token; the webhook rejects requests without it.
+      TELEGRAM_WEBHOOK_SECRET: secret(),
       AIRTABLE_TOKEN: secret(),
       AIRTABLE_BASE_ID: secret(),
       RESEND_API_KEY: secret(),

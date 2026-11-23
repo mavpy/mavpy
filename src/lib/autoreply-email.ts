@@ -22,7 +22,12 @@ const esc = (s: string) =>
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;');
 
-export function renderAutoReply(lang: Lang, name: string, siteUrl: string) {
+export function renderAutoReply(
+  lang: Lang,
+  name: string,
+  siteUrl: string,
+  telegram?: string,
+) {
   const r = t(lang).contact.autoReply;
   const title = r.title.replace('{name}', name);
   const home = new URL(lang === 'en' ? '/' : `/${lang}/`, siteUrl).href;
@@ -52,6 +57,7 @@ export function renderAutoReply(lang: Lang, name: string, siteUrl: string) {
       ${p(r.intro)}
       ${p(r.next)}
       ${p(r.details, c.grey)}
+      ${telegram ? `<p style="margin:0 0 16px;font:16px/1.5 ${font};color:${c.black}">${esc(r.telegram)} <a href="${esc(telegram)}" style="color:${c.black};font-weight:bold">${esc(r.telegramLink)}</a></p>` : ''}
       <table role="presentation" cellpadding="0" cellspacing="0" style="margin:8px 0 28px">
         <tr><td style="background:${c.orange};border-radius:8px">
           <a href="${home}#cases" style="display:inline-block;padding:14px 28px;font:500 17px/1 ${font};color:${c.black};text-decoration:none">${esc(r.cta)}</a>
@@ -75,6 +81,7 @@ export function renderAutoReply(lang: Lang, name: string, siteUrl: string) {
     r.intro,
     r.next,
     r.details,
+    ...(telegram ? [`${r.telegram} ${telegram}`] : []),
     `${r.cta}: ${home}#cases`,
     r.signoff,
     `${site.email} · ${site.phone.display} · ${site.instagram.handle}`,

@@ -336,6 +336,8 @@ export const en = {
     // Replaces the form after a successful submit.
     successTitle: 'Thank you!',
     success: "We've got your request and will reply within 24 hours.",
+    // Success-card button to the studio bot (shown when the lead got an id). TODO(copy)
+    telegram: 'Confirm in Telegram',
     // The studio e-mail is appended, so people can still reach us.
     error: "Couldn't send. Please e-mail us:",
     // Auto-reply e-mail to the person who submitted the form. {name} is replaced.
@@ -352,6 +354,17 @@ export const en = {
         'Want to add details, like a link to your current site, deadlines or examples you like? Just reply to this e-mail.',
       cta: 'See our recent work',
       signoff: 'MAVPY design studio',
+      // Line with the bot link, only when the lead has one.
+      telegram: 'Prefer Telegram? Confirm your request with our bot:',
+      telegramLink: 'Open in Telegram',
+    },
+    // Telegram bot replies. {name} is replaced. TODO(copy)
+    bot: {
+      confirmed:
+        "Thanks, {name}! Your request is confirmed. We'll get back to you within 24 hours.",
+      // /start without a valid lead (opened the bot directly, or an old link).
+      hello:
+        "Hi! This is the MAVPY studio bot. Leave a request on our site and we'll get in touch: {site}",
     },
   },
 };

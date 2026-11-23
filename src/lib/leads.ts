@@ -7,6 +7,7 @@ import {
   MAIL_FROM,
   RESEND_API_KEY,
   TELEGRAM_BOT_TOKEN,
+  TELEGRAM_BOT_USERNAME,
   TELEGRAM_CHAT_ID,
 } from 'astro:env/server';
 import { site } from '../data/site';
@@ -22,22 +23,44 @@ export type Lead = {
 
 const channels = { airtable: toAirtable, telegram: toTelegram };
 
-/** True if at least one channel got the lead; failures are logged, not thrown. */
-export async function sendLead(lead: Lead): Promise<boolean> {
+/**
+ * ok: at least one channel got the lead; failures are logged, not thrown.
+ * leadId: the Airtable record id (when Airtable worked), used as the bot's /start payload.
+ */
+export async function sendLead(
+  lead: Lead,
+): Promise<{ ok: boolean; leadId?: string }> {
   const names = Object.keys(channels) as (keyof typeof channels)[];
   const results = await Promise.allSettled(names.map((n) => channels[n](lead)));
   results.forEach((r, i) => {
     if (r.status === 'rejected')
       console.error(`lead: ${names[i]} failed:`, r.reason);
   });
-  return results.some((r) => r.status === 'fulfilled');
+  const airtable = results[names.indexOf('airtable')];
+  return {
+    ok: results.some((r) => r.status === 'fulfilled'),
+    leadId:
+      airtable.status === 'fulfilled' ? (airtable.value as string) : undefined,
+  };
 }
 
-async function toAirtable(lead: Lead) {
+/** "Open in Telegram" deep link for a lead; undefined if the bot or the lead id is missing. */
+export const telegramLink = (leadId?: string) =>
+  TELEGRAM_BOT_USERNAME && leadId
+    ? `https://t.me/${TELEGRAM_BOT_USERNAME}?start=${leadId}`
+    : undefined;
+
+/** Airtable record ids look like rec + 14 letters/digits; anything else isn't a lead id. */
+export const isLeadId = (s: string) => /^rec[A-Za-z0-9]{14}$/.test(s);
+
+const airtableUrl = () =>
+  `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(AIRTABLE_TABLE)}`;
+
+/** Creates the lead record and returns its id. */
+async function toAirtable(lead: Lead): Promise<string> {
   if (!AIRTABLE_TOKEN || !AIRTABLE_BASE_ID) throw new Error('not configured');
-  const url = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(AIRTABLE_TABLE)}`;
-  await post(
-    url,
+  const record = await send(
+    airtableUrl(),
     { Authorization: `Bearer ${AIRTABLE_TOKEN}` },
     {
       // typecast lets Airtable create a missing select option instead of rejecting the record.
@@ -52,6 +75,23 @@ async function toAirtable(lead: Lead) {
       },
     },
   );
+  return record.id;
+}
+
+/**
+ * Saves the visitor's Telegram chat id on their lead and returns the lead's name and locale
+ * (the PATCH response carries the record, so the write-only token is enough).
+ * Throws if the record doesn't exist.
+ */
+export async function linkTelegram(leadId: string, chatId: number) {
+  if (!AIRTABLE_TOKEN || !AIRTABLE_BASE_ID) throw new Error('not configured');
+  const record = await send(
+    `${airtableUrl()}/${leadId}`,
+    { Authorization: `Bearer ${AIRTABLE_TOKEN}` },
+    { fields: { TelegramChatId: String(chatId) } },
+    'PATCH',
+  );
+  return record.fields as { Name?: string; Locale?: string };
 }
 
 async function toTelegram(lead: Lead) {
@@ -64,7 +104,7 @@ async function toTelegram(lead: Lead) {
     `Email: ${esc(lead.email)}`,
   ];
   if (lead.page) lines.push(`Page: ${esc(lead.page)}`);
-  await post(
+  await send(
     `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,
     {},
     {
@@ -86,7 +126,7 @@ export async function sendAutoReply(
   mail: { subject: string; html: string; text: string },
 ) {
   if (!RESEND_API_KEY) return;
-  await post(
+  await send(
     'https://api.resend.com/emails',
     { Authorization: `Bearer ${RESEND_API_KEY}` },
     {
@@ -99,19 +139,21 @@ export async function sendAutoReply(
   );
 }
 
-async function post(
+async function send(
   url: string,
   headers: Record<string, string>,
   body: unknown,
+  method = 'POST',
 ) {
   const res = await fetch(url, {
-    method: 'POST',
+    method,
     headers: { 'content-type': 'application/json', ...headers },
     body: JSON.stringify(body),
     signal: AbortSignal.timeout(8000),
   });
   // The response body carries the API's reason (bad token, unknown field...); the URL isn't logged.
   if (!res.ok) throw new Error(`${res.status} ${await res.text()}`);
+  return res.json();
 }
 
 /** Telegram's HTML mode only needs these three escaped. */
