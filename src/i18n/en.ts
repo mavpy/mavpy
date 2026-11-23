@@ -321,19 +321,16 @@ export const en = {
     title: "Tell us your goal, we'll price it",
     sub: "You've seen the ballpark — from $700. Exact figure on a short call. No sales marathon. We reply within 24 hours.",
     name: 'Your name',
+    phone: 'Phone',
+    // Country-code picker (screen-reader name) and the number hint for the default +380.
+    country: 'Country code',
+    phoneHint: '67 123 45 67',
     email: 'Email address',
-    goal: 'Your goal',
-    // Form goal options, keyed by the id the form sends (src/data/goals.ts).
-    goals: {
-      attract: 'Attract new clients',
-      launch: 'Launch a new service',
-      care: 'Care plan',
-      other: 'Other',
-    },
     cta: 'Get an estimate',
     errors: {
       required: 'Please fill this in',
       email: 'Enter a valid e-mail',
+      phone: 'Enter a valid phone number',
       short: 'Too short',
     },
     // Replaces the form after a successful submit.
@@ -350,7 +347,6 @@ export const en = {
       title: 'Thank you, {name}!',
       intro:
         "Thanks for your interest in working with us. We've got your request.",
-      goal: 'Your goal',
       next: "We'll get back to you within 24 hours with next steps and a short call to agree on the exact price.",
       details:
         'Want to add details, like a link to your current site, deadlines or examples you like? Just reply to this e-mail.',

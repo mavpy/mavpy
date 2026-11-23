@@ -13,8 +13,9 @@ import { site } from '../data/site';
 
 export type Lead = {
   name: string;
+  /** E.164, e.g. +380671234567. */
+  phone: string;
   email: string;
-  goal: string;
   locale: string;
   page?: string;
 };
@@ -43,8 +44,8 @@ async function toAirtable(lead: Lead) {
       typecast: true,
       fields: {
         Name: lead.name,
+        Phone: lead.phone,
         Email: lead.email,
-        Goal: lead.goal,
         Locale: lead.locale,
         Page: lead.page,
         Status: 'New',
@@ -59,8 +60,8 @@ async function toTelegram(lead: Lead) {
   const lines = [
     `<b>New lead</b> (${lead.locale.toUpperCase()})`,
     `Name: ${esc(lead.name)}`,
+    `Phone: ${esc(lead.phone)}`,
     `Email: ${esc(lead.email)}`,
-    `Goal: ${esc(lead.goal)}`,
   ];
   if (lead.page) lines.push(`Page: ${esc(lead.page)}`);
   await post(

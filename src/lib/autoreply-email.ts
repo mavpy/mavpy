@@ -10,7 +10,6 @@ const c = {
   black: '#000000',
   grey: '#606060',
   orange: '#ffab01',
-  cream: '#fff6e9',
   night: '#313131',
 };
 const font = "'Helvetica Neue', Helvetica, Arial, sans-serif";
@@ -23,12 +22,7 @@ const esc = (s: string) =>
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;');
 
-export function renderAutoReply(
-  lang: Lang,
-  name: string,
-  goal: string,
-  siteUrl: string,
-) {
+export function renderAutoReply(lang: Lang, name: string, siteUrl: string) {
   const r = t(lang).contact.autoReply;
   const title = r.title.replace('{name}', name);
   const home = new URL(lang === 'en' ? '/' : `/${lang}/`, siteUrl).href;
@@ -56,12 +50,6 @@ export function renderAutoReply(
     <tr><td style="background:${c.white};border-left:5px solid ${c.orange};border-radius:12px;padding:40px 32px 32px">
       <h1 style="margin:0 0 20px;font:800 30px/1.15 ${font};color:${c.black}">${esc(title)}</h1>
       ${p(r.intro)}
-      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:8px 0 24px">
-        <tr><td style="background:${c.cream};border-radius:8px;padding:16px 20px">
-          <p style="margin:0 0 4px;font:13px/1.3 ${font};color:${c.grey};text-transform:uppercase;letter-spacing:0.06em">${esc(r.goal)}</p>
-          <p style="margin:0;font:bold 18px/1.3 ${font};color:${c.black}">${esc(goal)}</p>
-        </td></tr>
-      </table>
       ${p(r.next)}
       ${p(r.details, c.grey)}
       <table role="presentation" cellpadding="0" cellspacing="0" style="margin:8px 0 28px">
@@ -85,7 +73,6 @@ export function renderAutoReply(
   const text = [
     title,
     r.intro,
-    `${r.goal}: ${goal}`,
     r.next,
     r.details,
     `${r.cta}: ${home}#cases`,

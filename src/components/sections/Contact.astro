@@ -4,25 +4,34 @@
 // the lg button. Structure, copy and outer spacing follow the frames.
 // lg: sand card with an orange left border around a white form card. Mobile: no sand card (as in
 // the mobile frame). The form is a 2-column grid; each field is a 3-row subgrid (label, control,
-// error), so the button sits on the select's row however tall the error text gets.
+// error), so the button sits on the e-mail row however tall the error text gets.
 // Pages are static, so the form posts through the `contact` action from a script (JS required).
 // Validation: native constraints, shown as our own localized inline errors; the server re-checks.
+// Phone: a country-code picker (a transparent native select over a "🇺🇦 +380" label, so keyboard,
+// screen readers and mobile pickers work as usual) plus the national number; toE164 (shared with
+// the server) checks it. The goal is asked later by the Telegram bot.
 import Button from '../ui/Button.astro';
 import Heading from '../ui/Heading.astro';
 import Input from '../ui/Input.astro';
 import Section from '../ui/Section.astro';
-import { goalIds, goalLabel } from '../../data/goals';
+import { countries, dialCodes, flag } from '../../data/phone';
 import { site } from '../../data/site';
 import { getLang, t } from '../../i18n/utils';
 
 const lang = getLang(Astro.url);
-const dict = t(lang);
-const { contact } = dict;
+const { contact } = t(lang);
 const messages = {
   ...contact.errors,
   error: `${contact.error} ${site.email}`,
 };
 const field = 'lg:row-span-3 lg:grid lg:grid-rows-subgrid lg:gap-y-2';
+
+// Country names in the page language; Ukraine (the default) first, the rest alphabetical.
+const names = new Intl.DisplayNames([lang], { type: 'region' });
+const collator = new Intl.Collator(lang);
+const [first, ...rest] = countries;
+rest.sort((a, b) => collator.compare(names.of(a)!, names.of(b)!));
+const short = (c: keyof typeof dialCodes) => `${flag(c)} +${dialCodes[c]}`;
 ---
 
 <Section id="contact" class="pt-[80px] pb-[82px] lg:pt-[113px] lg:pb-[192px]">
@@ -51,6 +60,55 @@ const field = 'lg:row-span-3 lg:grid lg:grid-rows-subgrid lg:gap-y-2';
         class={field}
       />
       <Input
+        label={contact.phone}
+        name="phone"
+        type="tel"
+        autocomplete="tel"
+        autocomplete="tel-national"
+        placeholder={contact.phoneHint}
+        data-hint={contact.phoneHint}
+        required
+        maxlength={30}
+        class={field}
+      >
+        <div
+          slot="prefix"
+          class="relative flex shrink-0 items-center gap-2 border-b border-grey-light pr-3 transition-[border-color,box-shadow] duration-300 hover:border-grey has-[:focus-visible]:border-black has-[:focus-visible]:shadow-[inset_0_-1px_0_var(--color-black)] [&:has(~[aria-invalid=true])]:border-error"
+        >
+          <span
+            data-dial
+            class="py-2 text-body whitespace-nowrap"
+            aria-hidden="true"
+          >
+            {short(first)}
+          </span>
+          <svg
+            viewBox="0 0 89 45"
+            class="w-[12px]"
+            fill="none"
+            stroke="currentColor"
+            aria-hidden="true"
+          >
+            <path
+              d="M1 1 44.5 44 88 1"
+              stroke-width="2"
+              vector-effect="non-scaling-stroke"
+            />
+          </svg>
+          <select
+            name="country"
+            aria-label={contact.country}
+            class="absolute inset-0 cursor-pointer opacity-0"
+          >
+            {[first, ...rest].map((c) => (
+              <option value={c} data-short={short(c)}>
+                {flag(c)} {names.of(c)} +{dialCodes[c]}
+              </option>
+            ))}
+          </select>
+        </div>
+      </Input>
+      <Input
         label={contact.email}
         name="email"
         type="email"
@@ -59,17 +117,6 @@ const field = 'lg:row-span-3 lg:grid lg:grid-rows-subgrid lg:gap-y-2';
         maxlength={254}
         class={field}
       />
-      <Input
-        as="select"
-        label={contact.goal}
-        name="goal"
-        required
-        class={field}
-      >
-        {goalIds.map((id) => (
-          <option value={id}>{goalLabel(dict, id)}</option>
-        ))}
-      </Input>
       <input type="hidden" name="locale" value={lang} />
       <!-- Honeypot: off-screen and out of the tab order; people never see it, bots fill it. -->
       <div class="absolute -left-[9999px]" aria-hidden="true">
@@ -123,6 +170,7 @@ const field = 'lg:row-span-3 lg:grid lg:grid-rows-subgrid lg:gap-y-2';
 
 <script>
   import { actions, isInputError } from 'astro:actions';
+  import { toE164 } from '../../data/phone';
 
   const form = document.querySelector<HTMLFormElement>('#contact form')!;
   const button = form.querySelector<HTMLButtonElement>('[type=submit]')!;
@@ -131,10 +179,25 @@ const field = 'lg:row-span-3 lg:grid lg:grid-rows-subgrid lg:gap-y-2';
   const msg = JSON.parse(form.dataset.messages!);
   const loadedAt = Date.now();
   const fields = [
-    ...form.querySelectorAll<HTMLInputElement>(
-      'input[id^=field-], select[id^=field-]',
-    ),
+    ...form.querySelectorAll<HTMLInputElement>('input[id^=field-]'),
   ];
+  const phone = form.elements.namedItem('phone') as HTMLInputElement;
+  const country = form.elements.namedItem('country') as HTMLSelectElement;
+  const dial = form.querySelector<HTMLElement>('[data-dial]')!;
+
+  // A filled-in number that can't be real → customError ("Enter a valid phone number").
+  const syncPhone = () =>
+    phone.setCustomValidity(
+      phone.value.trim() && !toE164(country.value, phone.value)
+        ? msg.phone
+        : '',
+    );
+
+  // Show the picked code; the +380 example hint only fits Ukrainian numbers.
+  country.addEventListener('change', () => {
+    dial.textContent = country.selectedOptions[0].dataset.short!;
+    phone.placeholder = country.value === 'UA' ? phone.dataset.hint! : '';
+  });
 
   function setError(el: HTMLInputElement, text: string) {
     const errorId = `${el.id}-error`;
@@ -152,23 +215,26 @@ const field = 'lg:row-span-3 lg:grid lg:grid-rows-subgrid lg:gap-y-2';
   const errorFor = ({ validity: v }: HTMLInputElement) =>
     v.valueMissing
       ? msg.required
-      : v.typeMismatch
-        ? msg.email
-        : v.tooShort
-          ? msg.short
-          : '';
+      : v.customError
+        ? msg.phone
+        : v.typeMismatch
+          ? msg.email
+          : v.tooShort
+            ? msg.short
+            : '';
 
   const setStatus = (text = '') => (status.textContent = text);
 
-  // Clear a field's error as soon as it becomes valid.
-  form.addEventListener('input', (e) => {
-    const el = e.target as HTMLInputElement;
-    if (el.validity.valid && fields.includes(el)) setError(el, '');
+  // Clear errors as soon as fields become valid (a new country can also fix the phone).
+  form.addEventListener('input', () => {
+    syncPhone();
+    fields.forEach((el) => el.validity.valid && setError(el, ''));
   });
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     setStatus();
+    syncPhone();
     const invalid = fields.filter(
       (el) => (setError(el, errorFor(el)), !el.validity.valid),
     );
@@ -202,7 +268,14 @@ const field = 'lg:row-span-3 lg:grid lg:grid-rows-subgrid lg:gap-y-2';
         (el) => error.fields[el.name as keyof typeof error.fields],
       );
       bad.forEach((el) =>
-        setError(el, el.type === 'email' ? msg.email : msg.short),
+        setError(
+          el,
+          el.type === 'email'
+            ? msg.email
+            : el === phone
+              ? msg.phone
+              : msg.short,
+        ),
       );
       if (bad.length) return bad[0].focus();
     }

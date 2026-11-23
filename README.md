@@ -50,7 +50,7 @@ Set them in `.env` locally and in the host's project settings for production. Al
 | `TELEGRAM_CHAT_ID`   | Chat id of the studio group the bot is in (a negative number)                                                                 |
 | `AIRTABLE_TOKEN`     | Personal access token with `data.records:write` on the base                                                                   |
 | `AIRTABLE_BASE_ID`   | Base id (`app...`)                                                                                                            |
-| `AIRTABLE_TABLE`     | Table name, default `Leads`. Fields: Name, Email, Goal, Locale, Page, Status                                                  |
+| `AIRTABLE_TABLE`     | Table name, default `Leads`. Fields: Name, Phone, Email, Locale, Page, Status                                                  |
 | `RESEND_API_KEY`     | Auto-reply e-mail to the visitor. No key means no auto-reply                                                                  |
 | `MAIL_FROM`          | Sender, e.g. `MAVPY <hello@your-domain>`. Needs a domain verified in Resend; empty uses Resend's test sender                  |
 | `PUBLIC_GA_ID`       | GA4 measurement id (`G-...`). Empty = no analytics. Set = cookie banner; gtag loads only after Accept. Baked in at build time |

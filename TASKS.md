@@ -112,19 +112,6 @@ The agent works top to bottom, ticks `[x]` when a task is done, and adds short n
 - [x] Favicon set, OG image, robots.txt, 404 page
   - Favicons: the existing light/dark SVGs + apple-touch-icon, plus `favicon.ico` (16/32/48, rendered from favicon.svg in Chrome) for clients that request /favicon.ico. No web manifest (not an installable app). OG: `public/og.jpg` 1200×630 (63 KB), cropped from Figma `6:9` (top 48 px of grunge dropped), one image for both languages with localized `og:image:alt`, plus `twitter:card`. `robots.txt` is an endpoint built from `site`; it says `Disallow: /` until launch (Nikita, 2026-11-20: keep the preview out of search), flipped in M8. 404: one bilingual page (the host serves the same file for /uk/... too), `noindex`, no canonical/hreflang/og:url (Base got `title`/`noindex` props); big "404" in Hegarty like the hero. Header/footer nav links are now `/#id` / `/uk/#id` so they work from the 404; on the home page they still scroll in place (checked: same document).
 
-## M8: Handoff
-
-- [ ] Send Serhii the preview link plus the review list (copy, translation, team section)
-- [ ] Apply his fixes
-- [ ] Connect his domain on Vercel, then run a final check in production
-- [ ] **Allow search indexing at launch:** set `indexable = true` in `src/pages/robots.txt.ts` (it's `Disallow: /` while the site is a preview), update `site` in astro.config.mjs to the real domain, deploy, then check /robots.txt lists the sitemap and submit it in Google Search Console
-- [ ] Swap Telegram bot/group and Airtable base to Mavpy accounts (only env var values change)
-- [ ] Domain + e-mail sending (later phase): buy the domain (Cloudflare Registrar, at cost), Resend → Domains → add it (one-click DNS on Cloudflare: DKIM, SPF/MX on `send.`, DMARC `p=none`), verify, then set `MAIL_FROM="MAVPY <hello@domain>"` + `RESEND_API_KEY` on the host. Optional: Cloudflare Email Routing to forward hello@ to Gmail. Full steps in the M5 auto-reply plan notes.
-- [ ] Move hosting to Cloudflare (free, commercial use allowed; Vercel Hobby is non-commercial): `@astrojs/cloudflare` instead of `@astrojs/vercel`, re-enter the secrets, point DNS
-- [x] README: stack, env vars, how to edit copy and translations, plus screenshots (desktop + mobile, EN and UK) saved in `docs/screenshots/` and embedded in the README
-  - Take them from the final production build, after Serhii's fixes. Capture at 1440 and 375 px.
-  - README written (2026-11-20). Screenshots: desktop only (Nikita, 2026-11-20), 1440 px @1x from production: hero EN + UK, plus how-we-work, cases, pricing, contact sections (DevTools script: scrolls the page first for lazy images, grows the viewport to the section height or off-screen parts render blank). Retake after Serhii's fixes.
-
 ## M9: Review answers (2026-11-21)
 
 - [x] Contact subline: "from $500" -> "from $700"
@@ -143,19 +130,82 @@ The agent works top to bottom, ticks `[x]` when a task is done, and adds short n
 - [x] GA4 prepped but off: `PUBLIC_GA_ID` + cookie banner (EN/UK)
   - `components/Consent.astro`, rendered from Base only when the var is set. Consent Mode v2 defaults all denied; Accept grants `analytics_storage` only (no ads). gtag.js is never requested before Accept; choice in localStorage (`mavpy-consent`). No "change cookie settings" link yet: clearing site data brings the banner back.
 
+## M10: After Serhii's call (2026-11-21)
+
+### Can start now
+
+- [x] Contact form: phone field
+  - Required phone (placeholder/hint `+380…`, accepts any international number, validated by Zod on the server too); email becomes optional; the form rejects a submit with neither phone nor email filled, with an inline error in EN and UK.
+  - Phone appears in the Telegram message and in a new Airtable "Phone" field (add the column by hand first: `typecast` creates select options, not fields).
+  - Changed on the way (Nikita, 2026-11-23): phone **and** email are both required, and the goal field is gone (the bot asks it). Phone = country-code picker (transparent native select over a "🇺🇦 +380" label; names from `Intl.DisplayNames`, flags from the ISO code; RU/BY left out) + national number. `toE164` in `src/data/phone.ts` is shared by the form and the server: drops a trunk 0 (not for IT), a typed "+…" wins over the picker, 8–15 digits; leads carry `+380671234567`. Auto-reply lost its goal box. Fields now show focus as a 2px underline instead of the global ring. **Before deploying: add the Airtable "Phone" column** (the old "Goal" column is no longer written).
+- [ ] Telegram confirmation for the visitor
+  - Each lead gets a `leadId`; the success card shows an "Open in Telegram" button linking to `t.me/<BOT_USERNAME>?start=<leadId>` (`TELEGRAM_BOT_USERNAME` in env and `.env.example`).
+  - Bot webhook as an Astro API route, rejecting requests without the right `X-Telegram-Bot-Api-Secret-Token`: on `/start <leadId>` it replies with a confirmation in the lead's language and saves the chat id to that Airtable record. No time booking, no Make. (A bot can't message someone by phone number; they have to start the bot first.)
+- [ ] Bot pre-call questionnaire (depends on the Telegram confirmation task)
+  - After `/start <leadId>` and the confirmation, the bot asks 4 short questions, mostly inline buttons, each with "Skip": (1) business type: clinic / dentistry / salon / other (free text); (2) current website: link or "none"; (3) budget: under 10 000 UAH / 10–20 000 / more / not sure; (4) launch timing: urgent / 1–2 months / no rush. Ends with "Done, we'll get back to you within 24 hours." All copy in en.ts/uk.ts, sent in the lead's language.
+  - Answers go to the same Airtable record (new fields: Business, CurrentSite, Budget, Timing, Step). The current question is stored in "Step", so the serverless webhook stays stateless. One summary message goes to the studio group when the lead finishes or abandons (e.g. "Lead X added: dentistry, no site, 10–20k UAH"). Max 4–5 questions, no time booking, no Make.
+- [ ] Agree the question list and button options with Serhii before building the questionnaire (listed under "To settle with Serhii")
+- [ ] Later (idea, not now): AI follow-up questions and a short lead summary for the call
+- [ ] Testimonials carousel loops
+  - Arrows and swipe wrap around (last → first, first → last); arrows are never disabled; the "n / N" counter stays correct.
+- [ ] Testimonial #1 (Natalia) project line: "Full redesign" → "Design and development" in EN and UK.
+
+### Waiting on Serhii
+
+- [ ] Updated Figma: UX, language switcher placement, accordion arrow (a proper arrow, maybe in a circle, maybe on the right), case image sizes (the next card's edge visible), per-block animation notes with references.
+- [ ] Team block in two variants (two founders / founder + 4 roles); Nikita decides whether his photo is shown.
+- [ ] Real cases: ENT clinic first, then AOM (college platform), shop, maybe the tea site. 3 cases is enough; Gvozdi is not a case. Serhii's Webflow cases are fine as a stopgap.
+  - Replaces cases 2–5 and their "to be confirmed" facts; drop the crypto case if it isn't one of them.
+- [ ] Real testimonials to replace #4–6 (Dmytro, Julia, Daria; only the first 3 are real), with photos.
+- [ ] Current studio email, plus access to mavpy.studio@gmail.com for moving services (M8 account swap).
+
+### After the new Figma
+
+- [ ] Rebuild the sections that changed
+- [ ] Trust bar becomes a moving strip of client logos (respects `prefers-reduced-motion`)
+- [ ] Review hover effects: the mascot rotation is removed or redone
+- [ ] Micro-animations per Serhii's references
+
+### Deferred until the design is final
+
+- [ ] Pick the domain: mavpy.dev (820 UAH first year, then 1220) or mavpy.com.ua (720 UAH), on Cloudflare. Hosting moves to Cloudflare too; both happen in M8.
+- [ ] Ukrainian text review (`uk.ts`, `// review: Serhii`).
+
+### Manual (Nikita)
+
+- [ ] Rename the bot to "Mavpy bot" in @BotFather.
+
+## M8: Launch (after M10)
+
+Moved after M10 on 2026-11-21: the design changes come first, then launch.
+
+- [x] Send Serhii the preview link plus the review list (copy, translation, team section)
+  - He reviewed the preview on the 2026-11-21 call.
+- [x] Apply his fixes
+  - Tracked as M9 (done) and M10.
+- [ ] Move hosting to Cloudflare (free, commercial use allowed; Vercel Hobby is non-commercial): `@astrojs/cloudflare` instead of `@astrojs/vercel`, re-enter the secrets
+- [ ] Domain (mavpy.dev or mavpy.com.ua, picked in M10): buy it on Cloudflare Registrar, connect it to the Cloudflare deployment, update `site` in astro.config.mjs, then run a final check in production
+- [ ] Swap Telegram bot/group and Airtable base to the Mavpy accounts on mavpy.studio@gmail.com (only env var values change)
+- [ ] E-mail sending: Resend → Domains → add the domain (one-click DNS on Cloudflare: DKIM, SPF/MX on `send.`, DMARC `p=none`), verify, then set `MAIL_FROM="MAVPY <hello@domain>"` + `RESEND_API_KEY` on the host. Optional: Cloudflare Email Routing to forward hello@ to Gmail. Full steps in the M5 auto-reply plan notes.
+- [ ] **Allow search indexing at launch:** set `indexable = true` in `src/pages/robots.txt.ts` (it's `Disallow: /` while the site is a preview), deploy, then check /robots.txt lists the sitemap and submit it in Google Search Console
+- [x] README: stack, env vars, how to edit copy and translations, plus screenshots (desktop + mobile, EN and UK) saved in `docs/screenshots/` and embedded in the README
+  - Take them from the final production build, after Serhii's fixes. Capture at 1440 and 375 px.
+  - README written (2026-11-20). Screenshots: desktop only (Nikita, 2026-11-20), 1440 px @1x from production: hero EN + UK, plus how-we-work, cases, pricing, contact sections (DevTools script: scrolls the page first for lazy images, grows the viewport to the section height or off-screen parts render blank).
+- [ ] Retake the README screenshots from the launched site (same method as above)
+
 ## Decisions for Nikita
 
 Technical and setup calls that are Nikita's alone.
 
-- Production domain name (registrar: Cloudflare, at cost, per M8).
+- Domain: mavpy.dev or mavpy.com.ua (M10, deferred until the design is final).
+- Whether Nikita's photo goes in the team block (M10, waiting on Serhii's two variants).
 - Studio accounts (Telegram bot and group, Airtable, Resend, hosting) move to mavpy.studio@gmail.com in M8 (agreed with Serhii 2026-11-21). Only env var values change.
-- When to move hosting from Vercel Hobby (non-commercial) to Cloudflare: before launch, or right after?
 
 ## To settle with Serhii
 
 Copy, translation, prices, contact details and brand content. Nikita and Serhii decide these together. The site is the source of truth; changes come from Serhii through Figma.
 
-- Cases 2–5: waiting for Serhii's data (facts, live URLs); replace the non-real cases.
-- UK translation: review on a call (`uk.ts`, `// review: Serhii`).
+- Cases, testimonials, team block, studio email, UK review: tracked in M10.
 - Auto-reply e-mail wording (`contact.autoReply`) and the cookie banner copy.
-- Assets: a full crypto screenshot, Natalia's avatar in higher resolution, real photos for Dmytro, Julia and Daria.
+- Natalia's avatar in higher resolution.
+- Bot questionnaire: the 4 questions and their button options (M10), before it's built.
