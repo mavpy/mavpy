@@ -77,7 +77,7 @@ Technical and setup calls that are Nikita's alone.
 
 Copy, translation, prices, contact details and brand content. Nikita and Serhii decide these together. The site is the source of truth; changes come from Serhii through Figma.
 
-- Bot questionnaire (already built): confirm the questions and button options (call slot, business, current site, budget, timing).
+- Bot questionnaire (already built): confirm the questions and button options (call slot, business, current site, budget, timing), plus the "Start over" copy (intro line, button, "already have your answers" reply).
 - Auto-reply e-mail wording (`contact.autoReply`) and the cookie banner copy.
 - Default language, and whether to remember the visitor's choice.
 - Hero: add a stats line ("X projects · Y years · Upwork rating") and a second "See cases" button?
@@ -236,7 +236,7 @@ Notes are kept: they explain why things are built the way they are.
     4. Budget: under 10 000 UAH / 10–20 000 / more / not sure.
     5. Launch timing: urgent / 1–2 months / no rush.
   - Ends with a short "Done" message. All copy in en.ts/uk.ts.
-  - Answers go to the same Airtable record (new fields: CallSlot, Business, CurrentSite, Budget, Timing, Step; Redone, single line text, set when they tap "Start over"). The current question is stored in "Step", so the serverless webhook stays stateless. One summary message goes to the studio group when the lead finishes or abandons (e.g. "Lead X: 15–16, healthcare, no site, 10–20k UAH"). No Make.
+  - Answers go to the same Airtable record (new fields: CallSlot, Business, CurrentSite, Budget, Timing, Step; later Redone, see below). The current question is stored in "Step", so the serverless webhook stays stateless. One summary message goes to the studio group when the lead finishes or abandons (e.g. "Lead X: 15–16, healthcare, no site, 10–20k UAH"). No Make.
   - Done 2026-11-23 in `src/pages/api/telegram.ts`. The confirmation stays as it was, with the intro + first question in the same message. Each question has option buttons (+ "Other" on time/business) and "Skip"; typed text answers the current question. Taps on an old question are ignored. Airtable stores button answers in English. The token now has `data.records:read` (lookup by TelegramChatId, newest by `Created`) and schema write; the 6 text columns were created through the meta API. Summary to the group only on finish (abandoned = answers stay in Airtable, no ping). Tested locally with a throwaway record (deleted). Production webhook re-registered with `callback_query` (checked 2026-11-23).
 - [x] Testimonials: infinite carousel
   - Arrows and swipe wrap around (last → first, first → last); arrows are never disabled; the "n / N" counter stays correct.
@@ -256,3 +256,5 @@ Notes are kept: they explain why things are built the way they are.
   - Tracked as M9 and M10.
 - [x] README: stack, env vars, how to edit copy and translations, plus screenshots saved in `docs/screenshots/` and embedded in the README
   - README written (2026-11-20). Screenshots: desktop only (Nikita, 2026-11-20), 1440 px @1x from production: hero EN + UK, plus how-we-work, cases, pricing, contact sections (DevTools script: scrolls the page first for lazy images, grows the viewport to the section height or off-screen parts render blank).
+- [x] Bot: start the questionnaire over (Nikita, 2026-11-23: a misclick shouldn't be final)
+  - The intro says "Tapped the wrong answer? Send /start to begin again." A repeat `/start`, typed or from the link, finds the chat's newest lead (`findChatLead`, now including finished ones). If the questionnaire is finished, the bot says it has the answers and shows a "Start over" button. If it's half done, it carries on with that button under the current question. Start over clears the 5 answers and asks again. The studio summary after a redo says "Questionnaire (updated)": the tap writes `Redone = yes`, a text column added through the meta API (separate, non-fatal write). Pushed 2026-11-23; not yet tried in real Telegram.
