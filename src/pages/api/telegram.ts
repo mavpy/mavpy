@@ -56,10 +56,14 @@ const langOf = (locale?: string, fallback?: string): Lang =>
 function ask(lang: Lang, step: Step, chatId: number, prefix = '') {
   const bot = t(lang).contact.bot;
   const q = bot.questions[step];
-  const buttons = q.options.map((text, i) => ({
-    text,
-    callback_data: `a:${step}:${i}`,
-  }));
+  // Answers in solid blue ("primary", Bot API 9.4); Other and Skip keep the default look.
+  // Older Telegram apps ignore `style` and show the plain button.
+  const buttons: { text: string; callback_data: string; style?: string }[] =
+    q.options.map((text, i) => ({
+      text,
+      callback_data: `a:${step}:${i}`,
+      style: 'primary',
+    }));
   if (q.other)
     buttons.push({ text: bot.other, callback_data: `a:${step}:other` });
   buttons.push({ text: bot.skip, callback_data: `a:${step}:skip` });
