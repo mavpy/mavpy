@@ -1,8 +1,96 @@
 # Tasks: Mavpy studio site
 
-The agent works top to bottom, ticks `[x]` when a task is done, and adds short notes under it.
+How this file works: the agent takes the first unchecked task under **Now**, ticks `[x]` when it's done, adds a short note under it, and moves finished work to **Done** at the bottom. Anything blocked goes under the person it waits on. M-numbers (M8, M10, M11…) are kept so old commits and notes still make sense.
 
-## M0: Setup
+## Now (unblocked)
+
+- [ ] Footer "2021-2026": compute the end year at build time, like `studioYears` (it's hard-coded in `en.ts`/`uk.ts`).
+- [ ] Lighthouse re-check on production, `/` and `/uk/`, mobile + desktop (last run 2026-11-20; since then: phone picker, bot links, carousel autoplay).
+- [ ] Move hosting to Cloudflare (M8): `@astrojs/cloudflare` instead of `@astrojs/vercel`, re-enter the secrets, deploy to a `*.workers.dev` preview, re-register the Telegram webhook there. Doesn't need the domain; the domain is attached later. Vercel Hobby is non-commercial, Cloudflare's free tier allows commercial use.
+
+## Waiting on Serhii: design
+
+His Trello cards: **Update Figma**, **Block Design**, **Animations & Micro-interactions**, **Responsive / Adaptive**. Items come from his Figma changelist (2026-11-23, M11). Items marked _spec'd_ are described well enough to build early; Figma may only tweak values.
+
+- Header
+  - [ ] Language switcher on the right, before a new CTA button; text EN / UA, active language highlighted. _Update Figma._
+- Hero
+  - [ ] Entrance: heading slides up line by line from under a mask; subheading appears from blur; order heading → subheading → button → background. _Animations, spec'd._
+  - [ ] Button: arrow nudges right on hover. _Animations, spec'd._
+  - [ ] Background: thin grid that glows around the cursor; static fallback on touch. _Block Design._
+- Trust bar
+  - [ ] Client logos run left in an endless line, pause on hover, static with reduced motion. _Block Design (logos)._
+- Situation
+  - [ ] Orange border on card hover. _Animations, spec'd._
+- Process
+  - [ ] Mascot: drop the current tilt; scale up from the bottom-left corner instead. _Animations, spec'd._
+  - [ ] Subheading across the full width. _Block Design._
+  - [ ] Cards: lift + orange border on hover. _Animations, spec'd._
+- Cases
+  - [ ] Accordion: "+" that rotates into "×" instead of the chevron; smooth open; first case open by default. _Block Design, mostly spec'd._
+  - [ ] Image sizes: the next card's edge visible. _Update Figma._
+- Testimonials
+  - [ ] Card lifts on hover; author photos. _Block Design + real testimonials._
+- About
+  - [ ] Build the chosen variant. A: two founders, photo + text each. B: one founder large, team in small photos, text below. _Block Design + Nikita's photo decision._
+- Pricing
+  - [ ] Card hover: gradient border or cursor spotlight. _Animations / Block Design._
+  - [ ] Recommended tier: badge + orange border. _Block Design + which tier._
+- Footer
+  - [ ] Slightly darker background. _Block Design._
+- Whole page
+  - [ ] Other micro-animations per his references. _Animations._
+  - [ ] Mobile pass. _Responsive / Adaptive._
+  - [ ] "Technologies we use" block. _Block Design._
+
+## Waiting on Serhii: content
+
+- [ ] Real cases: 4 (2 Serhii + 2 Nikita), each captioned task → solution → result. Earlier list: ENT clinic first, then AOM (college platform), shop, maybe the tea site; Gvozdi is not a case. Replaces cases 2–5 and their "to be confirmed" facts; drop the crypto case if it isn't one of them.
+- [ ] Real testimonials to replace #4–6 (Dmytro, Julia, Daria; only the first 3 are real), with photos. Natalia's avatar in higher resolution.
+- [ ] Team block in two variants (two founders / founder + 4 roles).
+- [ ] Ukrainian copy review (`uk.ts`, marked `// review: Serhii`). He also listed "replace fonts": already done in M9 (Inter Tight + Unbounded); ask what he means.
+- [ ] Copy pass over all texts.
+- [ ] Current studio email, plus access to mavpy.studio@gmail.com (for the account swap in Launch).
+
+## Launch (M8, after the design work)
+
+- [ ] Pick the domain: mavpy.dev (820 UAH first year, then 1220) or mavpy.com.ua (720 UAH). Buy it on Cloudflare Registrar, attach it to the Cloudflare deployment, update `site` in astro.config.mjs, re-run the `setWebhook` curl from `.env.example`.
+- [ ] Swap Telegram bot/group and Airtable base to the Mavpy accounts on mavpy.studio@gmail.com (only env var values change).
+- [ ] E-mail sending: Resend → Domains → add the domain (one-click DNS on Cloudflare: DKIM, SPF/MX on `send.`, DMARC `p=none`), verify, then set `MAIL_FROM="MAVPY <hello@domain>"` + `RESEND_API_KEY` on the host. Optional: Cloudflare Email Routing to forward hello@ to Gmail.
+- [ ] **Allow search indexing:** set `indexable = true` in `src/pages/robots.txt.ts`, deploy, check /robots.txt lists the sitemap, submit it in Google Search Console.
+- [ ] Final check on production, then retake the README screenshots (1440 px @1x, method in the M8 notes under Done).
+
+## Later (ideas, not planned)
+
+- [ ] Bot: AI follow-up questions and a short lead summary for the call.
+- [ ] Cookie banner: a "change cookie settings" link (only matters once `PUBLIC_GA_ID` is set).
+
+## Decisions for Nikita
+
+Technical and setup calls that are Nikita's alone.
+
+- Domain: mavpy.dev or mavpy.com.ua (when the design is final).
+- Whether Nikita's photo goes in the team block (waiting on Serhii's two variants).
+- When to move hosting to Cloudflare (can happen now, see Now).
+- Studio accounts (Telegram bot and group, Airtable, Resend, hosting) move to mavpy.studio@gmail.com at launch (agreed with Serhii 2026-11-21).
+
+## To settle with Serhii
+
+Copy, translation, prices, contact details and brand content. Nikita and Serhii decide these together. The site is the source of truth; changes come from Serhii through Figma.
+
+- Bot questionnaire (already built): confirm the questions and button options (call slot, business, current site, budget, timing).
+- Auto-reply e-mail wording (`contact.autoReply`) and the cookie banner copy.
+- Default language, and whether to remember the visitor's choice.
+- Hero: add a stats line ("X projects · Y years · Upwork rating") and a second "See cases" button?
+- Which pricing tier is recommended.
+- Button extra effects: shine or magnetic?
+- Testimonials autoplay: the previous card now peeks into the left gutter on desktop (Figma shows the row starting at the column).
+
+## Done
+
+Notes are kept: they explain why things are built the way they are.
+
+### M0: Setup
 
 - [x] Fill in `<FIGMA_URL>` and `<WEBFLOW_URL>` in AGENTS.md
   - Already filled in.
@@ -15,7 +103,7 @@ The agent works top to bottom, ticks `[x]` when a task is done, and adds short n
 - [x] Private GitHub repo `mavpy-site`, first push, Vercel preview deploy
   - github.com/yeldynov/mavpy-site (private). Deployed by hand at https://mavpy-site.vercel.app/ (matches `site` in astro.config.mjs).
 
-## M1: Audit (no code)
+### M1: Audit (no code)
 
 - [x] List every section of the page (desktop and mobile frames), with notes on layout differences, in `docs/audit.md`
   - 10 sections plus the header. Desktop `1:331`, mobile `1:904`. The Figma mobile frame has no menu; we follow Webflow's hamburger.
@@ -26,7 +114,7 @@ The agent works top to bottom, ticks `[x]` when a task is done, and adds short n
 - [x] List the assets to export (images, icons, logo, OG image) and export them into `src/assets/`
   - Gaps: a full crypto screenshot, Natalia's avatar is 95 px (the Figma MCP rate limit was hit), Dmytro's photo.
 
-## M2: Foundations
+### M2: Foundations
 
 - [x] Design tokens from the UI kit (colors, type scale, spacing, radii, shadows, breakpoints) in `@theme`
   - Figma MCP was rate-limited, so tokens come from Nikita's UI-kit screenshots plus pixel sampling of the full-res frames (sips → BMP → read pixels). Neutrals and `#ffab01` are confirmed; the 4 other orange ramp shades are eyeballed (`TODO(figma)`). Type sizes are fluid `clamp()` between the 375 and 1280 values. Breakpoints: Tailwind defaults (md 768, lg 1024, xl 1280); there's no custom set in the kit.
@@ -40,14 +128,14 @@ The agent works top to bottom, ticks `[x]` when a task is done, and adds short n
 - [x] UI components: Button (all variants and states), Container, Section, Heading, Input/Textarea, Card
   - Button: lg/sm, `block`, hover/active/disabled/aria-busy. The state→colour mapping of the kit ramp is a guess (hover `orange-300`, active `orange-700`, disabled `orange-200`). No Textarea: the form has no message field (audit §3); Input does `input` and `select`. Not visually checked yet; that happens when sections use them in M4.
 
-## M3: Layout
+### M3: Layout
 
 - [x] Header: nav, language switcher, CTA, mobile menu (accessible, closes on Esc or on a link click)
   - **No CTA**: the Figma header has none (Figma wins); the CONTACT link covers it. The language link (UA/EN, not in Figma) sits after the nav on desktop and top-left on mobile, which keeps the logo centred as in Figma. The mobile menu is a native `popover` (Esc, focus return, top layer) plus 3 lines of JS for link-click close. The language link carries the section in view as the hash. Checked at 375/768/1024/1280/1920 in EN and UK.
 - [x] Footer
   - Positions within 1px of the frames at 375 and 1920. Wordmark is BBH Hegarty sized to the column (`leading-[0.7]` = cap height, so the margins equal the Figma gaps). Contacts from Figma (`src/data/site.ts`). I added a space in "INST: @mavpy_agency" (Figma has none).
 
-## M4: Sections (one task per section, filled in from docs/audit.md)
+### M4: Sections (one task per section, filled in from docs/audit.md)
 
 - [x] Hero + trust bar
   - Within ~1px of both frames (measured in the browser against the exports). Kit vs frames: MORE tracking is ~1% (not 5%), statement leading is 30/46 px; note and desktop trust items use −3%/−4% tracking. The button is 58 px (`py-[15.5px]`). "clients" is sized from `hero.clientsEm` per language (uk «клієнтів» = 3.5). On /uk/, "БІЛЬШЕ" falls back to regular Roboto (no Cyrillic in Hegarty), which is part of the open font question.
@@ -73,7 +161,7 @@ The agent works top to bottom, ticks `[x]` when a task is done, and adds short n
   - Process: show Nikita a screenshot of the polished version (desktop + mobile, EN + UK) for sign-off before ticking. List the deviations from Figma under "To settle with Serhii".
   - Signed off by Nikita. Outer rhythm within ~1px of both frames; cards are taller (desktop sand card 639 vs 609) because labels sit above fields and error lines are reserved. lg form is a 2-col grid of 3-row subgrids (label/control/error), so the button sits on the select row; the form message reuses the button's error row. Mobile has no sand card (as in the frame). Goal values are `attract|launch|care|other`. Heading got a `center` prop. Screenshots were taken via headless Chrome over CDP when the extension dropped.
 
-## M5: Contact form
+### M5: Contact form
 
 - [x] Zod schema + Astro Action + client validation
   - Pages are static, so the form calls `actions.contact` from a script (JS required). Inline errors are our own localized copy, not the browser's `validationMessage` (that follows the browser language, not the page's). Fixed a Button bug on the way: it rendered `type="button" type="submit"`, so the button never submitted.
@@ -86,7 +174,7 @@ The agent works top to bottom, ticks `[x]` when a task is done, and adds short n
 - [x] Success and error states in EN and UK, then an end-to-end test on the preview deploy
   - Tested on production (mavpy-site.vercel.app): lead arrives, no channel errors. Preview URLs sit behind Vercel Authentication; the production domain doesn't.
 
-## M6: Ukrainian
+### M6: Ukrainian
 
 - [x] Translate all copy into `uk.ts` (natural Ukrainian), mark it for Serhii's review
   - Already written section by section in M3–M5. Checked here: same keys and array lengths as `en.ts` (only prices, brand names and URLs are identical), no hard-coded copy in components or `src/data/`, apostrophes normalised to ’. Whole file is marked `// review: Serhii`.
@@ -95,7 +183,7 @@ The agent works top to bottom, ticks `[x]` when a task is done, and adds short n
 - [x] Layout check with the UK text at every breakpoint
   - Headless Chrome over CDP at 375/768/1024/1280/1440/1920, EN and UK: no horizontal scroll, no clipped text, no wrapped buttons; menu and form error states checked. The hero word's letter-spacing box pokes past the viewport at 768–1280 (the ink doesn't); `html { overflow-x: clip }` already handles that. «Медична клініка» wraps on mobile because the chevron column stays reserved on the open card (intended).
 
-## M7: Polish
+### M7: Polish
 
 - [x] Animations and hovers: start from what Webflow does, then go beyond it to design-studio-level motion (decided 2026-11-19). Not a 1:1 port
   - Before building, audit the Webflow interactions (list them), then propose a motion concept to Nikita for sign-off: scroll-reveals, staggered headline/text reveals, hero entrance, hover/cursor details, section transitions, smooth scroll. Pick what fits the brand; don't animate everything
@@ -112,7 +200,7 @@ The agent works top to bottom, ticks `[x]` when a task is done, and adds short n
 - [x] Favicon set, OG image, robots.txt, 404 page
   - Favicons: the existing light/dark SVGs + apple-touch-icon, plus `favicon.ico` (16/32/48, rendered from favicon.svg in Chrome) for clients that request /favicon.ico. No web manifest (not an installable app). OG: `public/og.jpg` 1200×630 (63 KB), cropped from Figma `6:9` (top 48 px of grunge dropped), one image for both languages with localized `og:image:alt`, plus `twitter:card`. `robots.txt` is an endpoint built from `site`; it says `Disallow: /` until launch (Nikita, 2026-11-20: keep the preview out of search), flipped in M8. 404: one bilingual page (the host serves the same file for /uk/... too), `noindex`, no canonical/hreflang/og:url (Base got `title`/`noindex` props); big "404" in Hegarty like the hero. Header/footer nav links are now `/#id` / `/uk/#id` so they work from the 404; on the home page they still scroll in place (checked: same document).
 
-## M9: Review answers (2026-11-21)
+### M9: Review answers (2026-11-21)
 
 - [x] Contact subline: "from $500" -> "from $700"
 - [x] Form goal "Revamp your website" -> "Care plan" (id `care`)
@@ -130,9 +218,7 @@ The agent works top to bottom, ticks `[x]` when a task is done, and adds short n
 - [x] GA4 prepped but off: `PUBLIC_GA_ID` + cookie banner (EN/UK)
   - `components/Consent.astro`, rendered from Base only when the var is set. Consent Mode v2 defaults all denied; Accept grants `analytics_storage` only (no ads). gtag.js is never requested before Accept; choice in localStorage (`mavpy-consent`). No "change cookie settings" link yet: clearing site data brings the banner back.
 
-## M10: After Serhii's call (2026-11-21)
-
-### Can start now
+### M10: After Serhii's call (2026-11-21)
 
 - [x] Contact form: phone field
   - Required phone (placeholder/hint `+380…`, accepts any international number, validated by Zod on the server too); email becomes optional; the form rejects a submit with neither phone nor email filled, with an inline error in EN and UK.
@@ -150,129 +236,20 @@ The agent works top to bottom, ticks `[x]` when a task is done, and adds short n
     3. Current website: link or "none".
     4. Budget: under 10 000 UAH / 10–20 000 / more / not sure.
     5. Launch timing: urgent / 1–2 months / no rush.
-    Ends with a short "Done" message. All copy in en.ts/uk.ts.
+  - Ends with a short "Done" message. All copy in en.ts/uk.ts.
   - Answers go to the same Airtable record (new fields: CallSlot, Business, CurrentSite, Budget, Timing, Step). The current question is stored in "Step", so the serverless webhook stays stateless. One summary message goes to the studio group when the lead finishes or abandons (e.g. "Lead X: 15–16, healthcare, no site, 10–20k UAH"). No Make.
-  - Done 2026-11-23 in `src/pages/api/telegram.ts`. The confirmation stays as it was, with the intro + first question in the same message. Each question has option buttons (+ "Other" on time/business) and "Skip"; typed text answers the current question. Taps on an old question are ignored. Airtable stores button answers in English. The token now has `data.records:read` (lookup by TelegramChatId, newest by `Created`) and schema write; the 6 text columns were created through the meta API. Summary to the group only on finish (abandoned = answers stay in Airtable, no ping). Tested locally with a throwaway record (deleted). **Before it works on production: re-run the `setWebhook` curl from `.env.example`** (now includes `callback_query`).
-- [ ] Agree the question list and button options with Serhii before building the questionnaire (listed under "To settle with Serhii")
-- [ ] Later (idea, not now): AI follow-up questions and a short lead summary for the call
+  - Done 2026-11-23 in `src/pages/api/telegram.ts`. The confirmation stays as it was, with the intro + first question in the same message. Each question has option buttons (+ "Other" on time/business) and "Skip"; typed text answers the current question. Taps on an old question are ignored. Airtable stores button answers in English. The token now has `data.records:read` (lookup by TelegramChatId, newest by `Created`) and schema write; the 6 text columns were created through the meta API. Summary to the group only on finish (abandoned = answers stay in Airtable, no ping). Tested locally with a throwaway record (deleted). Production webhook re-registered with `callback_query` (checked 2026-11-23).
 - [x] Testimonials: infinite carousel
   - Arrows and swipe wrap around (last → first, first → last); arrows are never disabled; the "n / N" counter stays correct.
   - Done 2026-11-23: items render 3× (outer copies `inert`), start on the middle copy, jump back one copy's width 150 ms after scrolling stops. On desktop the previous card now peeks into the left gutter. Also drifts left on its own (`SPEED` = 30 px/s; Nikita, 2026-11-23): paused on hover, focus, for 3 s after a touch, off-screen; off with reduced motion.
 - [x] Testimonial #1 (Natalia) project line: "Full redesign" → "Design and development" in EN and UK.
+- [x] Rename the bot to "Mavpy bot" in @BotFather (Nikita; shows as "Mavpy Bot").
 
-### Waiting on Serhii
-
-- [ ] Updated Figma: UX, language switcher placement, accordion arrow (a proper arrow, maybe in a circle, maybe on the right), case image sizes (the next card's edge visible), per-block animation notes with references.
-  - Changelist received 2026-11-23; the dev work is in M11. Serhii's design cards on Trello: Update Figma, Block Design, Animations & Micro-interactions, Responsive / Adaptive.
-- [ ] Team block in two variants (two founders / founder + 4 roles); Nikita decides whether his photo is shown.
-- [ ] Real cases: 4 cases, 2 from Serhii + 2 from Nikita, each captioned task → solution → result (changelist 2026-11-23). Earlier list: ENT clinic first, then AOM (college platform), shop, maybe the tea site. 3 cases is enough; Gvozdi is not a case. Serhii's Webflow cases are fine as a stopgap.
-  - Replaces cases 2–5 and their "to be confirmed" facts; drop the crypto case if it isn't one of them.
-- [ ] Real testimonials to replace #4–6 (Dmytro, Julia, Daria; only the first 3 are real), with photos.
-- [ ] Current studio email, plus access to mavpy.studio@gmail.com for moving services (M8 account swap).
-
-### After the new Figma
-
-- [ ] Rebuild the sections that changed
-- [ ] Trust bar becomes a moving strip of client logos running left endlessly, pausing on hover (respects `prefers-reduced-motion`)
-- [ ] ~~Review hover effects: the mascot rotation is removed or redone~~ → moved to M11 (Process)
-- [ ] Micro-animations per Serhii's references
-
-### Deferred until the design is final
-
-- [ ] Pick the domain: mavpy.dev (820 UAH first year, then 1220) or mavpy.com.ua (720 UAH), on Cloudflare. Hosting moves to Cloudflare too; both happen in M8.
-- [ ] Ukrainian text review (`uk.ts`, `// review: Serhii`).
-
-### Manual (Nikita)
-
-- [ ] Rename the bot to "Mavpy bot" in @BotFather.
-
-## M11: Figma changelist (2026-11-23)
-
-From Serhii's Figma changelist. Most items wait on his design cards on Trello (Update Figma, Block Design, Animations & Micro-interactions, Responsive / Adaptive); each item says what it's blocked by.
-
-### Header
-- [ ] Language switcher on the right, before a new CTA button; text (EN / UA), active language highlighted. *Blocked by: Update Figma.*
-
-### Hero
-- [ ] Entrance: heading slides up line by line from under a mask; subheading appears from blur; order heading → subheading → button → background. *Blocked by: Animations.*
-- [ ] Button: arrow nudges right on hover. *Blocked by: Animations.*
-- [ ] Background: thin grid that glows around the cursor; static fallback on touch. *Blocked by: Block Design.*
-
-### Trust bar
-- [ ] Logos run in an endless line to the left; pauses on hover (same item as M10 "Trust bar"). *Blocked by: Block Design (client logos).*
-
-### Situation
-- [ ] Orange border on card hover. *Blocked by: Animations.*
-
-### Process
-- [ ] Mascot: remove the current animation; replace with a scale-up from the bottom-left corner. *Blocked by: Animations.*
-- [ ] Subheading stretched across the full width. *Blocked by: Block Design.*
-- [ ] Cards: lift + orange border on hover. *Blocked by: Animations.*
-
-### Cases
-- [ ] 4 cases (2 Serhii + 2 Nikita), each captioned task → solution → result. *Blocked by: content (M10 "Real cases").*
-- [ ] Accordion: "+" that rotates into "×" instead of arrows; smooth open; first case open by default. *Blocked by: Block Design.*
-
-### Testimonials
-- [x] Infinite carousel (same item as M10).
-- [ ] Card lifts on hover; author photos. *Blocked by: Block Design + real testimonials.*
-
-### About
-- [ ] Build the chosen variant. A: two founders, photo + text each. B: one founder large, team in small photos, text below. *Blocked by: Block Design + Nikita's photo decision.*
-
-### Pricing
-- [ ] Card hover animation; gradient border or cursor spotlight. *Blocked by: Animations / Block Design.*
-- [ ] Recommended tier: badge + orange border. *Blocked by: Block Design + decision on which tier.*
-
-### Form
-- [x] Phone field added, goal field removed (M10).
-- [ ] Connect the bot (M10 Telegram confirmation + questionnaire).
-
-### Footer
-- [ ] Slightly darker background. *Blocked by: Block Design.*
-
-### Later
-- [ ] Ukrainian version: proofread the copy. (Serhii also lists "replace fonts": already done in M9, Inter Tight + Unbounded; ask him what he means.)
-- [ ] Mobile build pass. *Blocked by: Responsive / Adaptive.*
-- [ ] Copy pass over all texts.
-- [ ] "Technologies we use" block. *Blocked by: Block Design.*
-- [ ] Bot script: the questionnaire above (M10).
-
-## M8: Launch (after M10)
-
-Moved after M10 on 2026-11-21: the design changes come first, then launch.
+### M8: Launch (done so far)
 
 - [x] Send Serhii the preview link plus the review list (copy, translation, team section)
   - He reviewed the preview on the 2026-11-21 call.
 - [x] Apply his fixes
-  - Tracked as M9 (done) and M10.
-- [ ] Move hosting to Cloudflare (free, commercial use allowed; Vercel Hobby is non-commercial): `@astrojs/cloudflare` instead of `@astrojs/vercel`, re-enter the secrets
-- [ ] Domain (mavpy.dev or mavpy.com.ua, picked in M10): buy it on Cloudflare Registrar, connect it to the Cloudflare deployment, update `site` in astro.config.mjs, then run a final check in production
-- [ ] Swap Telegram bot/group and Airtable base to the Mavpy accounts on mavpy.studio@gmail.com (only env var values change)
-- [ ] E-mail sending: Resend → Domains → add the domain (one-click DNS on Cloudflare: DKIM, SPF/MX on `send.`, DMARC `p=none`), verify, then set `MAIL_FROM="MAVPY <hello@domain>"` + `RESEND_API_KEY` on the host. Optional: Cloudflare Email Routing to forward hello@ to Gmail. Full steps in the M5 auto-reply plan notes.
-- [ ] **Allow search indexing at launch:** set `indexable = true` in `src/pages/robots.txt.ts` (it's `Disallow: /` while the site is a preview), deploy, then check /robots.txt lists the sitemap and submit it in Google Search Console
-- [x] README: stack, env vars, how to edit copy and translations, plus screenshots (desktop + mobile, EN and UK) saved in `docs/screenshots/` and embedded in the README
-  - Take them from the final production build, after Serhii's fixes. Capture at 1440 and 375 px.
+  - Tracked as M9 and M10.
+- [x] README: stack, env vars, how to edit copy and translations, plus screenshots saved in `docs/screenshots/` and embedded in the README
   - README written (2026-11-20). Screenshots: desktop only (Nikita, 2026-11-20), 1440 px @1x from production: hero EN + UK, plus how-we-work, cases, pricing, contact sections (DevTools script: scrolls the page first for lazy images, grows the viewport to the section height or off-screen parts render blank).
-- [ ] Retake the README screenshots from the launched site (same method as above)
-
-## Decisions for Nikita
-
-Technical and setup calls that are Nikita's alone.
-
-- Domain: mavpy.dev or mavpy.com.ua (M10, deferred until the design is final).
-- Whether Nikita's photo goes in the team block (M10, waiting on Serhii's two variants).
-- Studio accounts (Telegram bot and group, Airtable, Resend, hosting) move to mavpy.studio@gmail.com in M8 (agreed with Serhii 2026-11-21). Only env var values change.
-
-## To settle with Serhii
-
-Copy, translation, prices, contact details and brand content. Nikita and Serhii decide these together. The site is the source of truth; changes come from Serhii through Figma.
-
-- Cases, testimonials, team block, studio email, UK review: tracked in M10.
-- Auto-reply e-mail wording (`contact.autoReply`) and the cookie banner copy.
-- Natalia's avatar in higher resolution.
-- Bot questionnaire: confirm the flow in M10 (call slot + 4 questions) and its button options before it's built. Bot = Mavpy bot; Nikita builds it.
-- Default language, and whether to remember the visitor's choice.
-- Hero: add a stats line ("X projects · Y years · Upwork rating") and a second "See cases" button?
-- Which pricing tier is recommended.
-- Button extra effects: shine or magnetic?
