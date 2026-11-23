@@ -204,7 +204,7 @@ export const en = {
         ],
         name: 'Natalia M.',
         company: 'SRT Massage clinic',
-        project: 'Full redesign',
+        project: 'Design and development',
         avatar: 'natalia',
       },
       {

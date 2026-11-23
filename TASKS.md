@@ -148,7 +148,7 @@ The agent works top to bottom, ticks `[x]` when a task is done, and adds short n
 - [ ] Later (idea, not now): AI follow-up questions and a short lead summary for the call
 - [ ] Testimonials carousel loops
   - Arrows and swipe wrap around (last → first, first → last); arrows are never disabled; the "n / N" counter stays correct.
-- [ ] Testimonial #1 (Natalia) project line: "Full redesign" → "Design and development" in EN and UK.
+- [x] Testimonial #1 (Natalia) project line: "Full redesign" → "Design and development" in EN and UK.
 
 ### Waiting on Serhii
 

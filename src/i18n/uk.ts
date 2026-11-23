@@ -182,7 +182,7 @@ export const uk: Dict = {
         ],
         name: 'Наталія М.',
         company: 'Масажна клініка SRT',
-        project: 'Повний редизайн',
+        project: 'Дизайн і розробка',
         avatar: 'natalia',
       },
       {
