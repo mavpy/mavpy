@@ -3,7 +3,7 @@ import type { HTMLAttributes } from 'astro/types';
 
 // Labelled form field: one underline style at every breakpoint (label above, body-size value).
 // `as="select"` renders a select with the cases-accordion chevron; pass <option>s as children.
-// Focus uses the global ring; the error slot keeps its height so the layout doesn't jump.
+// Focus thickens the underline (not the global ring); the error slot keeps its height so the layout doesn't jump.
 type Props = {
   label: string;
   name: string;
@@ -38,7 +38,9 @@ const errorId = `${id}-error`;
       aria-invalid={error ? 'true' : undefined}
       aria-describedby={error ? errorId : undefined}
       class:list={[
-        'w-full appearance-none rounded-none border-b border-grey-light bg-transparent py-2 text-body transition-colors duration-300 hover:border-grey focus-visible:border-black aria-invalid:border-error',
+        // Focus: the underline thickens to 2px (inset shadow, no layout shift) instead of the global
+        // ring, which boxes the field. Black on grey-light is well over 3:1, so it stays visible.
+        'w-full appearance-none rounded-none border-b border-grey-light bg-transparent py-2 text-body transition-[border-color,box-shadow] duration-300 hover:border-grey focus-visible:border-black focus-visible:shadow-[inset_0_-1px_0_var(--color-black)] focus-visible:outline-none aria-invalid:border-error aria-invalid:focus-visible:shadow-[inset_0_-1px_0_var(--color-error)]',
         Tag === 'select' && 'cursor-pointer pr-10',
       ]}
     >
