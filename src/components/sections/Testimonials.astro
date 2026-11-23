@@ -5,6 +5,9 @@
 // desktop frame); two arrow buttons (Webflow has them, Figma doesn't) cover mouse users. Negative margin + matching padding (and scroll-padding) let the list run
 // edge to edge while cards still snap to the column; cqw (the section is a size container)
 // is used instead of vw, which would include the scrollbar.
+// Infinite: the items render three times (the outer copies are inert, so screen readers and Tab
+// see each card once); the script starts on the middle copy and, once scrolling settles in an
+// outer copy, jumps one copy's width back. Same cards there, so the jump is invisible.
 import { Image } from 'astro:assets';
 import Heading from '../ui/Heading.astro';
 import Section from '../ui/Section.astro';
@@ -20,6 +23,9 @@ const avatars = { natalia, bram, ivan };
 // "Dmytro V." -> "DV" (Cyrillic on /uk/). Placeholder tints cycle through the orange ramp.
 const initials = (name: string) => name.match(/\p{Lu}/gu)?.join('') ?? '';
 const tints = ['bg-orange-200', 'bg-orange', 'bg-orange-300'];
+const looped = [0, 1, 2].flatMap((copy) =>
+  tm.items.map((item, i) => ({ item, i, clone: copy !== 1 })),
+);
 ---
 
 <Section
@@ -44,7 +50,7 @@ const tints = ['bg-orange-200', 'bg-orange', 'bg-orange-300'];
           type="button"
           aria-label={label}
           aria-controls="testimonials-list"
-          class="grid size-[48px] cursor-pointer place-items-center rounded-full border border-black transition-colors hover:bg-black hover:text-white disabled:cursor-default disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-current"
+          class="grid size-[48px] cursor-pointer place-items-center rounded-full border border-black transition-colors hover:bg-black hover:text-white"
         >
           <svg
             viewBox="0 0 10 18"
@@ -66,8 +72,11 @@ const tints = ['bg-orange-200', 'bg-orange', 'bg-orange-300'];
     aria-label={tm.listLabel}
     class="reveal mt-[53px] flex snap-x snap-mandatory scroll-px-(--bleed) gap-[16px] overflow-x-auto scroll-smooth px-(--bleed) [--bleed:calc((100cqw-min(var(--container-content),100cqw-2*var(--spacing-gutter)))/2)] [scrollbar-width:none] -mx-(--bleed) motion-reduce:scroll-auto lg:mt-[49px] lg:gap-[24px]"
   >
-    {tm.items.map((item, i) => (
-      <li class="w-[88%] max-w-[483px] shrink-0 snap-start lg:w-[483px]">
+    {looped.map(({ item, i, clone }) => (
+      <li
+        class="w-[88%] max-w-[483px] shrink-0 snap-start lg:w-[483px]"
+        inert={clone}
+      >
         <figure class="flex h-full min-h-[305px] flex-col rounded-card bg-white p-[9px] lg:min-h-[451px] lg:p-[14px] lg:pb-[20px]">
           <blockquote class="px-[11px] pt-[11px] pb-6 text-center text-[20px] leading-[1.172] lg:pr-[3px] lg:pl-[5px] lg:pt-[22px] lg:text-left lg:text-[28px]">
             {item.quote.map((s, i) => (
@@ -116,29 +125,43 @@ const tints = ['bg-orange-200', 'bg-orange', 'bg-orange-300'];
 </Section>
 
 <script>
-  // Arrows (lg) scroll by one card (+ gap) and disable at the ends; the counter (mobile)
-  // shows the card snapped at the start.
+  // Arrows (lg) scroll by one card (+ gap); the counter (mobile) shows the card snapped at the
+  // start. The list holds three copies of the items (see the top comment).
   const list = document.getElementById('testimonials-list')!;
   const counter = document.querySelector<HTMLElement>('[data-counter]')!;
   const [prev, next] = document.querySelectorAll<HTMLButtonElement>(
     '[data-arrows] button',
   );
+  const n = list.children.length / 3;
   const step = () =>
     (list.firstElementChild as HTMLElement).offsetWidth +
     parseFloat(getComputedStyle(list).columnGap);
+  // Back into the middle copy, instantly (the list is scroll-smooth).
+  const recenter = () => {
+    const set = n * step();
+    const shift =
+      list.scrollLeft < set - 1
+        ? set
+        : list.scrollLeft >= 2 * set - 1
+          ? -set
+          : 0;
+    if (shift)
+      list.scrollTo({ left: list.scrollLeft + shift, behavior: 'instant' });
+  };
+  let settle: ReturnType<typeof setTimeout>;
   const update = () => {
     // Focusable (arrow keys scroll it) only while it actually scrolls.
     list.tabIndex = list.scrollWidth > list.clientWidth ? 0 : -1;
-    prev.disabled = list.scrollLeft <= 1;
-    const atEnd = list.scrollLeft + list.clientWidth >= list.scrollWidth - 1;
-    next.disabled = atEnd;
-    const n = list.children.length;
-    const i = atEnd ? n : Math.round(list.scrollLeft / step()) + 1;
-    counter.textContent = `${i} / ${n}`;
+    const i = Math.round(list.scrollLeft / step());
+    counter.textContent = `${(i % n) + 1} / ${n}`;
+    // ponytail: timer instead of `scrollend` (not in older Safari).
+    clearTimeout(settle);
+    settle = setTimeout(recenter, 150);
   };
   prev.addEventListener('click', () => list.scrollBy({ left: -step() }));
   next.addEventListener('click', () => list.scrollBy({ left: step() }));
   list.addEventListener('scroll', update, { passive: true });
   addEventListener('resize', update);
+  list.scrollTo({ left: n * step(), behavior: 'instant' });
   update();
 </script>

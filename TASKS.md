@@ -155,8 +155,9 @@ The agent works top to bottom, ticks `[x]` when a task is done, and adds short n
   - Done 2026-11-23 in `src/pages/api/telegram.ts`. The confirmation stays as it was, with the intro + first question in the same message. Each question has option buttons (+ "Other" on time/business) and "Skip"; typed text answers the current question. Taps on an old question are ignored. Airtable stores button answers in English. The token now has `data.records:read` (lookup by TelegramChatId, newest by `Created`) and schema write; the 6 text columns were created through the meta API. Summary to the group only on finish (abandoned = answers stay in Airtable, no ping). Tested locally with a throwaway record (deleted). **Before it works on production: re-run the `setWebhook` curl from `.env.example`** (now includes `callback_query`).
 - [ ] Agree the question list and button options with Serhii before building the questionnaire (listed under "To settle with Serhii")
 - [ ] Later (idea, not now): AI follow-up questions and a short lead summary for the call
-- [ ] Testimonials: infinite carousel
+- [x] Testimonials: infinite carousel
   - Arrows and swipe wrap around (last → first, first → last); arrows are never disabled; the "n / N" counter stays correct.
+  - Done 2026-11-23: items render 3× (outer copies `inert`), start on the middle copy, jump back one copy's width 150 ms after scrolling stops. On desktop the previous card now peeks into the left gutter.
 - [x] Testimonial #1 (Natalia) project line: "Full redesign" → "Design and development" in EN and UK.
 
 ### Waiting on Serhii
@@ -213,7 +214,7 @@ From Serhii's Figma changelist. Most items wait on his design cards on Trello (U
 - [ ] Accordion: "+" that rotates into "×" instead of arrows; smooth open; first case open by default. *Blocked by: Block Design.*
 
 ### Testimonials
-- [ ] Infinite carousel (same item as M10). *Can start now.*
+- [x] Infinite carousel (same item as M10).
 - [ ] Card lifts on hover; author photos. *Blocked by: Block Design + real testimonials.*
 
 ### About
