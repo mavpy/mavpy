@@ -70,7 +70,7 @@ const looped = [0, 1, 2].flatMap((copy) =>
   <ul
     id="testimonials-list"
     aria-label={tm.listLabel}
-    class="reveal mt-[53px] flex snap-x snap-mandatory scroll-px-(--bleed) gap-[16px] overflow-x-auto scroll-smooth px-(--bleed) [--bleed:calc((100cqw-min(var(--container-content),100cqw-2*var(--spacing-gutter)))/2)] [scrollbar-width:none] -mx-(--bleed) motion-reduce:scroll-auto lg:mt-[49px] lg:gap-[24px]"
+    class="reveal mt-[53px] flex snap-x snap-mandatory data-auto:snap-none scroll-px-(--bleed) gap-[16px] overflow-x-auto scroll-smooth px-(--bleed) [--bleed:calc((100cqw-min(var(--container-content),100cqw-2*var(--spacing-gutter)))/2)] [scrollbar-width:none] -mx-(--bleed) motion-reduce:scroll-auto lg:mt-[49px] lg:gap-[24px]"
   >
     {looped.map(({ item, i, clone }) => (
       <li
@@ -164,4 +164,67 @@ const looped = [0, 1, 2].flatMap((copy) =>
   addEventListener('resize', update);
   list.scrollTo({ left: n * step(), behavior: 'instant' });
   update();
+
+  // Autoplay: the row drifts left at SPEED px/s. Paused while the mouse is over the cards or
+  // arrows, while anything in the section has focus, for a few seconds after a touch, while
+  // off-screen, and never runs with prefers-reduced-motion. Snapping is off while it drifts
+  // (it would pull every frame back to a card) and back on whenever it's paused.
+  const SPEED = 30;
+  const section = list.closest('section')!;
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)');
+  const holds = new Set<string>();
+  let frame = 0;
+  let last = 0;
+  let pos = 0; // own float: some browsers round scrollLeft, which would stall at 0.5px/frame
+  const tick = (now: number) => {
+    pos += ((now - last) / 1000) * SPEED;
+    last = now;
+    const set = n * step();
+    if (pos >= 2 * set) pos -= set;
+    list.scrollTo({ left: pos, behavior: 'instant' });
+    frame = requestAnimationFrame(tick);
+  };
+  const sync = () => {
+    const go = !holds.size && !reduce.matches;
+    list.toggleAttribute('data-auto', go);
+    if (go && !frame) {
+      pos = list.scrollLeft;
+      last = performance.now();
+      frame = requestAnimationFrame(tick);
+    } else if (!go && frame) {
+      cancelAnimationFrame(frame);
+      frame = 0;
+    }
+  };
+  const hold = (why: string, on: boolean) => {
+    if (on) holds.add(why);
+    else holds.delete(why);
+    sync();
+  };
+  for (const el of [list, prev.parentElement!]) {
+    el.addEventListener('pointerenter', (e) => {
+      if (e.pointerType === 'mouse') hold('hover', true);
+    });
+    el.addEventListener('pointerleave', () => hold('hover', false));
+  }
+  section.addEventListener('focusin', () => hold('focus', true));
+  section.addEventListener('focusout', (e) => {
+    if (!section.contains(e.relatedTarget as Node)) hold('focus', false);
+  });
+  let afterTouch: ReturnType<typeof setTimeout>;
+  list.addEventListener(
+    'touchstart',
+    () => {
+      clearTimeout(afterTouch);
+      hold('touch', true);
+    },
+    { passive: true },
+  );
+  list.addEventListener('touchend', () => {
+    afterTouch = setTimeout(() => hold('touch', false), 3000);
+  });
+  new IntersectionObserver(([e]) =>
+    hold('offscreen', !e.isIntersecting),
+  ).observe(list);
+  reduce.addEventListener('change', sync);
 </script>

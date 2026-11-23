@@ -157,7 +157,7 @@ The agent works top to bottom, ticks `[x]` when a task is done, and adds short n
 - [ ] Later (idea, not now): AI follow-up questions and a short lead summary for the call
 - [x] Testimonials: infinite carousel
   - Arrows and swipe wrap around (last → first, first → last); arrows are never disabled; the "n / N" counter stays correct.
-  - Done 2026-11-23: items render 3× (outer copies `inert`), start on the middle copy, jump back one copy's width 150 ms after scrolling stops. On desktop the previous card now peeks into the left gutter.
+  - Done 2026-11-23: items render 3× (outer copies `inert`), start on the middle copy, jump back one copy's width 150 ms after scrolling stops. On desktop the previous card now peeks into the left gutter. Also drifts left on its own (`SPEED` = 30 px/s; Nikita, 2026-11-23): paused on hover, focus, for 3 s after a touch, off-screen; off with reduced motion.
 - [x] Testimonial #1 (Natalia) project line: "Full redesign" → "Design and development" in EN and UK.
 
 ### Waiting on Serhii
