@@ -81,7 +81,7 @@ async function toAirtable(lead: Lead): Promise<string> {
 /** Updates a lead's fields and returns all its fields (the PATCH response carries the record). */
 export async function updateLead(
   leadId: string,
-  fields: Record<string, string | undefined>,
+  fields: Record<string, string | null | undefined>, // null clears a field
 ) {
   if (!AIRTABLE_TOKEN || !AIRTABLE_BASE_ID) throw new Error('not configured');
   const record = await send(
@@ -94,12 +94,12 @@ export async function updateLead(
 }
 
 /**
- * The lead whose bot questionnaire is in progress in this chat (Step set and not "done").
+ * The newest lead that started the bot questionnaire in this chat (Step set; may be "done").
  * Needs data.records:read on the token.
  */
-export async function findActiveLead(chatId: number) {
+export async function findChatLead(chatId: number) {
   if (!AIRTABLE_TOKEN || !AIRTABLE_BASE_ID) throw new Error('not configured');
-  const formula = `AND({TelegramChatId}='${chatId}', {Step}!='', {Step}!='done')`;
+  const formula = `AND({TelegramChatId}='${chatId}', {Step}!='')`;
   const res = await fetch(
     `${airtableUrl()}?filterByFormula=${encodeURIComponent(formula)}&sort%5B0%5D%5Bfield%5D=Created`,
     {
@@ -111,7 +111,7 @@ export async function findActiveLead(chatId: number) {
   const { records } = (await res.json()) as {
     records: { id: string; fields: Record<string, string | undefined> }[];
   };
-  // Two unfinished questionnaires in one chat (two requests): the newest one.
+  // Two requests from one chat: the newest one.
   return records.at(-1);
 }
 

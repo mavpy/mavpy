@@ -370,10 +370,12 @@ export const en = {
       // Pre-call questionnaire, sent after `confirmed` (the first question in the same message).
       // Button labels are saved to Airtable in English. TODO(copy): agree with Serhii.
       intro:
-        'A few quick questions help us prepare for the call (each can be skipped).',
+        'A few quick questions help us prepare for the call (each can be skipped). Tapped the wrong answer? Send /start to begin again.',
+      // Button: answer the questionnaire again (repeat /start).
+      restart: 'Start over',
       // /start again after the questionnaire is finished. {name} is replaced.
       already:
-        "Thanks, {name}! We already have your answers. We'll contact you soon.",
+        "Thanks, {name}! We already have your answers. We'll contact you soon. Want to change them? Tap the button below.",
       skip: 'Skip',
       other: 'Other',
       otherPrompt: 'Type your answer:',

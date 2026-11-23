@@ -9,7 +9,7 @@ import type { APIRoute } from 'astro';
 import { TELEGRAM_WEBHOOK_SECRET } from 'astro:env/server';
 import {
   esc,
-  findActiveLead,
+  findChatLead,
   isLeadId,
   telegram,
   toStudio,
@@ -75,6 +75,20 @@ function ask(lang: Lang, step: Step, chatId: number, prefix = '') {
   };
 }
 
+/** (Re)starts the questionnaire: clears earlier answers, asks the first question. */
+async function begin(leadId: string, lang: Lang, chatId: number, prefix = '') {
+  const cleared = Object.fromEntries(
+    Object.values(fields).map((f) => [f, null]),
+  );
+  await updateLead(leadId, { ...cleared, Step: steps[0] });
+  return ask(
+    lang,
+    steps[0],
+    chatId,
+    `${prefix}${t(lang).contact.bot.intro}\n\n`,
+  );
+}
+
 /** Saves the answer (undefined = skipped), moves Step on, returns the next message. */
 async function answer(
   leadId: string,
@@ -130,36 +144,44 @@ export const POST: APIRoute = async ({ request, site, url }) => {
     const start = message.text.match(/^\/start(?:\s+(\S+))?/);
     if (start) {
       const payload = start[1];
-      if (payload && isLeadId(payload)) {
-        // Saves the chat id; the returned record says how far the questionnaire got.
-        const lead = await updateLead(payload, {
-          TelegramChatId: String(chatId),
-        }).catch((err) => console.error('telegram: link failed:', err));
-        if (lead) {
-          const lang = langOf(lead.Locale, userLang);
-          const bot = t(lang).contact.bot;
-          const confirmed = bot.confirmed.replace('{name}', lead.Name ?? '');
-          // Opened again (e.g. from the e-mail) after finishing: no second questionnaire.
-          if (lead.Step === 'done')
-            return reply({
-              method: 'sendMessage',
-              chat_id: chatId,
-              text: bot.already.replace('{name}', lead.Name ?? ''),
-            });
-          // Half done: carry on from the current question.
-          if (isStep(lead.Step))
-            return reply(ask(lang, lead.Step, chatId, `${confirmed}\n\n`));
-          await updateLead(payload, { Step: steps[0] });
-          return reply(
-            ask(lang, steps[0], chatId, `${confirmed}\n\n${bot.intro}\n\n`),
-          );
-        }
+      // The site link carries the lead id (save the chat id; the returned record says how far
+      // the questionnaire got). A typed /start has none: find the chat's lead instead.
+      const lead =
+        payload && isLeadId(payload)
+          ? await updateLead(payload, { TelegramChatId: String(chatId) })
+              .then((fields) => ({ id: payload, fields }))
+              .catch((err) => console.error('telegram: link failed:', err))
+          : await findChatLead(chatId);
+      if (!lead) return hello(chatId, langOf(undefined, userLang));
+      const { Name, Locale, Step } = lead.fields;
+      const lang = langOf(Locale, userLang);
+      const bot = t(lang).contact.bot;
+      // Finished: say so, and offer to answer again (misclicked, changed their mind).
+      if (Step === 'done')
+        return reply({
+          method: 'sendMessage',
+          chat_id: chatId,
+          text: bot.already.replace('{name}', Name ?? ''),
+          reply_markup: {
+            inline_keyboard: [
+              [{ text: bot.restart, callback_data: 'restart' }],
+            ],
+          },
+        });
+      const confirmed = bot.confirmed.replace('{name}', Name ?? '');
+      // Half done: carry on from the current question, with a way to start over.
+      if (isStep(Step)) {
+        const q = ask(lang, Step, chatId, `${confirmed}\n\n`);
+        q.reply_markup.inline_keyboard.push([
+          { text: bot.restart, callback_data: 'restart' },
+        ]);
+        return reply(q);
       }
-      return hello(chatId, langOf(undefined, userLang));
+      return reply(await begin(lead.id, lang, chatId, `${confirmed}\n\n`));
     }
 
     // Free text answers the current question (a link, an "Other" value...).
-    const lead = await findActiveLead(chatId);
+    const lead = await findChatLead(chatId);
     const step = lead?.fields.Step;
     if (!lead || !isStep(step))
       return hello(chatId, langOf(undefined, userLang));
@@ -188,12 +210,28 @@ async function onButton(cb: NonNullable<Update['callback_query']>) {
     telegram('answerCallbackQuery', { callback_query_id: cb.id }).catch((err) =>
       console.error('telegram: answerCallbackQuery failed:', err),
     );
-  const [, step, choice] = cb.data?.split(':') ?? [];
   const msg = cb.message;
-  if (!msg || msg.chat.type !== 'private' || !isStep(step))
-    return done().then(ok);
+  if (!msg || msg.chat.type !== 'private') return done().then(ok);
 
-  const lead = await findActiveLead(msg.chat.id);
+  if (cb.data === 'restart') {
+    const lead = await findChatLead(msg.chat.id);
+    if (!lead) return done().then(ok);
+    const lang = langOf(lead.fields.Locale, cb.from?.language_code);
+    // Drop the button so it can't be tapped twice.
+    await Promise.all([
+      done(),
+      telegram('editMessageReplyMarkup', {
+        chat_id: msg.chat.id,
+        message_id: msg.message_id,
+      }).catch((err) => console.error('telegram: edit failed:', err)),
+    ]);
+    return reply(await begin(lead.id, lang, msg.chat.id));
+  }
+
+  const [, step, choice] = cb.data?.split(':') ?? [];
+  if (!isStep(step)) return done().then(ok);
+
+  const lead = await findChatLead(msg.chat.id);
   // A tap on an old question (already answered) is ignored.
   if (!lead || lead.fields.Step !== step) return done().then(ok);
   const lang = langOf(lead.fields.Locale, cb.from?.language_code);
