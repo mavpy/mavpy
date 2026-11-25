@@ -363,21 +363,21 @@ export const en = {
     // Telegram bot replies. {name} is replaced. TODO(copy)
     bot: {
       confirmed:
-        "🎉 Thanks, {name}! Your request is confirmed. We'll get back to you within 24 hours.",
+        "🎉 Thanks, {name}!\n\nYour request is confirmed. We'll get back to you within 24 hours.",
       // /start without a valid lead (opened the bot directly, or an old link).
       hello:
-        "👋 Hi! This is the MAVPY studio bot. Leave a request on our site and we'll get in touch: {site}",
+        "👋 Hi! This is the MAVPY studio bot.\n\nLeave a request on our site and we'll get in touch: {site}",
       // Pre-call questionnaire, sent after `confirmed` (the first question in the same message).
       // Button labels are saved to Airtable in English. TODO(copy): agree with Serhii.
       intro:
-        '🐒 A few quick questions help us prepare for the call (each can be skipped). Tapped the wrong answer? Send /start to begin again.',
+        '🐒 A few quick questions help us prepare for the call (each can be skipped).\nTapped the wrong answer? Send /start to begin again.',
       // Button: answer the questionnaire again (repeat /start).
       restart: '🔄 Start over',
       // /start again after the questionnaire is finished, before the answer list. {name} is replaced.
-      already: '🙌 Thanks, {name}!\n📋 We already have your answers:',
+      already: '🙌 Thanks, {name}!\n\n📋 We already have your answers:',
       // Button under the answer list: the answers are right. `kept` is the reply.
       allGood: '👍 All good',
-      kept: "🎉 Great, thank you! That helps us prepare. We'll contact you soon.",
+      kept: "🎉 Great, thank you!\n\nThat helps us prepare. We'll contact you soon.",
       skip: '⏭ Skip',
       // Under a question on a redo: the saved answer (Skip keeps it). {answer} is replaced.
       current: '📌 Current answer: {answer}',
@@ -386,9 +386,9 @@ export const en = {
       other: '✏️ Other',
       otherPrompt: '✏️ Type your answer:',
       // Finished: `done`, the answer list (`label: answer` lines), then `check` with All good / Start over.
-      done: '✅ Done, thank you! Here are your answers:',
+      done: '✅ Done, thank you!\n\n📋 Here are your answers:',
       check:
-        '🤔 Is everything correct? If not, tap Start over: a question you skip keeps your earlier answer.',
+        '🤔 Is everything correct?\nIf not, tap Start over: a question you skip keeps your earlier answer.',
       questions: {
         slot: {
           label: '🕐 Call time',

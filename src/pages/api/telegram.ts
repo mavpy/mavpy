@@ -163,18 +163,40 @@ async function finish(
     AnswersUpdated: new Date().toISOString(),
   });
   // ponytail: summary only when finished; an abandoned questionnaire stays in Airtable unannounced.
-  const line = (label: string, v?: string) => `${label}: ${esc(v || '—')}`;
+  // On a redo, lines that differ from the answers saved at "Start over" are bold.
+  const prev = lead.Redone ? parsePrevious(lead.PreviousAnswers) : undefined;
+  const line = (label: string, col: string) => {
+    const text = `${label}: ${esc(lead[col] || '—')}`;
+    return prev && (prev[col] ?? '') !== (lead[col] ?? '')
+      ? `<b>${text}</b>`
+      : text;
+  };
   await toStudio(
     [
-      `<b>Questionnaire${lead.Redone ? ' (updated)' : ''}</b>: ${esc(lead.Name ?? '')} ${esc(lead.Phone ?? '')}`,
-      line('Call', lead.CallSlot),
-      line('Business', lead.Business),
-      line('Site', lead.CurrentSite),
-      line('Budget', lead.Budget),
-      line('Timing', lead.Timing),
+      lead.Redone
+        ? `<b>📋 Questionnaire (updated)</b>${prev ? '\nChanges are in bold.' : ''}`
+        : '<b>📋 Questionnaire</b>',
+      '',
+      `Name: ${esc(lead.Name ?? '')}`,
+      `Phone: ${esc(lead.Phone ?? '')}`,
+      '',
+      line('Call', fields.slot),
+      line('Business', fields.business),
+      line('Site', fields.site),
+      line('Budget', fields.budget),
+      line('Timing', fields.timing),
     ].join('\n'),
   ).catch((err) => console.error('telegram: summary failed:', err));
   return review(lang, lead, chatId, t(lang).contact.bot.done);
+}
+
+/** The answers saved at "Start over", or undefined (none, or not valid JSON). */
+function parsePrevious(json?: string): Fields | undefined {
+  try {
+    return json ? (JSON.parse(json) as Fields) : undefined;
+  } catch {
+    return undefined;
+  }
 }
 
 /**
@@ -318,8 +340,16 @@ async function onButton(cb: NonNullable<Update['callback_query']>) {
       }).catch((err) => console.error('telegram: edit failed:', err)),
     ]);
     // Marks the redo (Airtable "Redone"): the summary says "updated" and questions get "Finish now".
+    // "PreviousAnswers" (long text, JSON) keeps the answers as they were, so the summary can bold
+    // what changed.
+    const previous = Object.fromEntries(
+      Object.values(fields).map((col) => [col, lead.fields[col] ?? '']),
+    );
     return reply(
-      await begin(lead.id, lang, msg.chat.id, '', { Redone: 'yes' }),
+      await begin(lead.id, lang, msg.chat.id, '', {
+        Redone: 'yes',
+        PreviousAnswers: JSON.stringify(previous),
+      }),
     );
   }
 

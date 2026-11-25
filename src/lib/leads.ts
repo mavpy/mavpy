@@ -128,7 +128,8 @@ export async function telegram(method: string, body: unknown) {
 async function toTelegram(lead: Lead) {
   if (!TELEGRAM_CHAT_ID) throw new Error('not configured');
   const lines = [
-    `<b>New lead</b> (${lead.locale.toUpperCase()})`,
+    `<b>🆕 New lead</b> (${lead.locale.toUpperCase()})`,
+    '',
     `Name: ${esc(lead.name)}`,
     `Phone: ${esc(lead.phone)}`,
     `Email: ${esc(lead.email)}`,
