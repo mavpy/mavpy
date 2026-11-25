@@ -370,9 +370,11 @@ export const uk: Dict = {
         },
         site: {
           label: '🌐 Сайт',
-          text: '🌐 Чи є у вас сайт зараз? Надішліть посилання або натисніть «Сайту немає».',
+          text: '🌐 Чи є у вас сайт зараз?',
           options: ['Сайту немає'],
-          other: false,
+          other: true,
+          otherText: '🔗 У мене є сайт',
+          otherPrompt: '🔗 Надішліть посилання на ваш сайт:',
         },
         budget: {
           label: '💰 Бюджет',

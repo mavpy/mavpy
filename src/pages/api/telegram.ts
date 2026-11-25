@@ -84,9 +84,10 @@ function ask(
       callback_data: `a:${step}:${i}`,
       style: 'primary',
     }));
+  // "Other" asks for a typed answer; a question can rename it (site: "I have a website").
   if (q.other)
     buttons.push({
-      text: bot.other,
+      text: 'otherText' in q ? q.otherText : bot.other,
       callback_data: `a:${step}:other`,
       style: 'primary',
     });
@@ -174,7 +175,7 @@ async function finish(
   await toStudio(
     [
       lead.Redone
-        ? `<b>📋 Questionnaire (updated)</b>${prev ? '\nChanges are in bold.' : ''}`
+        ? '<b>📋 Questionnaire (updated)</b>'
         : '<b>📋 Questionnaire</b>',
       '',
       `Name: ${esc(lead.Name ?? '')}`,
@@ -362,14 +363,6 @@ async function onButton(cb: NonNullable<Update['callback_query']>) {
   const lang = langOf(lead.fields.Locale, cb.from?.language_code);
   const bot = t(lang).contact.bot;
 
-  if (choice === 'other') {
-    await done();
-    return reply({
-      method: 'sendMessage',
-      chat_id: msg.chat.id,
-      text: bot.otherPrompt,
-    });
-  }
   const edit = (choiceText: string) =>
     Promise.all([
       done(),
@@ -379,6 +372,18 @@ async function onButton(cb: NonNullable<Update['callback_query']>) {
         text: `${msg.text ?? ''}\n\n→ ${choiceText}`,
       }).catch((err) => console.error('telegram: edit failed:', err)),
     ]);
+
+  // Other: mark the choice, then ask for the text (the next message answers this step).
+  if (choice === 'other') {
+    const q = bot.questions[step];
+    if (!q.other) return done().then(ok);
+    await edit('otherText' in q ? q.otherText : bot.other);
+    return reply({
+      method: 'sendMessage',
+      chat_id: msg.chat.id,
+      text: 'otherPrompt' in q ? q.otherPrompt : bot.otherPrompt,
+    });
+  }
 
   if (choice === 'finish') {
     await edit(bot.finish);

@@ -410,9 +410,12 @@ export const en = {
         },
         site: {
           label: '🌐 Website',
-          text: '🌐 Do you have a website now? Send the link, or tap "No website".',
+          text: '🌐 Do you have a website now?',
           options: ['No website'],
-          other: false,
+          // The "Other" button here, and what it asks for.
+          other: true,
+          otherText: '🔗 I have a website',
+          otherPrompt: '🔗 Send the link to your site:',
         },
         budget: {
           label: '💰 Budget',
