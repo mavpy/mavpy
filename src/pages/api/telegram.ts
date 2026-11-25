@@ -124,11 +124,19 @@ async function answer(
       line('Timing', lead.Timing),
     ].join('\n'),
   ).catch((err) => console.error('telegram: summary failed:', err));
-  // Start over right here, in case the last tap was a misclick.
+  // Thanks + everything they entered, with Start over right here in case something's off.
+  // Airtable holds the English button label; show it in their language (typed text as is).
+  const bot = t(lang).contact.bot;
+  const shown = (s: Step) => {
+    const v = lead[fields[s]];
+    const i = t('en').contact.bot.questions[s].options.indexOf(v ?? '');
+    return i >= 0 ? bot.questions[s].options[i] : v || '—';
+  };
+  const list = steps.map((s) => `${bot.questions[s].label}: ${shown(s)}`);
   return {
     method: 'sendMessage',
     chat_id: chatId,
-    text: t(lang).contact.bot.done,
+    text: [bot.done, '', bot.answers, ...list].join('\n'),
     reply_markup: {
       inline_keyboard: [
         [
@@ -302,13 +310,12 @@ async function onButton(cb: NonNullable<Update['callback_query']>) {
   const label = bot.questions[step].options[i];
   if (choice !== 'skip' && !label) return done().then(ok);
 
-  // Show the choice under the question and drop its buttons (no reply_markup = removed).
+  // Drop the answered question's buttons (no reply_markup = removed); the answers are listed at the end.
   await Promise.all([
     done(),
-    telegram('editMessageText', {
+    telegram('editMessageReplyMarkup', {
       chat_id: msg.chat.id,
       message_id: msg.message_id,
-      text: `${msg.text ?? ''}\n\n→ ${label ?? bot.skip}`,
     }).catch((err) => console.error('telegram: edit failed:', err)),
   ]);
   // Airtable gets the English label, so the studio reads one language.

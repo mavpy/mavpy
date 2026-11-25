@@ -383,13 +383,17 @@ export const en = {
       other: 'Other',
       otherPrompt: 'Type your answer:',
       done: "Done, thank you! That helps us prepare. We'll contact you soon.",
+      // Heading over the answer list in the `done` message; each line is `label: answer`.
+      answers: 'Your answers:',
       questions: {
         slot: {
+          label: 'Call time',
           text: 'What time suits you best for the call? (Kyiv time)',
           options: ['11:00–13:00', '15:00–16:00', '18:00–19:00'],
           other: true,
         },
         business: {
+          label: 'Business',
           text: "What's your business area?",
           options: [
             'Healthcare',
@@ -401,11 +405,13 @@ export const en = {
           other: true,
         },
         site: {
+          label: 'Website',
           text: 'Do you have a website now? Send the link, or tap "No website".',
           options: ['No website'],
           other: false,
         },
         budget: {
+          label: 'Budget',
           text: "What's your budget?",
           options: [
             'Under 10 000 UAH',
@@ -416,6 +422,7 @@ export const en = {
           other: false,
         },
         timing: {
+          label: 'Launch',
           text: 'When do you want to launch?',
           options: ['Urgently', 'In 1–2 months', 'No rush'],
           other: false,
