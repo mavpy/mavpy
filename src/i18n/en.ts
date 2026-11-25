@@ -374,7 +374,7 @@ export const en = {
       // Button: answer the questionnaire again (repeat /start).
       restart: 'Start over',
       // /start again after the questionnaire is finished, before the answer list. {name} is replaced.
-      already: 'Thanks, {name}! We already have your answers:',
+      already: 'Thanks, {name}!\nWe already have your answers:',
       // Button under the answer list: the answers are right. `kept` is the reply.
       allGood: 'All good',
       kept: "Great, thank you! That helps us prepare. We'll contact you soon.",
