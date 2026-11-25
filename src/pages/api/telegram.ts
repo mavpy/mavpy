@@ -57,7 +57,7 @@ function ask(lang: Lang, step: Step, chatId: number, prefix = '') {
   const bot = t(lang).contact.bot;
   const q = bot.questions[step];
   // Every button is coloured (Bot API 9.4): blue "primary" moves forward (answers, Other, Start over),
-  // red "danger" declines (Skip, Keep my answers).
+  // red "danger" declines (Skip), green "success" confirms (All good, in review()).
   // Older Telegram apps ignore `style` and show the plain button.
   const buttons: { text: string; callback_data: string; style?: string }[] =
     q.options.map((text, i) => ({
@@ -124,9 +124,21 @@ async function answer(
       line('Timing', lead.Timing),
     ].join('\n'),
   ).catch((err) => console.error('telegram: summary failed:', err));
-  // Thanks + everything they entered, with Start over right here in case something's off.
-  // Airtable holds the English button label; show it in their language (typed text as is).
+  return review(lang, lead, chatId, t(lang).contact.bot.done);
+}
+
+/**
+ * `head`, everything they entered, and "Is everything correct?" with All good / Start over.
+ * Sent when they finish and on every /start after that.
+ */
+function review(
+  lang: Lang,
+  lead: Record<string, string | undefined>,
+  chatId: number,
+  head: string,
+) {
   const bot = t(lang).contact.bot;
+  // Airtable holds the English button label; show it in their language (typed text as is).
   const shown = (s: Step) => {
     const v = lead[fields[s]];
     const i = t('en').contact.bot.questions[s].options.indexOf(v ?? '');
@@ -136,16 +148,11 @@ async function answer(
   return {
     method: 'sendMessage',
     chat_id: chatId,
-    text: [bot.done, '', bot.answers, ...list].join('\n'),
+    text: [head, ...list, '', bot.check].join('\n'),
     reply_markup: {
       inline_keyboard: [
-        [
-          {
-            text: t(lang).contact.bot.restart,
-            callback_data: 'restart',
-            style: 'primary',
-          },
-        ],
+        [{ text: bot.allGood, callback_data: 'keep', style: 'success' }],
+        [{ text: bot.restart, callback_data: 'restart', style: 'primary' }],
       ],
     },
   };
@@ -185,25 +192,16 @@ export const POST: APIRoute = async ({ request, site, url }) => {
       const { Name, Locale, Step } = lead.fields;
       const lang = langOf(Locale, userLang);
       const bot = t(lang).contact.bot;
-      // Finished: say so, and offer to answer again (misclicked, changed their mind) or keep them.
+      // Finished: show the answers again to confirm or redo (misclicked, changed their mind).
       if (Step === 'done')
-        return reply({
-          method: 'sendMessage',
-          chat_id: chatId,
-          text: bot.already.replace('{name}', Name ?? ''),
-          reply_markup: {
-            inline_keyboard: [
-              [
-                {
-                  text: bot.restart,
-                  callback_data: 'restart',
-                  style: 'primary',
-                },
-              ],
-              [{ text: bot.keep, callback_data: 'keep', style: 'danger' }],
-            ],
-          },
-        });
+        return reply(
+          review(
+            lang,
+            lead.fields,
+            chatId,
+            bot.already.replace('{name}', Name ?? ''),
+          ),
+        );
       const confirmed = bot.confirmed.replace('{name}', Name ?? '');
       // Half done: carry on from the current question, with a way to start over.
       if (isStep(Step)) {

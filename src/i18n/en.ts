@@ -373,18 +373,18 @@ export const en = {
         'A few quick questions help us prepare for the call (each can be skipped). Tapped the wrong answer? Send /start to begin again.',
       // Button: answer the questionnaire again (repeat /start).
       restart: 'Start over',
-      // /start again after the questionnaire is finished. {name} is replaced.
-      already:
-        "Thanks, {name}! We already have your answers. We'll contact you soon. Want to change them? Tap Start over: a question you skip keeps your earlier answer.",
-      // Button under `already`: leave the answers as they are.
-      keep: 'Keep my answers',
-      kept: "Great, your answers stay as they are. We'll contact you soon.",
+      // /start again after the questionnaire is finished, before the answer list. {name} is replaced.
+      already: 'Thanks, {name}! We already have your answers:',
+      // Button under the answer list: the answers are right. `kept` is the reply.
+      allGood: 'All good',
+      kept: "Great, thank you! That helps us prepare. We'll contact you soon.",
       skip: 'Skip',
       other: 'Other',
       otherPrompt: 'Type your answer:',
-      done: "Done, thank you! That helps us prepare. We'll contact you soon.",
-      // Heading over the answer list in the `done` message; each line is `label: answer`.
-      answers: 'Your answers:',
+      // Finished: `done`, the answer list (`label: answer` lines), then `check` with All good / Start over.
+      done: 'Done, thank you! Here are your answers:',
+      check:
+        'Is everything correct? If not, tap Start over: a question you skip keeps your earlier answer.',
       questions: {
         slot: {
           label: 'Call time',
