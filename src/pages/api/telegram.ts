@@ -115,10 +115,16 @@ async function answer(
       line('Timing', lead.Timing),
     ].join('\n'),
   ).catch((err) => console.error('telegram: summary failed:', err));
+  // Start over right here, in case the last tap was a misclick.
   return {
     method: 'sendMessage',
     chat_id: chatId,
     text: t(lang).contact.bot.done,
+    reply_markup: {
+      inline_keyboard: [
+        [{ text: t(lang).contact.bot.restart, callback_data: 'restart' }],
+      ],
+    },
   };
 }
 
