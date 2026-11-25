@@ -379,6 +379,10 @@ export const en = {
       allGood: 'All good',
       kept: "Great, thank you! That helps us prepare. We'll contact you soon.",
       skip: 'Skip',
+      // Under a question on a redo: the saved answer (Skip keeps it). {answer} is replaced.
+      current: 'Current answer: {answer}',
+      // Button on every question but the last: end now, later questions stay as they are.
+      finish: 'Finish now',
       other: 'Other',
       otherPrompt: 'Type your answer:',
       // Finished: `done`, the answer list (`label: answer` lines), then `check` with All good / Start over.

@@ -52,12 +52,31 @@ const reply = (body: object) =>
 const langOf = (locale?: string, fallback?: string): Lang =>
   locale === 'uk' || locale === 'en' ? locale : fallback === 'uk' ? 'uk' : 'en';
 
-/** A question with one button per option, plus "Other" and "Skip". */
-function ask(lang: Lang, step: Step, chatId: number, prefix = '') {
+type Fields = Record<string, string | undefined>;
+
+/** A saved answer in their language (Airtable holds the English button label; typed text as is). */
+function shown(lang: Lang, lead: Fields, step: Step) {
+  const v = lead[fields[step]];
+  const i = t('en').contact.bot.questions[step].options.indexOf(v ?? '');
+  return i >= 0 ? t(lang).contact.bot.questions[step].options[i] : v;
+}
+
+/**
+ * A question with one button per option, plus "Other", "Skip" and (before the last question)
+ * "Finish now". On a redo it shows the saved answer, which Skip keeps.
+ */
+function ask(
+  lang: Lang,
+  step: Step,
+  chatId: number,
+  lead: Fields,
+  prefix = '',
+) {
   const bot = t(lang).contact.bot;
   const q = bot.questions[step];
+  const current = shown(lang, lead, step);
   // Every button is coloured (Bot API 9.4): blue "primary" moves forward (answers, Other, Start over),
-  // red "danger" declines (Skip), green "success" confirms (All good, in review()).
+  // red "danger" declines (Skip), green "success" confirms (Finish now, All good).
   // Older Telegram apps ignore `style` and show the plain button.
   const buttons: { text: string; callback_data: string; style?: string }[] =
     q.options.map((text, i) => ({
@@ -76,10 +95,20 @@ function ask(lang: Lang, step: Step, chatId: number, prefix = '') {
     callback_data: `a:${step}:skip`,
     style: 'danger',
   });
+  // On the last question Skip already finishes.
+  if (step !== steps.at(-1))
+    buttons.push({
+      text: bot.finish,
+      callback_data: `a:${step}:finish`,
+      style: 'success',
+    });
   return {
     method: 'sendMessage',
     chat_id: chatId,
-    text: prefix + q.text,
+    text:
+      prefix +
+      q.text +
+      (current ? `\n\n${bot.current.replace('{answer}', current)}` : ''),
     reply_markup: { inline_keyboard: buttons.map((b) => [b]) },
   };
 }
@@ -89,11 +118,12 @@ function ask(lang: Lang, step: Step, chatId: number, prefix = '') {
  * field untouched (undefined is dropped from the PATCH), so a redo only overwrites what's re-answered.
  */
 async function begin(leadId: string, lang: Lang, chatId: number, prefix = '') {
-  await updateLead(leadId, { Step: steps[0] });
+  const lead = await updateLead(leadId, { Step: steps[0] });
   return ask(
     lang,
     steps[0],
     chatId,
+    lead,
     `${prefix}${t(lang).contact.bot.intro}\n\n`,
   );
 }
@@ -107,14 +137,25 @@ async function answer(
   chatId: number,
 ) {
   const next = steps[steps.indexOf(step) + 1] as Step | undefined;
+  if (!next) return finish(leadId, lang, chatId, { [fields[step]]: value });
+  const lead = await updateLead(leadId, { [fields[step]]: value, Step: next });
+  return ask(lang, next, chatId, lead);
+}
+
+/** Ends the questionnaire (last answer, or "Finish now"): summary to the studio, review to them. */
+async function finish(
+  leadId: string,
+  lang: Lang,
+  chatId: number,
+  last: Fields = {},
+) {
   const lead = await updateLead(leadId, {
-    [fields[step]]: value,
-    Step: next ?? 'done',
+    ...last,
+    Step: 'done',
     // When they last finished a round (first time or a redo). Airtable "AnswersUpdated":
     // date with time, shown in Kyiv time.
-    ...(next ? {} : { AnswersUpdated: new Date().toISOString() }),
+    AnswersUpdated: new Date().toISOString(),
   });
-  if (next) return ask(lang, next, chatId);
   // ponytail: summary only when finished; an abandoned questionnaire stays in Airtable unannounced.
   const line = (label: string, v?: string) => `${label}: ${esc(v || '—')}`;
   await toStudio(
@@ -134,20 +175,11 @@ async function answer(
  * `head`, everything they entered, and "Is everything correct?" with All good / Start over.
  * Sent when they finish and on every /start after that.
  */
-function review(
-  lang: Lang,
-  lead: Record<string, string | undefined>,
-  chatId: number,
-  head: string,
-) {
+function review(lang: Lang, lead: Fields, chatId: number, head: string) {
   const bot = t(lang).contact.bot;
-  // Airtable holds the English button label; show it in their language (typed text as is).
-  const shown = (s: Step) => {
-    const v = lead[fields[s]];
-    const i = t('en').contact.bot.questions[s].options.indexOf(v ?? '');
-    return i >= 0 ? bot.questions[s].options[i] : v || '—';
-  };
-  const list = steps.map((s) => `${bot.questions[s].label}: ${shown(s)}`);
+  const list = steps.map(
+    (s) => `${bot.questions[s].label}: ${shown(lang, lead, s) || '—'}`,
+  );
   return {
     method: 'sendMessage',
     chat_id: chatId,
@@ -208,7 +240,7 @@ export const POST: APIRoute = async ({ request, site, url }) => {
       const confirmed = bot.confirmed.replace('{name}', Name ?? '');
       // Half done: carry on from the current question, with a way to start over.
       if (isStep(Step)) {
-        const q = ask(lang, Step, chatId, `${confirmed}\n\n`);
+        const q = ask(lang, Step, chatId, lead.fields, `${confirmed}\n\n`);
         q.reply_markup.inline_keyboard.push([
           { text: bot.restart, callback_data: 'restart', style: 'primary' },
         ]);
@@ -307,20 +339,27 @@ async function onButton(cb: NonNullable<Update['callback_query']>) {
       text: bot.otherPrompt,
     });
   }
+  const edit = (choiceText: string) =>
+    Promise.all([
+      done(),
+      telegram('editMessageText', {
+        chat_id: msg.chat.id,
+        message_id: msg.message_id,
+        text: `${msg.text ?? ''}\n\n→ ${choiceText}`,
+      }).catch((err) => console.error('telegram: edit failed:', err)),
+    ]);
+
+  if (choice === 'finish') {
+    await edit(bot.finish);
+    return reply(await finish(lead.id, lang, msg.chat.id));
+  }
   const i = Number(choice);
   const label = bot.questions[step].options[i];
   if (choice !== 'skip' && !label) return done().then(ok);
 
   // Show the choice under the question and drop its buttons (no reply_markup = removed), so no
   // question looks unanswered; review() lists all the answers again at the end.
-  await Promise.all([
-    done(),
-    telegram('editMessageText', {
-      chat_id: msg.chat.id,
-      message_id: msg.message_id,
-      text: `${msg.text ?? ''}\n\n→ ${label ?? bot.skip}`,
-    }).catch((err) => console.error('telegram: edit failed:', err)),
-  ]);
+  await edit(label ?? bot.skip);
   // Airtable gets the English label, so the studio reads one language.
   const value = label && t('en').contact.bot.questions[step].options[i];
   return reply(await answer(lead.id, lang, step, value, msg.chat.id));
