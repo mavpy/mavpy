@@ -363,42 +363,42 @@ export const en = {
     // Telegram bot replies. {name} is replaced. TODO(copy)
     bot: {
       confirmed:
-        "Thanks, {name}! Your request is confirmed. We'll get back to you within 24 hours.",
+        "🎉 Thanks, {name}! Your request is confirmed. We'll get back to you within 24 hours.",
       // /start without a valid lead (opened the bot directly, or an old link).
       hello:
-        "Hi! This is the MAVPY studio bot. Leave a request on our site and we'll get in touch: {site}",
+        "👋 Hi! This is the MAVPY studio bot. Leave a request on our site and we'll get in touch: {site}",
       // Pre-call questionnaire, sent after `confirmed` (the first question in the same message).
       // Button labels are saved to Airtable in English. TODO(copy): agree with Serhii.
       intro:
-        'A few quick questions help us prepare for the call (each can be skipped). Tapped the wrong answer? Send /start to begin again.',
+        '🐒 A few quick questions help us prepare for the call (each can be skipped). Tapped the wrong answer? Send /start to begin again.',
       // Button: answer the questionnaire again (repeat /start).
-      restart: 'Start over',
+      restart: '🔄 Start over',
       // /start again after the questionnaire is finished, before the answer list. {name} is replaced.
-      already: 'Thanks, {name}!\nWe already have your answers:',
+      already: '🙌 Thanks, {name}!\n📋 We already have your answers:',
       // Button under the answer list: the answers are right. `kept` is the reply.
-      allGood: 'All good',
-      kept: "Great, thank you! That helps us prepare. We'll contact you soon.",
-      skip: 'Skip',
+      allGood: '👍 All good',
+      kept: "🎉 Great, thank you! That helps us prepare. We'll contact you soon.",
+      skip: '⏭ Skip',
       // Under a question on a redo: the saved answer (Skip keeps it). {answer} is replaced.
-      current: 'Current answer: {answer}',
+      current: '📌 Current answer: {answer}',
       // Button on every question but the last: end now, later questions stay as they are.
-      finish: 'Finish now',
-      other: 'Other',
-      otherPrompt: 'Type your answer:',
+      finish: '🏁 Finish now',
+      other: '✏️ Other',
+      otherPrompt: '✏️ Type your answer:',
       // Finished: `done`, the answer list (`label: answer` lines), then `check` with All good / Start over.
-      done: 'Done, thank you! Here are your answers:',
+      done: '✅ Done, thank you! Here are your answers:',
       check:
-        'Is everything correct? If not, tap Start over: a question you skip keeps your earlier answer.',
+        '🤔 Is everything correct? If not, tap Start over: a question you skip keeps your earlier answer.',
       questions: {
         slot: {
-          label: 'Call time',
-          text: 'What time suits you best for the call? (Kyiv time)',
+          label: '🕐 Call time',
+          text: '🕐 What time suits you best for the call? (Kyiv time)',
           options: ['11:00–13:00', '15:00–16:00', '18:00–19:00'],
           other: true,
         },
         business: {
-          label: 'Business',
-          text: "What's your business area?",
+          label: '💼 Business',
+          text: "💼 What's your business area?",
           options: [
             'Healthcare',
             'Beauty & wellness',
@@ -409,14 +409,14 @@ export const en = {
           other: true,
         },
         site: {
-          label: 'Website',
-          text: 'Do you have a website now? Send the link, or tap "No website".',
+          label: '🌐 Website',
+          text: '🌐 Do you have a website now? Send the link, or tap "No website".',
           options: ['No website'],
           other: false,
         },
         budget: {
-          label: 'Budget',
-          text: "What's your budget?",
+          label: '💰 Budget',
+          text: "💰 What's your budget?",
           options: [
             'Under 10 000 UAH',
             '10 000–20 000 UAH',
@@ -426,8 +426,8 @@ export const en = {
           other: false,
         },
         timing: {
-          label: 'Launch',
-          text: 'When do you want to launch?',
+          label: '🚀 Launch',
+          text: '🚀 When do you want to launch?',
           options: ['Urgently', 'In 1–2 months', 'No rush'],
           other: false,
         },
