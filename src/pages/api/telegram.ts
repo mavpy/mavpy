@@ -56,7 +56,8 @@ const langOf = (locale?: string, fallback?: string): Lang =>
 function ask(lang: Lang, step: Step, chatId: number, prefix = '') {
   const bot = t(lang).contact.bot;
   const q = bot.questions[step];
-  // Answers in solid blue ("primary", Bot API 9.4); Other and Skip keep the default look.
+  // Every button is coloured (Bot API 9.4): blue "primary" moves forward (answers, Other, Start over),
+  // red "danger" declines (Skip, Keep my answers).
   // Older Telegram apps ignore `style` and show the plain button.
   const buttons: { text: string; callback_data: string; style?: string }[] =
     q.options.map((text, i) => ({
@@ -65,8 +66,16 @@ function ask(lang: Lang, step: Step, chatId: number, prefix = '') {
       style: 'primary',
     }));
   if (q.other)
-    buttons.push({ text: bot.other, callback_data: `a:${step}:other` });
-  buttons.push({ text: bot.skip, callback_data: `a:${step}:skip` });
+    buttons.push({
+      text: bot.other,
+      callback_data: `a:${step}:other`,
+      style: 'primary',
+    });
+  buttons.push({
+    text: bot.skip,
+    callback_data: `a:${step}:skip`,
+    style: 'danger',
+  });
   return {
     method: 'sendMessage',
     chat_id: chatId,
@@ -122,7 +131,13 @@ async function answer(
     text: t(lang).contact.bot.done,
     reply_markup: {
       inline_keyboard: [
-        [{ text: t(lang).contact.bot.restart, callback_data: 'restart' }],
+        [
+          {
+            text: t(lang).contact.bot.restart,
+            callback_data: 'restart',
+            style: 'primary',
+          },
+        ],
       ],
     },
   };
@@ -170,7 +185,13 @@ export const POST: APIRoute = async ({ request, site, url }) => {
           text: bot.already.replace('{name}', Name ?? ''),
           reply_markup: {
             inline_keyboard: [
-              [{ text: bot.restart, callback_data: 'restart' }],
+              [
+                {
+                  text: bot.restart,
+                  callback_data: 'restart',
+                  style: 'primary',
+                },
+              ],
               [{ text: bot.keep, callback_data: 'keep', style: 'danger' }],
             ],
           },
@@ -180,7 +201,7 @@ export const POST: APIRoute = async ({ request, site, url }) => {
       if (isStep(Step)) {
         const q = ask(lang, Step, chatId, `${confirmed}\n\n`);
         q.reply_markup.inline_keyboard.push([
-          { text: bot.restart, callback_data: 'restart' },
+          { text: bot.restart, callback_data: 'restart', style: 'primary' },
         ]);
         return reply(q);
       }
