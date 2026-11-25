@@ -110,6 +110,9 @@ async function answer(
   const lead = await updateLead(leadId, {
     [fields[step]]: value,
     Step: next ?? 'done',
+    // When they last finished a round (first time or a redo). Airtable "AnswersUpdated":
+    // date with time, shown in Kyiv time.
+    ...(next ? {} : { AnswersUpdated: new Date().toISOString() }),
   });
   if (next) return ask(lang, next, chatId);
   // ponytail: summary only when finished; an abandoned questionnaire stays in Airtable unannounced.
@@ -308,12 +311,14 @@ async function onButton(cb: NonNullable<Update['callback_query']>) {
   const label = bot.questions[step].options[i];
   if (choice !== 'skip' && !label) return done().then(ok);
 
-  // Drop the answered question's buttons (no reply_markup = removed); the answers are listed at the end.
+  // Show the choice under the question and drop its buttons (no reply_markup = removed), so no
+  // question looks unanswered; review() lists all the answers again at the end.
   await Promise.all([
     done(),
-    telegram('editMessageReplyMarkup', {
+    telegram('editMessageText', {
       chat_id: msg.chat.id,
       message_id: msg.message_id,
+      text: `${msg.text ?? ''}\n\n→ ${label ?? bot.skip}`,
     }).catch((err) => console.error('telegram: edit failed:', err)),
   ]);
   // Airtable gets the English label, so the studio reads one language.
