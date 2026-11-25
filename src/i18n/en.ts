@@ -375,7 +375,10 @@ export const en = {
       restart: 'Start over',
       // /start again after the questionnaire is finished. {name} is replaced.
       already:
-        "Thanks, {name}! We already have your answers. We'll contact you soon. Want to change them? Tap the button below.",
+        "Thanks, {name}! We already have your answers. We'll contact you soon. Want to change them? Tap Start over: a question you skip keeps your earlier answer.",
+      // Button under `already`: leave the answers as they are.
+      keep: 'Keep my answers',
+      kept: "Great, your answers stay as they are. We'll contact you soon.",
       skip: 'Skip',
       other: 'Other',
       otherPrompt: 'Type your answer:',

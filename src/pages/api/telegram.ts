@@ -75,12 +75,12 @@ function ask(lang: Lang, step: Step, chatId: number, prefix = '') {
   };
 }
 
-/** (Re)starts the questionnaire: clears earlier answers, asks the first question. */
+/**
+ * (Re)starts the questionnaire at the first question. Earlier answers stay: a skip leaves the
+ * field untouched (undefined is dropped from the PATCH), so a redo only overwrites what's re-answered.
+ */
 async function begin(leadId: string, lang: Lang, chatId: number, prefix = '') {
-  const cleared = Object.fromEntries(
-    Object.values(fields).map((f) => [f, null]),
-  );
-  await updateLead(leadId, { ...cleared, Step: steps[0] });
+  await updateLead(leadId, { Step: steps[0] });
   return ask(
     lang,
     steps[0],
@@ -156,7 +156,7 @@ export const POST: APIRoute = async ({ request, site, url }) => {
       const { Name, Locale, Step } = lead.fields;
       const lang = langOf(Locale, userLang);
       const bot = t(lang).contact.bot;
-      // Finished: say so, and offer to answer again (misclicked, changed their mind).
+      // Finished: say so, and offer to answer again (misclicked, changed their mind) or keep them.
       if (Step === 'done')
         return reply({
           method: 'sendMessage',
@@ -165,6 +165,7 @@ export const POST: APIRoute = async ({ request, site, url }) => {
           reply_markup: {
             inline_keyboard: [
               [{ text: bot.restart, callback_data: 'restart' }],
+              [{ text: bot.keep, callback_data: 'keep', style: 'danger' }],
             ],
           },
         });
@@ -212,6 +213,23 @@ async function onButton(cb: NonNullable<Update['callback_query']>) {
     );
   const msg = cb.message;
   if (!msg || msg.chat.type !== 'private') return done().then(ok);
+
+  if (cb.data === 'keep') {
+    const lead = await findChatLead(msg.chat.id);
+    const lang = langOf(lead?.fields.Locale, cb.from?.language_code);
+    await Promise.all([
+      done(),
+      telegram('editMessageReplyMarkup', {
+        chat_id: msg.chat.id,
+        message_id: msg.message_id,
+      }).catch((err) => console.error('telegram: edit failed:', err)),
+    ]);
+    return reply({
+      method: 'sendMessage',
+      chat_id: msg.chat.id,
+      text: t(lang).contact.bot.kept,
+    });
+  }
 
   if (cb.data === 'restart') {
     const lead = await findChatLead(msg.chat.id);
