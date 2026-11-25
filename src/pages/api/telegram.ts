@@ -63,7 +63,7 @@ function shown(lang: Lang, lead: Fields, step: Step) {
 
 /**
  * A question with one button per option, plus "Other", "Skip" and (before the last question)
- * "Finish now". On a redo it shows the saved answer, which Skip keeps.
+ * "Finish now" (redo only). On a redo it shows the saved answer, which Skip keeps.
  */
 function ask(
   lang: Lang,
@@ -95,8 +95,8 @@ function ask(
     callback_data: `a:${step}:skip`,
     style: 'danger',
   });
-  // On the last question Skip already finishes.
-  if (step !== steps.at(-1))
+  // Only on a redo (the first round goes through every question); on the last one Skip finishes.
+  if (lead.Redone && step !== steps.at(-1))
     buttons.push({
       text: bot.finish,
       callback_data: `a:${step}:finish`,
@@ -117,8 +117,14 @@ function ask(
  * (Re)starts the questionnaire at the first question. Earlier answers stay: a skip leaves the
  * field untouched (undefined is dropped from the PATCH), so a redo only overwrites what's re-answered.
  */
-async function begin(leadId: string, lang: Lang, chatId: number, prefix = '') {
-  const lead = await updateLead(leadId, { Step: steps[0] });
+async function begin(
+  leadId: string,
+  lang: Lang,
+  chatId: number,
+  prefix = '',
+  extra: Fields = {},
+) {
+  const lead = await updateLead(leadId, { ...extra, Step: steps[0] });
   return ask(
     lang,
     steps[0],
@@ -311,15 +317,10 @@ async function onButton(cb: NonNullable<Update['callback_query']>) {
         message_id: msg.message_id,
       }).catch((err) => console.error('telegram: edit failed:', err)),
     ]);
-    // Marks the redo so the next summary says "updated". Separate and non-fatal: without the
-    // Airtable "Redone" column (single line text) the restart still works, just unlabelled.
-    const [, next] = await Promise.all([
-      updateLead(lead.id, { Redone: 'yes' }).catch((err) =>
-        console.error('telegram: Redone failed:', err),
-      ),
-      begin(lead.id, lang, msg.chat.id),
-    ]);
-    return reply(next);
+    // Marks the redo (Airtable "Redone"): the summary says "updated" and questions get "Finish now".
+    return reply(
+      await begin(lead.id, lang, msg.chat.id, '', { Redone: 'yes' }),
+    );
   }
 
   const [, step, choice] = cb.data?.split(':') ?? [];

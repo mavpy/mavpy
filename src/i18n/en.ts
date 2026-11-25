@@ -381,7 +381,7 @@ export const en = {
       skip: '⏭ Skip',
       // Under a question on a redo: the saved answer (Skip keeps it). {answer} is replaced.
       current: '📌 Current answer: {answer}',
-      // Button on every question but the last: end now, later questions stay as they are.
+      // Button on a redo, every question but the last: end now, later questions stay as they are.
       finish: '🏁 Finish now',
       other: '✏️ Other',
       otherPrompt: '✏️ Type your answer:',
