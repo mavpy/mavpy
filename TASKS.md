@@ -6,6 +6,7 @@ How this file works: the agent takes the first unchecked task under **Now**, tic
 
 - [ ] Lighthouse re-check on production, `/` and `/uk/`, mobile + desktop (last run 2026-11-20; since then: phone picker, bot links, carousel autoplay).
 - [ ] Move hosting to Cloudflare (M8): `@astrojs/cloudflare` instead of `@astrojs/vercel`, re-enter the secrets, deploy to a `*.workers.dev` preview, re-register the Telegram webhook there. Doesn't need the domain; the domain is attached later. Vercel Hobby is non-commercial, Cloudflare's free tier allows commercial use.
+  - Code done on branch `cloudflare` (2026-11-26): adapter swapped, `wrangler.jsonc` (worker `mavpy-site`), `imageService: 'compile'` + `session: false` so the adapter doesn't add an Images binding or a KV namespace. Tested in local workerd (`npx wrangler dev`): pages, 404, webhook 401, form action (honeypot + validation). Left for Nikita, on the studio Cloudflare account: connect the repo, add secrets, test on workers.dev, `setWebhook`, then merge to `main` and delete the Vercel project (steps in the account-move plan). `site` stays on vercel.app until then.
 
 ## Waiting on Serhii: design
 
@@ -54,7 +55,7 @@ His Trello cards: **Update Figma**, **Block Design**, **Animations & Micro-inter
 ## Launch (M8, after the design work)
 
 - [ ] Pick the domain: mavpy.dev (820 UAH first year, then 1220) or mavpy.com.ua (720 UAH). Buy it on Cloudflare Registrar, attach it to the Cloudflare deployment, update `site` in astro.config.mjs, re-run the `setWebhook` curl from `.env.example`.
-- [ ] Swap Telegram bot/group and Airtable base to the Mavpy accounts on mavpy.studio@gmail.com (only env var values change).
+- [ ] Airtable to mavpy.studio@gmail.com: base moved (2026-11-26); new token from the studio account on the host + local `.env`, then revoke the personal one.
 - [ ] E-mail sending: Resend → Domains → add the domain (one-click DNS on Cloudflare: DKIM, SPF/MX on `send.`, DMARC `p=none`), verify, then set `MAIL_FROM="MAVPY <hello@domain>"` + `RESEND_API_KEY` on the host. Optional: Cloudflare Email Routing to forward hello@ to Gmail.
 - [ ] **Allow search indexing:** set `indexable = true` in `src/pages/robots.txt.ts`, deploy, check /robots.txt lists the sitemap, submit it in Google Search Console.
 - [ ] Final check on production, then retake the README screenshots (1440 px @1x, method in the M8 notes under Done).
@@ -71,7 +72,7 @@ Technical and setup calls that are Nikita's alone.
 - Domain: mavpy.dev or mavpy.com.ua (when the design is final).
 - Whether Nikita's photo goes in the team block (waiting on Serhii's two variants).
 - When to move hosting to Cloudflare (can happen now, see Now).
-- Studio accounts (Telegram bot and group, Airtable, Resend, hosting) move to mavpy.studio@gmail.com at launch (agreed with Serhii 2026-11-21).
+- Studio accounts (Airtable, Resend, GA, Cloudflare hosting) move to mavpy.studio@gmail.com (agreed with Serhii 2026-11-21). Telegram bot/group and the GitHub org stay as they are (Nikita, 2026-11-26).
 
 ## To settle with Serhii
 

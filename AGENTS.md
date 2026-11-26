@@ -24,7 +24,7 @@ Port the Mavpy (Мавпы) web studio's Webflow site to code, matching the Figm
 
 - Astro (latest) + TypeScript (strict)
 - Tailwind CSS v4 (`npx astro add tailwind`), with design tokens from the UI kit in `@theme` inside `src/styles/global.css`
-- `@astrojs/vercel` adapter: pages are pre-rendered (static), and only the form action runs on the server
+- `@astrojs/cloudflare` adapter (Workers, `wrangler.jsonc`): pages are pre-rendered (static), and only the form action and the Telegram webhook run on the server
 - Images through `astro:assets` `<Image />`, stored in `src/assets/`. Export them from Figma at 2x and as SVG for icons and the logo
 - Fonts: the ones the UI kit uses, self-hosted through Fontsource, with only the weights we need. **They must include Cyrillic subsets**
 - No UI framework. Add a small island (vanilla script, or Preact if needed) only for real interactivity such as the mobile menu or form state

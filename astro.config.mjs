@@ -1,14 +1,17 @@
 // @ts-check
 import { defineConfig, envField } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
-import vercel from '@astrojs/vercel';
+import cloudflare from '@astrojs/cloudflare';
 import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
   // TODO: replace with Serhii's domain (M8). Sitemap and canonical URLs need it.
   site: 'https://mavpy-site.vercel.app',
-  // Pages stay static (prerendered); only routes that opt out (the form action) run as functions.
-  adapter: vercel(),
+  // Pages stay static (prerendered); only routes that opt out (form action, Telegram webhook) run
+  // in the Worker. `compile` optimizes images with sharp at build time (no Cloudflare Images binding).
+  adapter: cloudflare({ imageService: 'compile' }),
+  // No Astro sessions used; without this the adapter provisions a KV namespace for them.
+  session: false,
   i18n: {
     defaultLocale: 'en',
     locales: ['en', 'uk'],
@@ -18,8 +21,8 @@ export default defineConfig({
   integrations: [
     sitemap({ i18n: { defaultLocale: 'en', locales: { en: 'en', uk: 'uk' } } }),
   ],
-  // Lead delivery secrets, read through `astro:env/server` so any adapter (Vercel now, Cloudflare
-  // later) works. Optional: a channel with missing config just counts as failed (see lib/leads.ts).
+  // Lead delivery secrets, read through `astro:env/server` so they come from Cloudflare Worker
+  // secrets in production and `.env` locally. Optional: a channel with missing config just counts as failed (see lib/leads.ts).
   env: {
     schema: {
       TELEGRAM_BOT_TOKEN: secret(),
