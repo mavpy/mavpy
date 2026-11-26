@@ -5,8 +5,6 @@ How this file works: the agent takes the first unchecked task under **Now**, tic
 ## Now (unblocked)
 
 - [ ] Lighthouse re-check on production, `/` and `/uk/`, mobile + desktop (last run 2026-11-20; since then: phone picker, bot links, carousel autoplay).
-- [ ] Move hosting to Cloudflare (M8): `@astrojs/cloudflare` instead of `@astrojs/vercel`, re-enter the secrets, deploy to a `*.workers.dev` preview, re-register the Telegram webhook there. Doesn't need the domain; the domain is attached later. Vercel Hobby is non-commercial, Cloudflare's free tier allows commercial use.
-  - Code done on branch `cloudflare` (2026-11-26): adapter swapped, `wrangler.jsonc` (worker `mavpy`, live at mavpy.mavpy-studio.workers.dev), `imageService: 'compile'` + `session: false` so the adapter doesn't add an Images binding or a KV namespace. Tested in local workerd (`npx wrangler dev`): pages, 404, webhook 401, form action (honeypot + validation). Left for Nikita, on the studio Cloudflare account: connect the repo, add secrets, test on workers.dev, `setWebhook`, then merge to `main` and delete the Vercel project (steps in the account-move plan). `site` stays on vercel.app until then.
 
 ## Waiting on Serhii: design
 
@@ -87,6 +85,8 @@ Copy, translation, prices, contact details and brand content. Nikita and Serhii 
 - Testimonials autoplay: the previous card now peeks into the left gutter on desktop (Figma shows the row starting at the column).
 
 ## Done
+- [x] Move hosting to Cloudflare (M8): `@astrojs/cloudflare` instead of `@astrojs/vercel`, re-enter the secrets, deploy to a `*.workers.dev` preview, re-register the Telegram webhook there. Doesn't need the domain; the domain is attached later. Vercel Hobby is non-commercial, Cloudflare's free tier allows commercial use.
+  - Done 2026-11-26 on the studio Cloudflare account (mavpy.studio@gmail.com): Worker `mavpy`, live at https://mavpy.mavpy-studio.workers.dev, builds from `main` (Workers Builds). Adapter `@astrojs/cloudflare` with `imageService: 'compile'` + `session: false` (no Images binding or KV namespace). Runtime values are dashboard **Secrets** (7: `TELEGRAM_*`, `AIRTABLE_*`, `AIRTABLE_TABLE` = `Mavpy Leads`); `keep_vars: true` in wrangler.jsonc so deploys never drop dashboard vars. `PUBLIC_GA_ID` is a **build** variable (Settings → Builds), not a runtime one. Webhook re-registered to the Worker; tested end to end (lead → Telegram + Airtable → button → /start → questionnaire). Vercel project paused and Git disconnected (kept, can be reconnected). `RESEND_API_KEY` stays off until the domain is verified.
 
 Notes are kept: they explain why things are built the way they are.
 
