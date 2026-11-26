@@ -1,5 +1,5 @@
 // Cloudflare Worker for the site. Static pages are served from ./dist as assets; only the
-// on-demand routes (form action, /api/telegram) run the Worker. Secrets: dashboard → Settings →
+// on-demand routes (form action, /api/telegram) run the Worker. Add values in the dashboard as type Secret: Settings →
 // Variables and Secrets (names in .env.example).
 {
   "$schema": "node_modules/wrangler/config-schema.json",
@@ -9,4 +9,6 @@
   "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
   "assets": { "binding": "ASSETS", "directory": "./dist" },
   "observability": { "enabled": true },
+  // Keep variables set in the dashboard: without this, every `wrangler deploy` wipes them.
+  "keep_vars": true,
 }
