@@ -6,7 +6,7 @@ import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
   // TODO: replace with Serhii's domain (M8). Sitemap and canonical URLs need it.
-  site: 'https://mavpy-site.vercel.app',
+  site: 'https://mavpy.mavpy-studio.workers.dev',
   // Pages stay static (prerendered); only routes that opt out (form action, Telegram webhook) run
   // in the Worker. `compile` optimizes images with sharp at build time (no Cloudflare Images binding).
   adapter: cloudflare({ imageService: 'compile' }),

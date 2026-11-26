@@ -3,7 +3,7 @@
 // Variables and Secrets (names in .env.example).
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "mavpy-site",
+  "name": "mavpy",
   "main": "@astrojs/cloudflare/entrypoints/server",
   "compatibility_date": "2026-11-26",
   "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],

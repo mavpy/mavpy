@@ -6,7 +6,7 @@ How this file works: the agent takes the first unchecked task under **Now**, tic
 
 - [ ] Lighthouse re-check on production, `/` and `/uk/`, mobile + desktop (last run 2026-11-20; since then: phone picker, bot links, carousel autoplay).
 - [ ] Move hosting to Cloudflare (M8): `@astrojs/cloudflare` instead of `@astrojs/vercel`, re-enter the secrets, deploy to a `*.workers.dev` preview, re-register the Telegram webhook there. Doesn't need the domain; the domain is attached later. Vercel Hobby is non-commercial, Cloudflare's free tier allows commercial use.
-  - Code done on branch `cloudflare` (2026-11-26): adapter swapped, `wrangler.jsonc` (worker `mavpy-site`), `imageService: 'compile'` + `session: false` so the adapter doesn't add an Images binding or a KV namespace. Tested in local workerd (`npx wrangler dev`): pages, 404, webhook 401, form action (honeypot + validation). Left for Nikita, on the studio Cloudflare account: connect the repo, add secrets, test on workers.dev, `setWebhook`, then merge to `main` and delete the Vercel project (steps in the account-move plan). `site` stays on vercel.app until then.
+  - Code done on branch `cloudflare` (2026-11-26): adapter swapped, `wrangler.jsonc` (worker `mavpy`, live at mavpy.mavpy-studio.workers.dev), `imageService: 'compile'` + `session: false` so the adapter doesn't add an Images binding or a KV namespace. Tested in local workerd (`npx wrangler dev`): pages, 404, webhook 401, form action (honeypot + validation). Left for Nikita, on the studio Cloudflare account: connect the repo, add secrets, test on workers.dev, `setWebhook`, then merge to `main` and delete the Vercel project (steps in the account-move plan). `site` stays on vercel.app until then.
 
 ## Waiting on Serhii: design
 
