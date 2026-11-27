@@ -96,8 +96,6 @@
   /* btn_main hover glow. */
   --shadow-btn-hover: 0 6px 14px -10px rgb(204 136 0 / 0.5);
 
-  --color-grey-100: #f2f2f2; /* hero */
-
   /* Hero entrance (design's a-mask / a-blur / a-rise / a-bg), staggered by --d. Used behind
      motion-safe:, so with reduced motion everything is simply there. */
   --animate-mask-up: mask-up 0.75s var(--ease-mv) var(--d, 0s) both;
