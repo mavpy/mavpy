@@ -2,7 +2,7 @@
 // The design's .v-head: h2 + lead on the left (9fr), a small mono label on the right (3fr).
 // Below 1200px it stacks, label first (that's also the DOM order, so screen readers match mobile).
 // Slides in with the cards (data-ri, reveal.ts). dark: colours for the dark Cases section.
-// A \n in the title is a forced line break, as the design's <br>.
+// A \n in the title is a forced line break from 1200px, as the design's <br> (hidden below that).
 interface Props {
   label: string;
   title: string;
@@ -27,7 +27,7 @@ const { label, title, lead, dark = false } = Astro.props;
   <div>
     <h2
       class:list={[
-        'font-head text-h2 leading-none whitespace-pre-line font-bold tracking-[-0.02em]',
+        'font-head text-h2 leading-none font-bold tracking-[-0.02em] desk:whitespace-pre-line',
         dark ? 'text-snow' : 'text-black',
       ]}
     >
