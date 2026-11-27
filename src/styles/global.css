@@ -343,7 +343,8 @@
     transform: translateY(28px);
     transition:
       opacity 1s cubic-bezier(0.45, 0, 0.25, 1) calc(var(--ri, 0) * 120ms),
-      transform 1s cubic-bezier(0.45, 0, 0.25, 1) calc(var(--ri, 0) * 120ms);
+      transform 1s cubic-bezier(0.45, 0, 0.25, 1) calc(var(--ri, 0) * 120ms),
+      translate 0.6s var(--ease-mv); /* hover lift (pricing cards), no stagger */
   }
   .ri.ri-in {
     opacity: 1;

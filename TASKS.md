@@ -23,7 +23,8 @@ Port of Serhii's redesign from `~/dev/mavpy-design` (v3.15, commit `d1fbc8b`; `g
 - [x] 8. Testimonials: marquee (reuses `animate-marquee`, 90s), 4 copies with only the first exposed to screen readers; phones get a snap swipe row instead of the design's ← 1 / 3 → pager. Only the 3 real reviews in both languages (Bram's stays English, `lang="en"`).
 - [x] 9. Team (`About.astro`): all four as designed (Serhii, Nikita, Julia, Marina), approved by Nikita 2026-11-27. Nikita's photo is his own `team-nikita.png` (400 × 400, transparent background), replacing the design's jpg; it's smaller than the 960 × 1200 slot, so place it on a warm background and check it isn't upscaled on desktop.
   - Stage rotates every 6s as in the design (hover/focus pauses, off with reduced motion); `.member`/`.tab-bar` in global.css. Section id is now `#team` (nothing linked `#about`). Nikita's cut-out uses `object-scale-down` at the slot's bottom, so it never renders above 400 CSS px. Old about copy, Serhii's old photo and the year-word helpers removed from i18n (photo file cleanup in 14).
-- [ ] 10. Pricing (`goal` preset)
+- [x] 10. Pricing (`goal` preset)
+  - Design's plans and prices (EN in $, UA in ₴ with ≈ $ under it), replacing the old three goals ($1000 / $700 / $40 a month). Both prices are in the markup and cross-fade on the section's `data-pay`, with no JS text swapping. The buttons set `input[name=goal]`, which arrives in step 11. `.ri` now also transitions `translate`, for the hover lift.
 - [ ] 11. Contact (keep the Action + phone picker; optional `goal`; restyle)
 - [ ] 12. Footer
 - [ ] 13. Allow indexing (`indexable = true` in robots.txt.ts), last commit before the merge
