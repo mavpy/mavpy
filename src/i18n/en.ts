@@ -1,16 +1,7 @@
 // All English copy. This file is the source of truth (synced from Webflow once, 2026-11-20); changes now come from Serhii via Figma.
-// Years since the studio started, counted at build time (pages are prerendered).
+// The footer's year range, counted at build time (pages are prerendered).
 const thisYear = new Date().getFullYear();
-export const studioYears = thisYear - 2021;
 export const yearRange = `2021-${thisYear},`;
-const yearsEn: Record<number, string> = {
-  5: 'Five',
-  6: 'Six',
-  7: 'Seven',
-  8: 'Eight',
-  9: 'Nine',
-  10: 'Ten',
-};
 
 export const en = {
   meta: {
@@ -241,22 +232,73 @@ export const en = {
       },
     ],
   },
-  about: {
-    label: 'about',
-    // \n: the line break both frames use.
-    title: 'A craft studio,\nnot a conveyor belt',
-    sub: 'Building since 2021. A founder leads every project personally, start to launch.',
-    // The card title: line 1, then line 2 with its first part medium-weight on desktop (as in Figma).
-    hi: 'Serhii —',
-    role: { em: 'Co-founder,', after: ' strategy & design' },
-    // One string per paragraph; \n is a forced line break.
-    paragraphs: [
-      'I’m the one you talk to, from the first brief to launch.',
-      'Before any design, I write the plan: the problem, the audience, the offer — and the number we’re trying to move.',
-      'I work out who your clients are and what makes them book — then design the site around it.\nI write the copy too, so every word on the page has a job.',
-      `${yearsEn[studioYears] ?? studioYears} years, 30+ projects across Ukraine and worldwide.`,
+  team: {
+    label: 'Team',
+    title: 'The people behind\nyour project',
+    what: 'What I do',
+    // photo: file name in src/assets/v3/team/. quote: one string per paragraph.
+    members: [
+      {
+        photo: 'team-serhii',
+        name: 'Serhii',
+        role: 'Designer & product manager',
+        quote: [
+          'I start with why people leave your site, then design the page that keeps them.',
+          'From the first call to launch, you talk to me. I keep the plan, the deadlines and the decisions in one place, so nothing gets lost between people.',
+        ],
+        tags: [
+          'Research & UX',
+          'Site structure',
+          'Design in Figma',
+          'Project lead',
+        ],
+      },
+      {
+        photo: 'team-nikita',
+        name: 'Nikita',
+        role: 'Developer & automation',
+        quote: [
+          'I build the site and connect it to what you already use: booking, CRM, a Telegram bot.',
+          'Every request lands where your team will see it. After launch I stay on the tech side, so updates and fixes don’t stall.',
+        ],
+        tags: [
+          'Webflow & custom code',
+          'Booking, CRM, Telegram bots',
+          'Integrations',
+          'Launch & support',
+        ],
+      },
+      {
+        photo: 'team-julia',
+        name: 'Julia',
+        role: 'Marketing & copywriting',
+        quote: [
+          'I write in your clients’ words, not ours. Each headline answers one question: why choose you over the business next door.',
+          'Before writing, I read your reviews, calls and competitors’ pages to find the phrases your clients actually use.',
+        ],
+        tags: [
+          'Positioning & offer',
+          'Website copy',
+          'Case studies',
+          'Ad content',
+        ],
+      },
+      {
+        photo: 'team-marina',
+        name: 'Marina',
+        role: 'Ads & analytics',
+        quote: [
+          'I run your ads and set up tracking, so you see which channel brings paying clients and which one only spends the budget.',
+          'You get a short report in plain words: what we spent, what came in, and what we change next.',
+        ],
+        tags: [
+          'Google & Meta ads',
+          'Analytics & tracking',
+          'Cost per enquiry reports',
+          'Budget planning',
+        ],
+      },
     ],
-    photoAlt: 'Serhii, co-founder of MAVPY',
   },
   pricing: {
     label: 'pricing',

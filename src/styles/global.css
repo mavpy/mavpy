@@ -351,6 +351,44 @@
   }
 }
 
+/* Team (About.astro): members share one grid cell and cross-fade; the hidden one turns
+   visibility:hidden only after its fade (0.6s), so it leaves the accessibility tree too. The active
+   tab's bar fills over the 6s a member is on show; paused (hover, focus) it just shows full. */
+@layer components {
+  .member {
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(0.97);
+    transform-origin: 0 50%;
+    transition:
+      opacity 0.5s var(--ease-mv),
+      transform 0.6s var(--ease-mv),
+      visibility 0s 0.6s;
+  }
+  .member.is-on {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition:
+      opacity 0.5s var(--ease-mv),
+      transform 0.6s var(--ease-mv);
+  }
+  [aria-pressed='true'] > * > .tab-bar {
+    width: 100%;
+    transition: width 6s linear;
+  }
+  .is-paused [aria-pressed='true'] > * > .tab-bar {
+    transition: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .member,
+    .member.is-on,
+    [aria-pressed='true'] > * > .tab-bar {
+      transition: none;
+    }
+  }
+}
+
 /* Process rows (Process.astro): once a row has landed (.ri-in), its amber line draws (down on
    desktop, across below 1200px) and the detail fades in, 350ms behind the row's own reveal. */
 @layer components {
