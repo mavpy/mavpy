@@ -1,51 +1,57 @@
 ---
-// Pain points ("Which of these sounds like you right now?").
-// Spacing is Figma's ink positions converted to CSS boxes with the font metrics
-// (Archivo 800: ascent 0.878, descent 0.21; Roboto: ascent 0.928, cap 0.711).
-// Cards are equal width on lg (Figma's 355/341/477 overruled by Nikita, 2026-11-19).
-// On lg the cards are a subgrid, so the bodies line up even when a title wraps to 3 lines (uk).
-import Card from '../ui/Card.astro';
-import Heading from '../ui/Heading.astro';
-import Section from '../ui/Section.astro';
+// Situation (design v3.15, section 02): head + three warm cards, each with a looping line icon
+// (CSS in global.css, .pi). Icons go by card index, as in the design.
+import Container from '../ui/Container.astro';
+import SectionHead from '../ui/SectionHead.astro';
 import { getLang, t } from '../../i18n/utils';
 
 const { pain } = t(getLang(Astro.url));
+
+const cells = [0, 1, 2]
+  .flatMap((r) =>
+    [0, 1, 2].map(
+      (c) =>
+        `<rect class="pi-cell" x="${14 + c * 13}" y="${30 + r * 9}" width="9" height="5" rx="1.2"/>`,
+    ),
+  )
+  .join('');
+const bars = [12, 25, 38, 51]
+  .map(
+    (x) =>
+      `<rect class="pi-bar" x="${x}" y="20" width="7" height="36" rx="1.5"/>`,
+  )
+  .join('');
+const icons = [
+  // a line that keeps climbing
+  '<path class="pi-ax" d="M8 56H58M8 56V8"/><path class="pi-grid" d="M8 41H58M8 26H58"/><path class="pi-ln" pathLength="1" d="M10 48 L22 40 L31 44 L43 28 L56 14"/><circle class="pi-dot" cx="56" cy="14" r="2.6"/>',
+  // bars rising one by one
+  `<path class="pi-ax" d="M8 56H58"/>${bars}`,
+  // a week grid filling up cell by cell
+  `<rect class="pi-ax" x="8" y="12" width="48" height="44" rx="4"/><path class="pi-ax" d="M8 24H56M20 8V16M44 8V16"/>${cells}`,
+];
 ---
 
-<Section
-  id="situation"
-  tone="sand"
-  class="pt-[68px] pb-[89px] lg:pt-[124px] lg:pb-[82px]"
->
-  <div class="lg:flex lg:items-start lg:justify-between">
-    <Heading class="lg:max-w-[760px]">{pain.title}</Heading>
-    <!-- Decorative section tag, desktop only (not in the mobile frame). -->
-    <p aria-hidden="true" class="mt-[9px] max-lg:hidden">
-      {pain.label}
-      <span class="ml-[25px]">|</span>
-    </p>
-  </div>
-
-  <p class="mt-[44px] text-center text-[21px] lg:mt-[35px] lg:text-left lg:text-body">
-    {pain.sub}
-  </p>
-
-  <ul class="mt-[60px] grid gap-8 text-center lg:mt-[68px] lg:grid-cols-3 lg:gap-x-[26px] lg:gap-y-0 lg:text-left">
-    {pain.cards.map(({ title, text }, i) => (
-      <Card
-        as="li"
-        style={`--i: ${i}`}
-        class="reveal transition-[translate] duration-300 ease-out-quart hover:-translate-y-1 px-5 py-[17px] lg:row-span-2 lg:grid lg:grid-rows-subgrid lg:content-start lg:px-6.5 lg:pt-[21px] lg:pb-6.5"
-      >
-        <h3 class="text-card font-bold">
-          {title[0]}
-          <br class="max-lg:hidden" /> {title[1]}
-        </h3>
-        <!-- min-h on the body, not the card: a subgrid item can't grow its tracks. 148 = Figma's 367px card minus padding, 2-line title and gap. -->
-        <p class="mt-[30px] lg:mt-[78px] lg:min-h-[148px] lg:leading-[28px]">
-          {text}
-        </p>
-      </Card>
-    ))}
-  </ul>
-</Section>
+<section class="bg-snow py-[max(80px,calc(140*var(--u)))]">
+  <Container wide>
+    <SectionHead label={pain.label} title={pain.title} lead={pain.sub} />
+    <ul class="grid gap-g desk:grid-cols-3">
+      {pain.cards.map(({ title, text }, i) => (
+        <li
+          data-ri
+          class="flex flex-col gap-[max(16px,calc(24*var(--u)))] rounded-[12px] border border-transparent bg-warm-50 p-[max(24px,calc(40*var(--u)))] hover:border-amber-500"
+        >
+          <svg
+            class="pi"
+            viewBox="0 0 64 64"
+            aria-hidden="true"
+            set:html={icons[i]}
+          />
+          <h3 class="font-head text-h3 leading-[1.05] font-bold tracking-[-0.005em] text-ink">
+            {title}
+          </h3>
+          <p class="text-body leading-[1.5] text-ink-2">{text}</p>
+        </li>
+      ))}
+    </ul>
+  </Container>
+</section>

@@ -1,0 +1,30 @@
+---
+// The design's .v-head: h2 + lead on the left (9fr), a small mono label on the right (3fr).
+// Below 1200px it stacks, label first (that's also the DOM order, so screen readers match mobile).
+// Slides in with the cards (data-ri, reveal.ts).
+interface Props {
+  label: string;
+  title: string;
+  lead?: string;
+}
+const { label, title, lead } = Astro.props;
+---
+
+<div
+  data-ri
+  class="mb-[32px] grid gap-[16px] desk:mb-[max(40px,calc(64*var(--u)))] desk:grid-cols-[9fr_3fr] desk:gap-g"
+>
+  <p class="font-mono text-[max(13px,calc(16*var(--u)))] text-ink-3 desk:order-2 desk:text-right">
+    {label}
+  </p>
+  <div>
+    <h2 class="font-head text-h2 leading-none font-bold tracking-[-0.02em] text-ink">
+      {title}
+    </h2>
+    {lead && (
+      <p class="mt-[max(14px,calc(20*var(--u)))] text-lead leading-[1.4] text-ink-2 desk:max-w-[calc(820*var(--u))]">
+        {lead}
+      </p>
+    )}
+  </div>
+</div>

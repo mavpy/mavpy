@@ -350,3 +350,152 @@
     transform: none;
   }
 }
+
+/* Situation card icons (Pain.astro): they loop all the time and start mid-cycle (negative delays),
+   so they're already moving when seen. Per-child delays and SVG strokes are why this isn't Tailwind. */
+@layer components {
+  .pi {
+    width: max(48px, calc(64 * var(--u)));
+    height: auto;
+    fill: none;
+    stroke: var(--color-amber-500);
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    overflow: visible;
+  }
+  .pi .pi-ax {
+    stroke: var(--color-ink);
+    opacity: 0.28;
+  }
+  .pi .pi-grid {
+    stroke: var(--color-ink);
+    opacity: 0.1;
+    stroke-dasharray: 2 3;
+  }
+  .pi-ln {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: pi-draw 6s cubic-bezier(0.45, 0, 0.25, 1) -2.2s infinite;
+  }
+  .pi-dot {
+    fill: var(--color-amber-500);
+    stroke: none;
+    opacity: 0;
+    animation: pi-dot 6s ease-in-out -2.2s infinite;
+  }
+  .pi-bar {
+    fill: rgb(255 171 1 / 0.14);
+    transform-box: fill-box;
+    transform-origin: 50% 100%;
+    transform: scaleY(0.25);
+    animation: pi-rise 5.6s cubic-bezier(0.45, 0, 0.25, 1) -1.4s infinite;
+  }
+  .pi-bar:nth-of-type(2) {
+    animation-delay: -1.05s;
+  }
+  .pi-bar:nth-of-type(3) {
+    animation-delay: -0.7s;
+  }
+  .pi-bar:nth-of-type(4) {
+    animation-delay: -0.35s;
+  }
+  /* The calendar frame is rect #1, so the cells count from 2. */
+  .pi-cell {
+    fill: var(--color-amber-500);
+    stroke: none;
+    opacity: 0.12;
+    animation: pi-fill 9s ease-in-out -3s infinite;
+  }
+  .pi-cell:nth-of-type(2) {
+    animation-delay: 0.4s;
+  }
+  .pi-cell:nth-of-type(3) {
+    animation-delay: 0.8s;
+  }
+  .pi-cell:nth-of-type(4) {
+    animation-delay: 1.2s;
+  }
+  .pi-cell:nth-of-type(5) {
+    animation-delay: 1.6s;
+  }
+  .pi-cell:nth-of-type(6) {
+    animation-delay: 2s;
+  }
+  .pi-cell:nth-of-type(7) {
+    animation-delay: 2.4s;
+  }
+  .pi-cell:nth-of-type(8) {
+    animation-delay: 2.8s;
+  }
+  .pi-cell:nth-of-type(9) {
+    animation-delay: 3.2s;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .pi * {
+      animation: none !important;
+    }
+    .pi-ln {
+      stroke-dashoffset: 0;
+    }
+    .pi-dot {
+      opacity: 1;
+    }
+    .pi-bar {
+      transform: none;
+    }
+    .pi-cell {
+      opacity: 0.6;
+    }
+  }
+}
+@keyframes pi-draw {
+  0% {
+    stroke-dashoffset: 1;
+  }
+  45%,
+  85% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: -1;
+  }
+}
+@keyframes pi-dot {
+  0%,
+  40% {
+    opacity: 0;
+  }
+  48%,
+  82% {
+    opacity: 1;
+  }
+  92%,
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes pi-rise {
+  0%,
+  100% {
+    transform: scaleY(0.25);
+  }
+  45%,
+  70% {
+    transform: scaleY(1);
+  }
+}
+@keyframes pi-fill {
+  0%,
+  8% {
+    opacity: 0.12;
+  }
+  18%,
+  72% {
+    opacity: 0.9;
+  }
+  86%,
+  100% {
+    opacity: 0.12;
+  }
+}

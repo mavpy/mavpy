@@ -17,7 +17,7 @@ Port of Serhii's redesign from `~/dev/mavpy-design` (v3.15, commit `d1fbc8b`; `g
   - Visual checks per step dropped (Nikita, 2026-11-27): port from the HTML/CSS, one polish pass in step 14.
 - [x] 4. Featured case (new `FeaturedCase.astro`): white card, 5fr/7fr, text column `display: contents` below 1200px so the shot sits between intro and stats. Added `Container wide` (1680u, the design's .v-wrap), Button `tone="soft"`, and `src/scripts/reveal.ts` (cards with `data-ri` slide in, staggered; reuse it in later sections).
   - CSS dumps of every remaining section (UA) are in `~/.claude/plans/dumps/uk-*.txt`; EN differs only by the `:lang(uk)` rules in the design's styles.css.
-- [ ] 5. Situation (`Pain.astro`)
+- [x] 5. Situation (`Pain.astro`): new `ui/SectionHead.astro` (the design's .v-head, reuse in steps 6–12; slides in via `data-ri`), looping line icons (`.pi` in global.css), copy from the design in both languages.
 - [ ] 6. Process
 - [ ] 7. Cases
 - [ ] 8. Testimonials
@@ -29,7 +29,7 @@ Port of Serhii's redesign from `~/dev/mavpy-design` (v3.15, commit `d1fbc8b`; `g
 - [ ] 14. Cleanup (old tokens, components, images; `uk` as the reference type in i18n is optional), AGENTS.md (sources of truth, UA default), TASKS.md; Lighthouse; PR
 - Method: serve the design (`python3 -m http.server 8080` in mavpy-design). Run `~/.claude/plans/mavpy-design-dump.js` in its console with the receiver `python3 -I ~/.claude/plans/mavpy-design-recv.py` running, which writes the winning CSS per element, breakpoint and state to `dumps/`. The design's copy lives in `tools/build.py` (dicts `E`/`U`); behaviours are in `main.js`.
 - For Nikita: Cloudflare → Workers → `mavpy` → Settings → Builds → turn on non-production branch builds (gives a preview URL per push).
-- To check with Serhii: the h1 is the tagline («Сайти, що працюють на результат»), not «НОВІ клієнти» as in the design, for SEO and screen readers. The design's phone is +380 99 220 83 43 but `site.ts` has +380 99 320 84 54 (kept `site.ts` for now). The design adds Telegram @mavpy_agency. The design's favicon differs from ours (we kept ours, which has .ico and dark variants).
+- To check with Serhii: the h1 is the tagline («Сайти, що працюють на результат»), not «НОВІ клієнти» as in the design, for SEO and screen readers. The design's phone is +380 99 220 83 43 but `site.ts` has +380 99 320 84 54 (kept `site.ts` for now). The design adds Telegram @mavpy_agency. The design's favicon differs from ours (we kept ours, which has .ico and dark variants). Situation: icons go by card index, but EN and UA have different cards, so in EN «Your site costs you deals» gets the rising line and «Traffic, but no enquiries» the calendar (kept as designed).
 
 - [ ] Lighthouse re-check on production, `/` and `/uk/`, mobile + desktop (last run 2026-11-20; since then: phone picker, bot links, carousel autoplay).
 

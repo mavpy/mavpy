@@ -122,31 +122,30 @@ export const en = {
     host: 'drlor-kh.com',
   },
   pain: {
-    label: 'situation',
-    title: 'Which of these sounds like you right now?',
-    sub: "Find yours below — that's what we'll build around.",
-    // Each title is [before, after] a line break that only shows on desktop (as in Figma).
+    label: 'Sound familiar?',
+    title: 'Which of these sounds like you?',
+    sub: 'Find yours — that’s where we start.',
     cards: [
       {
-        title: ['Your site', 'costs deals'],
+        title: 'Your site costs you deals',
         text: 'Visitors make up their minds in seconds, long before they ever read your pitch.',
       },
       {
-        title: ["Referrals aren't", 'enough'],
-        text: "Luck isn't a strategy. You need a steady, predictable stream of qualified leads.",
+        title: 'Referrals aren’t enough',
+        text: 'Luck isn’t a plan. You need a steady, predictable stream of qualified leads.',
       },
       {
-        title: ['Admins drown', 'in calls'],
-        text: 'Patients call, can’t get through and book elsewhere. No-shows eat the schedule.',
+        title: 'Traffic, but no enquiries',
+        text: 'People visit, but the site fails to turn them into real business enquiries.',
       },
-    ] as { title: [string, string]; text: string }[],
+    ],
   },
   process: {
     label: 'process',
     title: 'How we do it',
     intro:
       'Design that can actually be built. Code that sells. Both under one roof.',
-    // Titles are [before, after] a desktop-only line break, as in pain.cards.
+    // Titles are [before, after] a desktop-only line break.
     steps: [
       {
         title: ['Design and code', 'under one roof'],
