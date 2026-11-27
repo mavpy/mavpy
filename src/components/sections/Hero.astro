@@ -1,8 +1,8 @@
 ---
-// Hero + trust strip (design v3.15, .mv-hero / .mv-strip). Desktop: tagline, «MORE» with three bars,
+// Hero + trust strip (design .mv-hero / .mv-strip). Desktop: tagline, «MORE» with three bars,
 // «clients» filling the container, «Not just a new website» pinned top-right, note + CTA bottom-right.
 // Below 1200px everything stacks and the statement sits right-aligned under «clients».
-// The tagline stays the h1 (as built before): the design puts «MORE clients» in the h1, which says
+// The tagline stays the h1: the design puts «MORE clients» in the h1, which says
 // little to search engines or screen readers.
 import Button from '../ui/Button.astro';
 import Container from '../ui/Container.astro';
@@ -35,8 +35,8 @@ const mask = 'overflow-x-visible overflow-y-clip'; // clips the slide-up, not th
       </h1>
 
       <p aria-hidden="true" class={mask}>
-        <span class="mt-[14px] flex items-end gap-[4px] font-hegarty text-[calc(20vw-8px)] leading-[0.74] tracking-[0.05em] whitespace-nowrap text-black motion-safe:animate-mask-up uk:font-montserrat uk:font-black uk:tracking-[0.02em] desk:mt-[calc(18*var(--u))] desk:ml-[calc(6*var(--u))] desk:gap-[calc(2*var(--u))] desk:text-[calc(135*var(--u))]">
-          <span class="flex h-[0.72em] gap-[min(1.4vw,8px)] *:h-full *:bg-black motion-safe:animate-bars-left desk:gap-[calc(8*var(--u))]">
+        <span class="mt-[14px] flex items-baseline gap-[4px] font-hegarty text-[calc(20vw-8px)] leading-[0.74] tracking-[0.05em] whitespace-nowrap text-black motion-safe:animate-mask-up uk:font-montserrat uk:font-black uk:tracking-[0.02em] desk:mt-[calc(18*var(--u))] desk:ml-[calc(6*var(--u))] desk:gap-[calc(2*var(--u))] desk:text-[calc(135*var(--u))]">
+          <span class="flex h-[0.7em] gap-[min(1.4vw,8px)] *:h-full *:bg-black motion-safe:animate-bars-left desk:gap-[calc(8*var(--u))]">
             <i class="w-[min(2vw,11px)] desk:w-[calc(11*var(--u))]"></i>
             <i class="w-[min(1.5vw,8px)] desk:w-[calc(8*var(--u))]"></i>
             <i class="w-[min(4.6vw,26px)] desk:w-[calc(26*var(--u))]"></i>
