@@ -9,9 +9,8 @@ import { defaultLang, getLang, langs, localizePath, t } from '../i18n/utils';
 // fold. `?url` resolves to the same hashed file the Fontsource CSS points at.
 import hegartyLatin from '@fontsource/bbh-hegarty/files/bbh-hegarty-latin-400-normal.woff2?url';
 import robotoLatin500 from '@fontsource/roboto/files/roboto-latin-500-normal.woff2?url';
-import robotoCyr400 from '@fontsource/roboto/files/roboto-cyrillic-400-normal.woff2?url';
 import robotoCyr500 from '@fontsource/roboto/files/roboto-cyrillic-500-normal.woff2?url';
-import unboundedCyr from '@fontsource/unbounded/files/unbounded-cyrillic-900-normal.woff2?url';
+import montserratCyr from '@fontsource/montserrat/files/montserrat-cyrillic-900-normal.woff2?url';
 
 interface Props {
   /** Overrides the localized page title (e.g. the 404). */
@@ -31,10 +30,10 @@ const ogLocale = { en: 'en_US', uk: 'uk_UA' } as const;
 const isDefaultHome =
   !noindex && Astro.url.pathname === localizePath(defaultLang);
 const enHome = localizePath('en');
-// Helvetica Thin is "clients" (the LCP) on both pages. On /uk/ "БІЛЬШЕ" is Unbounded (no Cyrillic in Hegarty).
+// Helvetica Thin is "clients" (the LCP) on both pages. On UA "НОВІ" is Montserrat (no Cyrillic in Hegarty).
 const preloadFonts =
   lang === 'uk'
-    ? ['/fonts/HelveticaNeue-Thin-cyrillic.woff2', unboundedCyr, robotoCyr500]
+    ? ['/fonts/HelveticaNeue-Thin-cyrillic.woff2', montserratCyr, robotoCyr500]
     : ['/fonts/HelveticaNeue-Thin-latin.woff2', hegartyLatin, robotoLatin500];
 ---
 
