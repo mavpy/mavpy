@@ -29,15 +29,15 @@ const { featured: f } = t(getLang(Astro.url));
         </p>
         <p class="order-4 mt-[max(14px,calc(20*var(--u)))] text-body leading-[1.5] text-text-2">{f.text}</p>
         <ul
-          class="order-6 my-[max(20px,calc(28*var(--u)))] grid w-full gap-[12px] tab:grid-cols-3 desk:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)_minmax(0,0.6fr)] desk:gap-g"
+          class="order-6 my-[max(20px,calc(28*var(--u)))] grid w-full grid-cols-3 gap-[12px] desk:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)_minmax(0,0.6fr)] desk:gap-g"
         >
           {
             f.stats.map((s) => (
               <li class="flex flex-col gap-[4px] border-t border-line pt-[10px] desk:pt-[max(10px,calc(12*var(--u)))]">
-                <b class="font-head text-[24px] leading-none font-semibold whitespace-nowrap text-black tabular-nums desk:text-[max(22px,calc(30*var(--u)))]">
+                <b class="font-head text-[max(22px,calc(30*var(--u)))] leading-none font-semibold whitespace-nowrap text-black tabular-nums">
                   {s.value}
                 </b>
-                <span class="text-[13px] leading-[1.35] text-text-2 desk:text-small">{s.label}</span>
+                <span class="text-small leading-[1.35] text-text-2">{s.label}</span>
               </li>
             ))
           }
@@ -63,7 +63,7 @@ const { featured: f } = t(getLang(Astro.url));
           alt={f.shotAlt}
           widths={[600, 1000, 1600]}
           sizes="(min-width: 1200px) 55vw, 100vw"
-          class="block h-auto w-full bg-warm-100 object-cover object-top max-desk:aspect-[16/11]"
+          class="block h-auto w-full bg-warm-100"
         />
       </a>
     </div>
