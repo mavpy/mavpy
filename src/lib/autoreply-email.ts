@@ -2,7 +2,7 @@
 // E-mail HTML is its own world: tables for layout, inline styles, web-safe fonts (Gmail loads no
 // web fonts), PNG not SVG, absolute image URLs. Colours are the site tokens from global.css.
 import { site } from '../data/site';
-import { t, type Lang } from '../i18n/utils';
+import { localizePath, t, type Lang } from '../i18n/utils';
 
 const c = {
   paper: '#f2f2f2',
@@ -30,7 +30,7 @@ export function renderAutoReply(
 ) {
   const r = t(lang).contact.autoReply;
   const title = r.title.replace('{name}', name);
-  const home = new URL(lang === 'en' ? '/' : `/${lang}/`, siteUrl).href;
+  const home = new URL(localizePath(lang), siteUrl).href;
   const logo = new URL('/email/logo.png', siteUrl).href;
   const p = (text: string, color = c.black) =>
     `<p style="margin:0 0 16px;font:16px/1.5 ${font};color:${color}">${esc(text)}</p>`;

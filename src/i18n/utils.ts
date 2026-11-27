@@ -2,12 +2,12 @@ import { getRelativeLocaleUrl } from 'astro:i18n';
 import { en } from './en';
 import { uk } from './uk';
 
-const dicts = { en, uk };
+const dicts = { uk, en };
 export type Lang = keyof typeof dicts;
 export const langs = Object.keys(dicts) as Lang[];
-export const defaultLang: Lang = 'en';
+export const defaultLang: Lang = 'uk';
 
-/** Language of a URL: '/uk/...' is Ukrainian, everything else English. */
+/** Language of a URL: '/en/...' is English, everything else Ukrainian (the default). */
 export function getLang(url: URL): Lang {
   const first = url.pathname.split('/')[1];
   return langs.includes(first as Lang) ? (first as Lang) : defaultLang;
@@ -16,7 +16,7 @@ export function getLang(url: URL): Lang {
 /** The copy dictionary for a language. */
 export const t = (lang: Lang) => dicts[lang];
 
-/** Path in a given language, e.g. localizePath('uk', '#pricing') -> '/uk/#pricing'. */
+/** Path in a given language, e.g. localizePath('en', '#pricing') -> '/en/#pricing'. */
 export function localizePath(lang: Lang, hash = '') {
   return getRelativeLocaleUrl(lang, '') + hash;
 }

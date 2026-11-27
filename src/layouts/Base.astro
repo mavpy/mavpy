@@ -4,7 +4,7 @@ import Header from '../components/sections/Header.astro';
 import Footer from '../components/sections/Footer.astro';
 import Consent from '../components/Consent.astro';
 import { PUBLIC_GA_ID } from 'astro:env/client';
-import { getLang, langs, localizePath, t } from '../i18n/utils';
+import { defaultLang, getLang, langs, localizePath, t } from '../i18n/utils';
 // Hero fonts are only discovered through the CSS, so preload the ones that swap visibly above the
 // fold. `?url` resolves to the same hashed file the Fontsource CSS points at.
 import hegartyLatin from '@fontsource/bbh-hegarty/files/bbh-hegarty-latin-400-normal.woff2?url';
@@ -27,6 +27,10 @@ const ogImage = new URL('/og.jpg', Astro.site ?? Astro.url).href;
 const site = Astro.site ?? Astro.url;
 const canonical = new URL(Astro.url.pathname, site).href;
 const ogLocale = { en: 'en_US', uk: 'uk_UA' } as const;
+// Only the default-language home picks a language for the visitor; a shared /en/ link is never redirected.
+const isDefaultHome =
+  !noindex && Astro.url.pathname === localizePath(defaultLang);
+const enHome = localizePath('en');
 // Helvetica Thin is "clients" (the LCP) on both pages. On /uk/ "БІЛЬШЕ" is Unbounded (no Cyrillic in Hegarty).
 const preloadFonts =
   lang === 'uk'
@@ -38,6 +42,28 @@ const preloadFonts =
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {isDefaultHome && <script is:inline define:vars={{ enHome }}>
+      // Before paint: a saved choice (header switcher) wins, then the browser languages
+      // (first uk/ru/en entry), else stay on Ukrainian. Bots stay put so / gets indexed as UA.
+      try {
+        var lang = localStorage.getItem('mavpy-lang');
+        if (
+          !lang &&
+          !navigator.webdriver &&
+          !/bot|crawl|spider/i.test(navigator.userAgent)
+        ) {
+          var first = (navigator.languages || [navigator.language])
+            .map(function (l) {
+              return l.slice(0, 2).toLowerCase();
+            })
+            .find(function (l) {
+              return l === 'uk' || l === 'ru' || l === 'en';
+            });
+          lang = first === 'en' ? 'en' : 'uk';
+        }
+        if (lang === 'en') location.replace(enHome + location.hash);
+      } catch (e) {}
+    </script>}
     <title>{pageTitle}</title>
     {preloadFonts.map((href) => (
       <link rel="preload" href={href} as="font" type="font/woff2" crossorigin />
@@ -57,7 +83,7 @@ const preloadFonts =
       <link
         rel="alternate"
         hreflang="x-default"
-        href={new URL(localizePath('en'), site).href}
+        href={new URL(localizePath(defaultLang), site).href}
       />
     )}
 

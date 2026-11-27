@@ -15,7 +15,7 @@ import {
   toStudio,
   updateLead,
 } from '../../lib/leads';
-import { t, type Lang } from '../../i18n/utils';
+import { localizePath, t, type Lang } from '../../i18n/utils';
 
 export const prerender = false;
 
@@ -293,7 +293,7 @@ export const POST: APIRoute = async ({ request, site, url }) => {
   }
 
   function hello(chatId: number, lang: Lang) {
-    const home = new URL(lang === 'en' ? '/' : `/${lang}/`, site ?? url).href;
+    const home = new URL(localizePath(lang), site ?? url).href;
     return reply({
       method: 'sendMessage',
       chat_id: chatId,

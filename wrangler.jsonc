@@ -11,4 +11,7 @@
   "observability": { "enabled": true },
   // Keep variables set in the dashboard: without this, every `wrangler deploy` wipes them.
   "keep_vars": true,
+  // Non-production branch builds (Workers Builds) upload a version with its own preview URL
+  // (<branch>-mavpy.<subdomain>.workers.dev) without promoting it to live.
+  "preview_urls": true,
 }

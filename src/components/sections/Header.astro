@@ -150,6 +150,10 @@ const linkClass =
     .querySelectorAll<HTMLAnchorElement>('[data-lang-switch]')
     .forEach((a) =>
       a.addEventListener('click', () => {
+        // Remembered for the next visit to / (see the redirect in Base.astro).
+        try {
+          localStorage.setItem('mavpy-lang', a.lang);
+        } catch {}
         const current = [...document.querySelectorAll('main section[id]')]
           .filter((s) => s.getBoundingClientRect().top <= innerHeight / 3)
           .pop();
