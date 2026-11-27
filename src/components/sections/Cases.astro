@@ -48,7 +48,7 @@ const shot = (name: string) =>
               <span class="font-mono text-[max(13px,calc(16*var(--u)))] font-medium text-[#9a9a96]">
                 {String(i + 1).padStart(2, '0')}
               </span>
-              <h3 class="font-head text-[max(24px,calc(40*var(--u)))] leading-none font-bold tracking-[-0.01em] text-white">
+              <h3 class="font-head text-[max(24px,calc(40*var(--u)))] leading-none font-bold tracking-[-0.01em] text-snow">
                 {c.name}
               </h3>
             </span>
@@ -57,7 +57,7 @@ const shot = (name: string) =>
             </span>
             <span
               aria-hidden="true"
-              class="absolute top-1/2 right-0 flex size-[52px] -translate-y-1/2 items-center justify-center rounded-full border-[1.5px] border-white/50 text-white transition-colors duration-150 group-hover/s:border-amber-500 group-hover/s:bg-amber-500 group-hover/s:text-black"
+              class="absolute top-1/2 right-0 flex size-[52px] -translate-y-1/2 items-center justify-center rounded-full border-[1.5px] border-white/50 text-snow transition-colors duration-150 group-hover/s:border-amber-500 group-hover/s:bg-amber-500 group-hover/s:text-black"
             >
               <svg
                 width="18"
@@ -87,20 +87,13 @@ const shot = (name: string) =>
               <dl class="grid gap-[22px]">
                 {cases.facts.map((dt, k) => (
                   <div>
-                    <dt
-                      class:list={[
-                        'inline-block rounded-[4px] px-[10px] py-[4px] text-[max(13px,calc(15*var(--u)))] font-bold tracking-[0.02em] uppercase',
-                        k === 2
-                          ? 'bg-amber-500 text-black'
-                          : 'bg-white/12 text-white',
-                      ]}
-                    >
+                    <dt class="inline-block rounded-[4px] bg-white/12 px-[10px] py-[4px] text-[max(13px,calc(15*var(--u)))] font-bold tracking-[0.02em] text-snow uppercase">
                       {dt}
                     </dt>
                     <dd
                       class:list={[
-                        'mt-[10px] text-body leading-[1.5] [&_b]:font-bold [&_b]:text-white',
-                        k === 2 ? 'font-medium text-white' : 'text-[#ededeb]',
+                        'mt-[10px] text-body leading-[1.5] [&_b]:font-bold [&_b]:text-snow',
+                        k === 2 ? 'font-medium text-snow' : 'text-[#ededeb]',
                       ]}
                       set:html={c.facts[k]}
                     />
