@@ -1,67 +1,47 @@
 ---
-// Process ("How we do it"): a header card with the mascot, then the three steps.
-// Spacing converts Figma's ink positions to CSS boxes with the font metrics (see Pain.astro).
-// Mobile: the mascot stands on the header card's top edge and pokes 21px into the pain
-// section above. lg: it sits in the card's bottom-left corner, overflowing the top, with
-// the left of the sweater cropped as in Figma. `flow-root` on the card stops the mascot's
-// negative margin collapsing through it (which would drag the white card up too).
-// The desktop steps are equal columns (Figma's are uneven; same call as the pain cards).
-import { Image } from 'astro:assets';
-import Card from '../ui/Card.astro';
-import Heading from '../ui/Heading.astro';
-import Section from '../ui/Section.astro';
-import mascot from '../../assets/images/mascot.png';
+// Process (design v3.15, section 03): head + three full-width step rows on the warm grid.
+// Each row: big figure (3fr), title + text (5fr), detail (4fr) behind an amber line. Below 1200px
+// they stack and the line runs across the top of the detail. Rows slide in with data-ri; the line
+// draws and the detail fades in as each lands (.flow-side in global.css). The design starts all
+// three when the first is seen; here each starts as it enters the view (same reveal as the cards).
+import Container from '../ui/Container.astro';
+import SectionHead from '../ui/SectionHead.astro';
 import { getLang, t } from '../../i18n/utils';
 
-const copy = t(getLang(Astro.url)).process;
+const { process: p } = t(getLang(Astro.url));
 ---
 
-<Section
+<section
   id="how-we-work"
-  class="pt-[161px] pb-[77px] lg:pt-[130px] lg:pb-[113px]"
+  class="bg-warm-100 bg-grid py-[max(80px,calc(140*var(--u)))]"
 >
-  <Card class="group relative flow-root px-5 pt-0 pb-[16px] text-center lg:min-h-[276px] lg:pt-[36px] lg:pr-6.5 lg:pb-[68px] lg:pl-[294px] lg:text-left">
-    <!-- One 2x transparent image (Figma 1:512). Mobile shows the whole figure; lg crops it at
-         the card's left edge with a 246px clipping window and the image pulled 48px left. -->
-    <div class="mx-auto -mt-[182px] w-fit lg:absolute lg:bottom-0 lg:left-0 lg:m-0 lg:w-[246px] lg:overflow-x-clip">
-      <Image
-        src={mascot}
-        alt=""
-        class="origin-bottom transition-transform duration-500 ease-out-quart group-hover:-rotate-3 h-[182px] w-auto lg:-ml-12 lg:block lg:h-[322px] lg:max-w-none"
-      />
-    </div>
-
-    <Heading class="mt-[5px] lg:mt-0">{copy.title}</Heading>
-    <p class="mx-auto mt-[26px] max-w-[205px] text-[14px] lg:mx-0 lg:mt-[31px] lg:max-w-[252px] lg:text-body">
-      {copy.intro}
-    </p>
-    <!-- Decorative section tag, desktop only (not in the mobile frame). -->
-    <p
-      aria-hidden="true"
-      class="absolute top-[44px] right-[32px] max-lg:hidden"
-    >
-      {copy.label}
-      <span class="ml-[25px]">|</span>
-    </p>
-  </Card>
-
-  <ol class="mt-[19px] grid gap-[19px] text-center lg:mt-[13px] lg:grid-cols-3 lg:gap-x-12 lg:rounded-card lg:bg-white lg:px-[37px] lg:pt-[18px] lg:pb-[53px] lg:text-left">
-    {copy.steps.map(({ title, text }, i) => (
-      <li
-        style={`--i: ${i}`}
-        class="reveal rounded-card bg-white px-5 pt-[8.5px] pb-[20px] lg:rounded-none lg:bg-transparent lg:p-0"
-      >
-        <p class="text-[16px] lg:text-body" aria-hidden="true">
-          {String(i + 1).padStart(2, '0')}
-        </p>
-        <h3 class="mx-auto mt-[30px] max-w-[250px] text-card font-bold lg:mx-0 lg:mt-[52px] lg:max-w-none">
-          {title[0]}
-          <br class="max-lg:hidden" /> {title[1]}
-        </h3>
-        <p class="mt-[38px] lg:mt-[70px] lg:text-lead lg:leading-[30px]">
-          {text}
-        </p>
-      </li>
-    ))}
-  </ol>
-</Section>
+  <Container wide>
+    <SectionHead label={p.label} title={p.title} lead={p.intro} />
+    <ol class="grid gap-[max(12px,calc(16*var(--u)))]">
+      {p.steps.map((s) => (
+        <li
+          data-ri
+          class="grid items-start gap-[14px] rounded-[16px] border border-line bg-snow px-[max(24px,calc(40*var(--u)))] py-[28px] desk:grid-cols-[minmax(0,3fr)_minmax(0,5fr)_minmax(0,4fr)] desk:gap-g desk:py-[max(28px,calc(48*var(--u)))]"
+        >
+          <p class="flex flex-wrap items-baseline gap-[12px] font-head leading-none font-semibold tracking-[-0.02em] text-ink">
+            <b class="text-[max(56px,calc(96*var(--u)))] leading-[0.85] font-semibold">
+              {s.fig[0]}
+            </b>
+            <span class="text-[max(20px,calc(28*var(--u)))] tracking-[-0.01em]">
+              {s.fig[1]}
+            </span>
+          </p>
+          <div class="flex flex-col gap-[10px]">
+            <h3 class="font-head text-h3 leading-[1.05] font-bold tracking-[-0.005em] text-ink">
+              {s.title}
+            </h3>
+            <p class="text-body leading-[1.5] text-ink-2">{s.text}</p>
+          </div>
+          <div class="flow-side relative self-stretch pt-[16px] before:absolute before:top-0 before:left-0 before:h-[2px] before:w-full before:bg-amber-500 desk:pt-0 desk:pl-[max(16px,calc(24*var(--u)))] desk:before:h-full desk:before:w-[2px]">
+            <p class="flow-more text-body leading-[1.5] text-ink">{s.more}</p>
+          </div>
+        </li>
+      ))}
+    </ol>
+  </Container>
+</section>

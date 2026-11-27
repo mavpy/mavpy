@@ -141,25 +141,30 @@ export const en = {
     ],
   },
   process: {
-    label: 'process',
+    label: 'Process',
     title: 'How we do it',
-    intro:
-      'Design that can actually be built. Code that sells. Both under one roof.',
-    // Titles are [before, after] a desktop-only line break.
+    intro: 'One clear path. The right people for your goal, no more, no less.',
+    // fig: the big number and its word.
     steps: [
       {
-        title: ['Design and code', 'under one roof'],
-        text: 'Strategy, design, build and automation by the two founders. No hand-offs to outside contractors.',
+        fig: ['1', 'team'],
+        title: 'Full cycle, done for you',
+        text: 'From zero to a steady flow of clients. Nothing gets lost in hand-offs.',
+        more: 'Strategy, copy, design, build, booking and ads. One team and one contract, so nothing gets lost between contractors.',
       },
       {
-        title: ['Minimal load', 'on your side'],
-        text: 'We agree the decisions that matter, handle everything else, and leave you free to run your business.',
-      },
-      {
-        title: ['Result in 2–3', 'months'],
+        fig: ['2', 'weeks'],
+        title: 'Live in as little as 2 weeks',
         text: 'We set the timeline before we start, tie it to your scope, and hold to it.',
+        more: 'Week 1: plan and design. Week 2: build, integrations and launch. The timeline is fixed in the contract.',
       },
-    ] as { title: [string, string]; text: string }[],
+      {
+        fig: ['3', 'approvals'],
+        title: 'Minimal load on your side',
+        text: 'We agree on the decisions that matter, handle the rest, and leave you free to run your business.',
+        more: 'You approve three things: the plan, the design and the launch. We do the rest and show you the result.',
+      },
+    ],
   },
   cases: {
     label: 'cases',

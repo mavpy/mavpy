@@ -15,7 +15,7 @@ const mask = 'overflow-x-visible overflow-y-clip'; // clips the slide-up, not th
 
 <section id="top" class="relative overflow-hidden bg-grey-100">
   <div aria-hidden="true" class="absolute inset-0 [--d:1.05s] motion-safe:animate-fade-in">
-    <div class="absolute inset-0 bg-hero-grid"></div>
+    <div class="absolute inset-0 bg-grid"></div>
     <div data-streaks class="absolute inset-0 overflow-hidden motion-reduce:hidden"></div>
   </div>
 
@@ -133,7 +133,7 @@ const mask = 'overflow-x-visible overflow-y-clip'; // clips the slide-up, not th
   if (box && !reduce) {
     const spawn = () => {
       if (document.hidden || box.childElementCount >= 2) return;
-      const c = Math.min(1, innerWidth / 1920) * 80; // grid cell, as in bg-hero-grid
+      const c = Math.min(1, innerWidth / 1920) * 80; // grid cell, as in bg-grid
       const cols = Math.floor(box.clientWidth / c);
       const rows = Math.floor(box.clientHeight / c);
       const pick = (n: number) => Math.floor(Math.random() * Math.max(1, n)) * c;

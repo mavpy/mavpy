@@ -18,7 +18,7 @@ Port of Serhii's redesign from `~/dev/mavpy-design` (v3.15, commit `d1fbc8b`; `g
 - [x] 4. Featured case (new `FeaturedCase.astro`): white card, 5fr/7fr, text column `display: contents` below 1200px so the shot sits between intro and stats. Added `Container wide` (1680u, the design's .v-wrap), Button `tone="soft"`, and `src/scripts/reveal.ts` (cards with `data-ri` slide in, staggered; reuse it in later sections).
   - CSS dumps of every remaining section (UA) are in `~/.claude/plans/dumps/uk-*.txt`; EN differs only by the `:lang(uk)` rules in the design's styles.css.
 - [x] 5. Situation (`Pain.astro`): new `ui/SectionHead.astro` (the design's .v-head, reuse in steps 6–12; slides in via `data-ri`), looping line icons (`.pi` in global.css), copy from the design in both languages.
-- [ ] 6. Process
+- [x] 6. Process: full-width step rows on the warm grid (`bg-hero-grid` renamed `bg-grid`); amber line + detail fade after each row's `data-ri` reveal (`.flow-side`/`.flow-more` in global.css). Rows start as each enters the view, not all three at once as in the design. Old mascot image unused (cleanup in 14).
 - [ ] 7. Cases
 - [ ] 8. Testimonials
 - [ ] 9. Team (`About.astro`)

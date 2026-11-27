@@ -137,8 +137,8 @@
   }
 }
 
-/* Hero background: a faint 80-unit grid. */
-@utility bg-hero-grid {
+/* Hero and Process backgrounds: a faint 80-unit grid. */
+@utility bg-grid {
   background-image:
     linear-gradient(rgb(15 15 15 / 0.045) 1px, transparent 1px),
     linear-gradient(90deg, rgb(15 15 15 / 0.045) 1px, transparent 1px);
@@ -348,6 +348,33 @@
   .ri.ri-in {
     opacity: 1;
     transform: none;
+  }
+}
+
+/* Process rows (Process.astro): once a row has landed (.ri-in), its amber line draws (down on
+   desktop, across below 1200px) and the detail fades in, 350ms behind the row's own reveal. */
+@layer components {
+  .ri .flow-side::before {
+    transform: scaleX(0);
+    transform-origin: 0 50%;
+    transition: transform 1.2s cubic-bezier(0.45, 0, 0.25, 1)
+      calc(var(--ri, 0) * 120ms + 350ms);
+  }
+  .ri .flow-more {
+    opacity: 0;
+    transition: opacity 0.9s ease-in-out calc(var(--ri, 0) * 120ms + 350ms);
+  }
+  @media (width >= 1200px) {
+    .ri .flow-side::before {
+      transform: scaleY(0);
+      transform-origin: 50% 0;
+    }
+  }
+  .ri-in .flow-side::before {
+    transform: none;
+  }
+  .ri-in .flow-more {
+    opacity: 1;
   }
 }
 
