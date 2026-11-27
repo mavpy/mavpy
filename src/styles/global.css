@@ -43,8 +43,8 @@
   --color-amber-300: #ffcb64; /* tints */
   --color-black: #0f0f0f; /* headings, text (names match the design's variables) */
   --color-ink: #202020; /* body text, footer, dark controls */
-  --color-ink-2: #4a4a4a; /* secondary text, 7:1 on warm */
-  --color-ink-3: #62625f; /* muted text, 5:1 on warm */
+  --color-text-2: #4a4a4a; /* secondary text, 7:1 on warm */
+  --color-text-3: #62625f; /* muted text, 5:1 on warm */
   --color-warm-50: #f7f5f2; /* page */
   --color-warm-100: #efedea; /* sections */
   --color-snow: #fdfdfd; /* cards ("white" in the design) */

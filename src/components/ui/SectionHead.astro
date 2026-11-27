@@ -19,7 +19,7 @@ const { label, title, lead, dark = false } = Astro.props;
   <p
     class:list={[
       'font-mono text-[max(13px,calc(16*var(--u)))] desk:order-2 desk:text-right',
-      dark ? 'text-[#b9b9b4]' : 'text-ink-3',
+      dark ? 'text-[#b9b9b4]' : 'text-text-3',
     ]}
   >
     {label}
@@ -37,7 +37,7 @@ const { label, title, lead, dark = false } = Astro.props;
       <p
         class:list={[
           'mt-[max(14px,calc(20*var(--u)))] text-lead leading-[1.4] desk:max-w-[calc(820*var(--u))]',
-          dark ? 'text-[#b9b9b4]' : 'text-ink-2',
+          dark ? 'text-[#b9b9b4]' : 'text-text-2',
         ]}
       >
         {lead}

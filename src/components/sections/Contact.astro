@@ -85,7 +85,7 @@ const short = (c: keyof typeof dialCodes) => `${flag(c)} +${dialCodes[c]}`;
             </span>
             <span>
               <strong class="block font-medium">{label}</strong>
-              <em class="block text-ink-2 not-italic">{value}</em>
+              <em class="block text-text-2 not-italic">{value}</em>
             </span>
           </a>
         ))}
@@ -178,7 +178,7 @@ const short = (c: keyof typeof dialCodes) => `${flag(c)} +${dialCodes[c]}`;
                 →
               </span>
             </Button>
-            <span class="font-mono text-[max(13px,calc(15*var(--u)))] text-ink-3">
+            <span class="font-mono text-[max(13px,calc(15*var(--u)))] text-text-3">
               {contact.reply}
             </span>
           </div>
@@ -199,7 +199,7 @@ const short = (c: keyof typeof dialCodes) => `${flag(c)} +${dialCodes[c]}`;
           <h3 class="font-head text-h3 leading-[1.05] font-bold tracking-[-0.005em] text-black">
             {contact.successTitle}
           </h3>
-          <p class="text-body text-ink-2">{contact.success}</p>
+          <p class="text-body text-text-2">{contact.success}</p>
           <!-- Bot confirmation (t.me deep link with the lead id). Shown by the script when the server
                returns a link; leads without an id (Airtable down) just don't get the button. -->
           <Button
