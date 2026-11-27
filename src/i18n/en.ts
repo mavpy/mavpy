@@ -12,30 +12,12 @@ const yearsEn: Record<number, string> = {
   10: 'Ten',
 };
 
-type Facts = {
-  goal: string;
-  start: string;
-  did: string;
-  time: string;
-  result: string;
-};
-export type CaseItem = {
-  title: string;
-  type: string;
-  url: string;
-  facts: Facts;
-};
 export type Testimonial = {
   quote: string[];
   name: string;
   company: string;
   project: string;
   avatar: 'natalia' | 'bram' | 'ivan' | 'placeholder'; // placeholder = initials circle, TODO(photo)
-};
-// TODO(copy): placeholder until Serhii sends the real facts for a case.
-export const tbd = (lang: 'en' | 'uk' = 'en'): Facts => {
-  const v = lang === 'uk' ? 'уточнюється' : 'to be confirmed';
-  return { goal: v, start: v, did: v, time: v, result: v };
 };
 
 export const en = {
@@ -167,45 +149,74 @@ export const en = {
     ],
   },
   cases: {
-    label: 'cases',
-    title: 'Real projects, real results',
-    sub: 'Same structure every card — so you can compare goals, not marketing.',
-    link: 'View live site',
-    // Appended to the link for screen readers: "View live site: Medical clinic (opens in a new tab)".
-    newTab: 'opens in a new tab',
-    facts: {
-      goal: 'Goal:',
-      start: 'Starting point:',
-      did: 'What we did:',
-      time: 'Timeframe:',
-      result: 'Result:',
-    },
-    // Only the clinic has real facts and a URL. TODO(copy): facts and URLs for cases 2–5 from Serhii.
+    label: 'Cases',
+    title: 'How our clients’\nbusiness changed',
+    sub: 'Where each client started, what we did and what changed.',
+    facts: ['Before', 'What we did', 'After'],
+    live: 'Open live site',
+    // facts: before, what we did, after. HTML: <b> marks the key figures.
     items: [
       {
-        title: 'Medical clinic',
-        type: 'from scratch',
+        name: 'Doctor LOR',
+        kind: 'ENT clinic · Kharkiv',
+        shot: 'case-doctor-lor',
         url: 'https://www.drlor-kh.com/',
-        facts: {
-          goal: 'steady patient flow, booking that runs itself',
-          start:
-            'early-2000s site, patients only by word of mouth, every appointment booked by phone',
-          did: 'research · UX analysis · redesign & build · booking + reminder automation',
-          time: '~1.5 months',
-          result:
-            'booking runs on its own, reminders go out automatically, a real stream of enquiries where there used to be only word of mouth',
-        },
+        host: 'drlor-kh.com',
+        facts: [
+          'Patients take months to choose a surgeon and fear the operation. Booking was by phone only, on a site from the early 2000s.',
+          'A first screen about the outcome: breathe freely, look natural. Price and sedation shown up front. Booking in <b>one click</b>.',
+          '<b>271</b> organic clicks and <b>#1–2</b> in Google within <b>2 months</b>, with <b>$0</b> on ads. Calls come in from search.',
+        ],
       },
-      { title: 'Massage studio', type: 'redesign', url: '', facts: tbd() },
-      { title: 'English school', type: 'from scratch', url: '', facts: tbd() },
-      { title: 'Crypto company', type: 'from scratch', url: '', facts: tbd() },
       {
-        title: 'B2B Solar company',
-        type: 'concept project',
-        url: '',
-        facts: tbd(),
+        name: 'Aurelia Dental',
+        kind: 'Premium dentistry · Antalya',
+        shot: 'case-aurelia-dental',
+        url: 'https://aurelia-dental.webflow.io/',
+        host: 'aurelia-dental.webflow.io',
+        facts: [
+          'Patients from abroad choose a clinic remotely and fear pain and hidden costs.',
+          'A calm, photo-led design and a fear-free promise. A <b>free online consultation</b> before the flight. Only <b>two actions</b>: book or consult.',
+          'Patients book the consultation <b>before they travel</b>. The site answers the questions the team used to repeat on every call.',
+        ],
       },
-    ] as CaseItem[],
+      {
+        name: 'SRT',
+        kind: 'Chronic pain therapy',
+        shot: 'case-srt-therapy',
+        url: 'https://srt-bf60b5.webflow.io/',
+        host: 'srt-bf60b5.webflow.io',
+        facts: [
+          'Clients come after years of pain and failed treatments. Booking took <b>half the administrator’s day</b>.',
+          'The method explained step by step, <b>10+ years</b> of practice on the first screen. Online booking synced with the calendar.',
+          'Booking runs on its own. The administrator got <b>half a day back</b>.',
+        ],
+      },
+      {
+        name: 'The Nook',
+        kind: '12-room hotel by the sea',
+        shot: 'case-the-nook',
+        url: 'https://the-nook----premium-coastal-coliving-we.webflow.io/',
+        host: 'the-nook.webflow.io',
+        facts: [
+          'Guests saw just another beach hotel, and rooms stood empty <b>off-season</b>.',
+          'New positioning for remote workers: “Work by the sea. Rest with purpose.” Quiet workspace, open <b>all year</b>, long-stay packages.',
+          'The off-season has its own guests: remote workers who stay for <b>weeks, not days</b>.',
+        ],
+      },
+      {
+        name: 'Unit Surface',
+        kind: 'B2B rooftop solar',
+        shot: 'case-unit-surface',
+        url: 'https://unit-surface-c8e2de.webflow.io/',
+        host: 'unit-surface.webflow.io',
+        facts: [
+          'Owners of industrial roofs don’t see solar as income, and B2B decisions take <b>months</b>.',
+          'Headline: “Your roof is an untapped financial asset”. An ROI calculator on the first screen: payback in <b>5–7 years</b>.',
+          'Visitors see <b>their own payback</b> before the first call, so sales talks start further along.',
+        ],
+      },
+    ],
   },
   testimonials: {
     label: 'clients',

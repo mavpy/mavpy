@@ -19,7 +19,7 @@ Port of Serhii's redesign from `~/dev/mavpy-design` (v3.15, commit `d1fbc8b`; `g
   - CSS dumps of every remaining section (UA) are in `~/.claude/plans/dumps/uk-*.txt`; EN differs only by the `:lang(uk)` rules in the design's styles.css.
 - [x] 5. Situation (`Pain.astro`): new `ui/SectionHead.astro` (the design's .v-head, reuse in steps 6–12; slides in via `data-ri`), looping line icons (`.pi` in global.css), copy from the design in both languages.
 - [x] 6. Process: full-width step rows on the warm grid (`bg-hero-grid` renamed `bg-grid`); amber line + detail fade after each row's `data-ri` reveal (`.flow-side`/`.flow-more` in global.css). Rows start as each enters the view, not all three at once as in the design. Old mascot image unused (cleanup in 14).
-- [ ] 7. Cases
+- [x] 7. Cases: dark accordion on `<details name>` (animation `.case` in global.css), first case open from the start, scroll hold left to native anchoring. Added Button `tone="outline"`, SectionHead `dark` and `\n` line breaks. Dropped the old case types and `tbd()`; old case images unused (cleanup in 14).
 - [ ] 8. Testimonials
 - [ ] 9. Team (`About.astro`)
 - [ ] 10. Pricing (`goal` preset)

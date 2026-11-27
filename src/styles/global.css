@@ -378,6 +378,29 @@
   }
 }
 
+/* Cases accordion (Cases.astro): the open panel grows and the closing one shrinks, as the
+   design's grid-rows trick. Needs interpolate-size; elsewhere the panels snap. */
+@layer components {
+  .case {
+    interpolate-size: allow-keywords;
+  }
+  .case::details-content {
+    block-size: 0;
+    overflow: clip;
+    transition:
+      block-size 0.7s cubic-bezier(0.45, 0, 0.25, 1),
+      content-visibility 0.7s allow-discrete;
+  }
+  .case[open]::details-content {
+    block-size: auto;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .case::details-content {
+      transition: none;
+    }
+  }
+}
+
 /* Situation card icons (Pain.astro): they loop all the time and start mid-cycle (negative delays),
    so they're already moving when seen. Per-child delays and SVG strokes are why this isn't Tailwind. */
 @layer components {

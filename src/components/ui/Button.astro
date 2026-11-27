@@ -6,8 +6,9 @@ import type { HTMLAttributes } from 'astro/types';
 // Renders an <a> when href is given, otherwise a <button>.
 type Props = {
   size?: 'lg' | 'sm';
-  /** soft: pale amber with an amber outline (secondary). telegram: Telegram's blue (the bot link). */
-  tone?: 'amber' | 'soft' | 'telegram';
+  /** soft: pale amber with an amber outline (secondary). telegram: Telegram's blue (the bot link).
+   *  outline: white text in a thin amber ring, for dark sections (cases). */
+  tone?: 'amber' | 'soft' | 'telegram' | 'outline';
   /** Full width. Pass responsive classes via `class` to undo it on wider screens. */
   block?: boolean;
   class?: string;
@@ -32,6 +33,8 @@ const tones = {
   soft: 'bg-[#fff6e3] text-ink inset-ring-[1.5px] inset-ring-amber-500 hover:bg-[#ffefcf] focus-visible:bg-[#ffb829] active:bg-amber-500',
   // Deeper than Telegram's #2AABEE: white on that is 2.6:1; #0077B5 is 4.9:1 (AA).
   telegram: 'bg-[#0077B5] text-white hover:bg-[#006DAD]',
+  outline:
+    'text-white inset-ring inset-ring-amber-500 hover:bg-amber-500/12 focus-visible:bg-[#ffb829] focus-visible:text-ink active:bg-amber-500 active:text-ink',
 };
 const classes = [
   'group/btn inline-flex shrink-0 cursor-pointer items-center justify-center gap-3 rounded-btn px-[max(20px,calc(28*var(--u)))] text-center font-medium whitespace-nowrap',
