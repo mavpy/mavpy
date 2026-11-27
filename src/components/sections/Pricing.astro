@@ -36,7 +36,7 @@ const partsCls = `${fade} invisible opacity-0 group-data-[pay=3]/pay:visible gro
           type="button"
           value={i ? '3' : '1'}
           aria-pressed={i ? 'false' : 'true'}
-          class="cursor-pointer rounded-[8px] px-[22px] py-[12px] text-[max(14px,calc(16*var(--u)))] font-medium text-ink-2 transition-colors duration-200 ease-mv aria-pressed:bg-ink-soft aria-pressed:text-snow"
+          class="cursor-pointer rounded-[8px] px-[22px] py-[12px] text-[max(14px,calc(16*var(--u)))] font-medium text-ink-2 transition-colors duration-200 ease-mv aria-pressed:bg-ink aria-pressed:text-snow"
         >
           {label}
         </button>
@@ -53,18 +53,18 @@ const partsCls = `${fade} invisible opacity-0 group-data-[pay=3]/pay:visible gro
               {plan.kind}
             </span>
             {plan.popular && (
-              <span class="rounded-full bg-amber-500 px-[12px] py-[4px] text-[13px] font-medium text-ink">
+              <span class="rounded-full bg-amber-500 px-[12px] py-[4px] text-[13px] font-medium text-black">
                 {p.badge}
               </span>
             )}
           </div>
-          <h3 class="font-head text-h3 leading-[1.05] font-bold tracking-[-0.005em] text-ink">
+          <h3 class="font-head text-h3 leading-[1.05] font-bold tracking-[-0.005em] text-black">
             {plan.title}
           </h3>
           <p class="text-body leading-[1.5] text-ink-2">{plan.text}</p>
           <p class="grid grid-cols-[auto_1fr] items-baseline gap-x-[0.4em] gap-y-[6px] text-[max(16px,calc(19*var(--u)))] leading-[1.45] text-ink-2">
             <span class="text-ink-3">{p.from}</span>
-            <b class="grid justify-self-start font-head text-[max(40px,calc(64*var(--u)))] leading-none font-semibold tracking-[-0.02em] whitespace-nowrap text-ink tabular-nums desk:font-medium">
+            <b class="grid justify-self-start font-head text-[max(40px,calc(64*var(--u)))] leading-none font-semibold tracking-[-0.02em] whitespace-nowrap text-black tabular-nums desk:font-medium">
               <span class={onceCls}>{plan.once[0]}</span>
               <span class={partsCls}>{plan.parts[0]}</span>
             </b>

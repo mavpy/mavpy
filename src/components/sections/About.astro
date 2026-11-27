@@ -61,7 +61,7 @@ const photo = (name: string) =>
                 ]}
               />
               <div class="flex w-full flex-col justify-between gap-[max(24px,calc(32*var(--u)))]">
-                <blockquote class="text-quote leading-[1.45] tracking-[-0.005em] text-ink">
+                <blockquote class="text-quote leading-[1.45] tracking-[-0.005em] text-black">
                   {m.quote.map((p, k) => (
                     <p class="not-first:mt-[0.8em]">
                       {k === 0 && '“'}
@@ -72,7 +72,7 @@ const photo = (name: string) =>
                 </blockquote>
                 <div class="mt-auto">
                   <p>
-                    <strong class="block text-[max(18px,calc(26*var(--u)))] font-medium text-ink">
+                    <strong class="block text-[max(18px,calc(26*var(--u)))] font-medium text-black">
                       {m.name}
                     </strong>
                     <span class="text-ink-2">{m.role}</span>
@@ -118,7 +118,7 @@ const photo = (name: string) =>
               class="size-[48px] shrink-0 rounded-full bg-warm-100 object-cover outline outline-offset-1 outline-amber-500 desk:size-[64px]"
             />
             <span class="min-w-0">
-              <strong class="block font-medium text-ink">{m.name}</strong>
+              <strong class="block font-medium text-black">{m.name}</strong>
               <em class="block font-mono text-[13px] text-ink-3 not-italic max-desk:hidden">
                 {m.role}
               </em>

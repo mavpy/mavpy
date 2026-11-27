@@ -41,8 +41,8 @@
   --color-amber-500: #ffab01; /* btn_main */
   --color-amber-400: #ffbd3a; /* btn hover */
   --color-amber-300: #ffcb64; /* tints */
-  --color-ink: #0f0f0f; /* headings, text: the design's --black (not its --ink!) */
-  --color-ink-soft: #202020; /* body text, footer: the design's --ink */
+  --color-black: #0f0f0f; /* headings, text (names match the design's variables) */
+  --color-ink: #202020; /* body text, footer, dark controls */
   --color-ink-2: #4a4a4a; /* secondary text, 7:1 on warm */
   --color-ink-3: #62625f; /* muted text, 5:1 on warm */
   --color-warm-50: #f7f5f2; /* page */
@@ -174,7 +174,6 @@
    mobile value at 375px to the desktop value at 1280px, where the 1226px column is reached. */
 @theme {
   --color-white: #fff;
-  --color-black: #000;
 
   /* btn_main ramp from the UI kit. #ffab01 is confirmed by pixel sampling;
      the other four are read off a kit screenshot. TODO(figma): confirm their exact hex. */
@@ -264,7 +263,7 @@
   }
 
   body {
-    @apply bg-warm-50 font-sans text-body/[1.45] text-ink-soft antialiased;
+    @apply bg-warm-50 font-sans text-body/[1.45] text-ink antialiased;
   }
 
   /* Archivo has no Cyrillic: UA headings are Inter (the design's :lang(uk) --f-head). */
@@ -360,7 +359,7 @@
     border: 1px solid rgb(15 15 15 / 0.3);
     border-radius: 8px;
     background: var(--color-snow);
-    color: var(--color-ink);
+    color: var(--color-black);
     font-size: 17px;
     transition:
       border-color 0.2s var(--ease-mv),
@@ -475,11 +474,11 @@
     overflow: visible;
   }
   .pi .pi-ax {
-    stroke: var(--color-ink);
+    stroke: var(--color-black);
     opacity: 0.28;
   }
   .pi .pi-grid {
-    stroke: var(--color-ink);
+    stroke: var(--color-black);
     opacity: 0.1;
     stroke-dasharray: 2 3;
   }

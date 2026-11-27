@@ -68,7 +68,7 @@ const short = (c: keyof typeof dialCodes) => `${flag(c)} +${dialCodes[c]}`;
       class="grid gap-[max(24px,calc(48*var(--u)))] rounded-[16px] border border-line bg-snow p-[16px] desk:grid-cols-[minmax(0,4fr)_minmax(0,8fr)] desk:p-[max(20px,calc(40*var(--u)))]"
     >
       <div class="flex flex-col">
-        <p class="mb-[max(12px,calc(16*var(--u)))] text-[max(18px,calc(24*var(--u)))] font-medium text-ink">
+        <p class="mb-[max(12px,calc(16*var(--u)))] text-[max(18px,calc(24*var(--u)))] font-medium text-black">
           {contact.side.title}
         </p>
         {plaques.map(({ Icon, label, value, href }) => (
@@ -78,9 +78,9 @@ const short = (c: keyof typeof dialCodes) => `${flag(c)} +${dialCodes[c]}`;
               target: '_blank',
               rel: 'noopener',
             })}
-            class="flex flex-1 items-center gap-[16px] border-t border-line py-[max(14px,calc(18*var(--u)))] text-small text-ink transition-colors last:border-b hover:text-amber-700"
+            class="flex flex-1 items-center gap-[16px] border-t border-line py-[max(14px,calc(18*var(--u)))] text-small text-black transition-colors last:border-b hover:text-amber-700"
           >
-            <span class="grid size-[48px] shrink-0 place-items-center rounded-full bg-grey-100 text-ink">
+            <span class="grid size-[48px] shrink-0 place-items-center rounded-full bg-grey-100 text-black">
               <Icon aria-hidden="true" class="size-[22px]" />
             </span>
             <span>
@@ -196,7 +196,7 @@ const short = (c: keyof typeof dialCodes) => `${flag(c)} +${dialCodes[c]}`;
           tabindex="-1"
           class="flex flex-col items-start justify-center gap-[8px] outline-none motion-safe:transition-opacity motion-safe:duration-500 motion-safe:starting:opacity-0 [&[hidden]]:hidden"
         >
-          <h3 class="font-head text-h3 leading-[1.05] font-bold tracking-[-0.005em] text-ink">
+          <h3 class="font-head text-h3 leading-[1.05] font-bold tracking-[-0.005em] text-black">
             {contact.successTitle}
           </h3>
           <p class="text-body text-ink-2">{contact.success}</p>
