@@ -84,28 +84,25 @@ export const en = {
     studio: 'MAVPY DESIGN & DEVELOPMENT STUDIO',
   },
   hero: {
-    // Figma sets "websites" in bold, so the line is split around it.
-    h1: {
-      before: 'Conversion-focused ',
-      em: 'websites',
-      after: ' for growing businesses',
-    },
-    more: 'More',
+    // The design sets the end of the line in bold, so it's split around it.
+    h1: { before: 'Websites built around ', em: 'business results', after: '' },
+    more: 'MORE',
     clients: 'clients',
-    // Desktop breaks after every line; mobile only before the last one.
+    // Desktop breaks after every line; below 1200px only before the last one.
     statement: ['Not just', 'a new', 'website'],
-    note: ['Designed and built in-house.', 'Priced upfront.'],
-    cta: 'Get an estimate',
-    // ink width of `clients` in ems (Helvetica Neue Thin, +4%): sizes the word to the column.
-    clientsEm: 2.8,
+    note: ['Scoped, priced upfront,', 'delivered end-to-end.'],
+    cta: 'Get my estimate',
   },
   trust: {
-    label: 'Why MAVPY',
+    label: 'Why clients work with us',
     items: [
-      '30+ projects',
+      '30+ projects since 2022',
       'Fixed price, no surprises',
-      'Designed and built in-house',
-      'PageSpeed 90+ on mobile',
+      'Founder-led, direct',
+      'Reply within 24h',
+      'Pay in 3 parts',
+      'Booking, CRM and bot wired in',
+      'You own the site and the code',
     ],
   },
   pain: {

@@ -79,6 +79,93 @@
   --spacing-head: max(72px, calc(108 * var(--u)));
   /* btn_main hover glow. */
   --shadow-btn-hover: 0 6px 14px -10px rgb(204 136 0 / 0.5);
+
+  --color-grey-100: #f2f2f2; /* hero */
+
+  /* Hero entrance (design's a-mask / a-blur / a-rise / a-bg), staggered by --d. Used behind
+     motion-safe:, so with reduced motion everything is simply there. */
+  --animate-mask-up: mask-up 0.75s var(--ease-mv) var(--d, 0s) both;
+  --animate-blur-in: blur-in 0.6s var(--ease-mv) var(--d, 0s) both;
+  --animate-rise-in: rise-in 0.5s var(--ease-mv) var(--d, 0s) both;
+  --animate-fade-in: fade-in 0.9s var(--ease-mv) var(--d, 0s) both;
+  /* «MORE»: the word wipes in from the left, then the bars step left to meet it. */
+  --animate-wipe: wipe 0.9s cubic-bezier(0.65, 0, 0.35, 1) 0.7s both;
+  --animate-bars-left: bars-left 0.6s cubic-bezier(0.45, 0, 0.25, 1) 1.6s both;
+  /* Trust strip: the items are rendered twice, so -50% loops seamlessly. */
+  --animate-marquee: marquee 70s linear infinite;
+
+  @keyframes mask-up {
+    from {
+      transform: translateY(105%);
+    }
+  }
+  @keyframes blur-in {
+    from {
+      opacity: 0;
+      filter: blur(10px);
+    }
+  }
+  @keyframes rise-in {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+  }
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+  }
+  @keyframes wipe {
+    from {
+      clip-path: inset(0 100% 0 0);
+    }
+    to {
+      clip-path: inset(0);
+    }
+  }
+  @keyframes bars-left {
+    to {
+      transform: translateX(calc(-6 * var(--u)));
+    }
+  }
+  @keyframes marquee {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+}
+
+/* Hero background: a faint 80-unit grid. */
+@utility bg-hero-grid {
+  background-image:
+    linear-gradient(rgb(15 15 15 / 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(15 15 15 / 0.045) 1px, transparent 1px);
+  background-size: calc(80 * var(--u)) calc(80 * var(--u));
+}
+
+/* A thin amber streak running along a hero grid line; Hero.astro spawns them (at most 2) and sets
+   the position, distance (--dx/--dy) and duration (--t). */
+@utility streak {
+  position: absolute;
+  opacity: 0;
+  background: linear-gradient(
+    var(--dir, 90deg),
+    rgb(255 171 1 / 0),
+    rgb(255 171 1 / 0.85) 80%,
+    rgb(255 171 1 / 0)
+  );
+  animation: streak var(--t, 1.6s) linear forwards;
+}
+@keyframes streak {
+  15%,
+  85% {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    transform: translate(var(--dx, 0), var(--dy, 0));
+  }
 }
 
 /* Design tokens. Source: Figma UI kit (1:1886) plus pixel measurements of the desktop (1:331,
@@ -157,21 +244,6 @@
   --ease-out-quart: cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
-/* `inline` so the utility carries the expression itself: --clients-em then resolves on the
-   element (set per language), not on :root. */
-@theme inline {
-  /* Helvetica Neue Thin 438, +4%. Sized so the ink spans the 1226 column on desktop and the
-     screen minus 13px a side on mobile (as in the frames; --clients-inset widens that to the
-     gutter on lg, where it sits beside column-aligned content). --clients-em is the word's ink width
-     in ems, set per language from i18n (2.8 for "clients"). */
-  --text-clients: calc(
-    min(var(--container-content), 100vw - var(--clients-inset, 26px)) /
-      var(--clients-em, 2.8)
-  );
-  --text-clients--line-height: 1;
-  --text-clients--letter-spacing: 0.04em;
-}
-
 @layer base {
   :root {
     --u: min(1px, calc(100vw / 1920));
@@ -238,11 +310,6 @@
     .rise {
       animation: rise 0.9s var(--ease-out-quart) var(--d, 0s) both;
     }
-    /* The bar left of "MORE" wipes in from the screen edge. */
-    .rise-bar > span {
-      transform-origin: left;
-      animation: bar 1s var(--ease-out-quart) both;
-    }
 
     /* Scroll reveal: rises in as the element enters the bottom quarter of the viewport.
        --i staggers cards in a row (they enter together, so each starts a bit later).
@@ -263,10 +330,5 @@
   from {
     opacity: 0;
     transform: translateY(32px);
-  }
-}
-@keyframes bar {
-  from {
-    transform: scaleX(0);
   }
 }

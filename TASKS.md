@@ -12,7 +12,9 @@ Port of Serhii's redesign from `~/dev/mavpy-design` (v3.15, commit `d1fbc8b`; `g
 - [x] 1. Foundation: v3.15 tokens in `@theme` (amber-*, ink, ink-2/3, warm-50/100, snow, line; text-h2/h3/lead/body/small/quote via `--u`), fonts regenerated (+Inter, Montserrat 900, Roboto Mono, Roboto 100; −Inter Tight, Unbounded), images in `src/assets/v3/`.
 - [x] 2. Header: sticky, `data-stuck` background, popover menu, `LangSwitch.astro`, new `Button` (amber, lift + scale on hover) and `Container` (1280u, 20px gutters). Scroll script: opens at the top, honours #hash once and then drops it, in-page links don't write #.
   - Breakpoints `tab:` (≥601px) and `desk:` (≥1200px); variants `uk:` and `menu-open:`. Old tokens (paper, sand, orange, text-card…) stay until step 14.
-- [ ] 3. Hero + trust strip
+- [x] 3. Hero + trust strip: entrance (mask-up, blur, wipe, bars), typed statement, grid + streaks, marquee strip. «clients» fills the container via `cqw` + a per-language em ratio (no JS fit).
+  - Kept the tagline as the h1 (the design makes «MORE clients» the h1); listed for Serhii.
+  - Visual checks per step dropped (Nikita, 2026-11-27): port from the HTML/CSS, one polish pass in step 14.
 - [ ] 4. Featured case (new `FeaturedCase.astro`)
 - [ ] 5. Situation (`Pain.astro`)
 - [ ] 6. Process
@@ -26,7 +28,7 @@ Port of Serhii's redesign from `~/dev/mavpy-design` (v3.15, commit `d1fbc8b`; `g
 - [ ] 14. Cleanup (old tokens, components, images; `uk` as the reference type in i18n is optional), AGENTS.md (sources of truth, UA default), TASKS.md; Lighthouse; PR
 - Method: serve the design (`python3 -m http.server 8080` in mavpy-design). Run `~/.claude/plans/mavpy-design-dump.js` in its console with the receiver `python3 -I ~/.claude/plans/mavpy-design-recv.py` running, which writes the winning CSS per element, breakpoint and state to `dumps/`. The design's copy lives in `tools/build.py` (dicts `E`/`U`); behaviours are in `main.js`.
 - For Nikita: Cloudflare → Workers → `mavpy` → Settings → Builds → turn on non-production branch builds (gives a preview URL per push).
-- To check with Serhii: the design's phone is +380 99 220 83 43 but `site.ts` has +380 99 320 84 54 (kept `site.ts` for now). The design adds Telegram @mavpy_agency. The design's favicon differs from ours (we kept ours, which has .ico and dark variants).
+- To check with Serhii: the h1 is the tagline («Сайти, що працюють на результат»), not «НОВІ клієнти» as in the design, for SEO and screen readers. The design's phone is +380 99 220 83 43 but `site.ts` has +380 99 320 84 54 (kept `site.ts` for now). The design adds Telegram @mavpy_agency. The design's favicon differs from ours (we kept ours, which has .ico and dark variants).
 
 - [ ] Lighthouse re-check on production, `/` and `/uk/`, mobile + desktop (last run 2026-11-20; since then: phone picker, bot links, carousel autoplay).
 

@@ -1,101 +1,158 @@
 ---
-// Hero + trust bar. DOM follows the mobile order (tagline, MORE, clients, statement, CTA);
-// on lg+ the statement is pinned to the top-right cell, the rest auto-flows around it.
-// "MORE" and "clients" are big display words: the h1 is the small tagline (audit §2).
-// Vertical margins are Figma's ink gaps minus each box's slack above the caps / below the baseline.
+// Hero + trust strip (design v3.15, .mv-hero / .mv-strip). Desktop: tagline, «MORE» with three bars,
+// «clients» filling the container, «Not just a new website» pinned top-right, note + CTA bottom-right.
+// Below 1200px everything stacks and the statement sits right-aligned under «clients».
+// The tagline stays the h1 (as built before): the design puts «MORE clients» in the h1, which says
+// little to search engines or screen readers.
 import Button from '../ui/Button.astro';
 import Container from '../ui/Container.astro';
 import { getLang, t } from '../../i18n/utils';
 
 const { hero, trust } = t(getLang(Astro.url));
 const [s1, s2, s3] = hero.statement;
-// The bar beside "MORE" is drawn with the font's own I (a plain cap-height rectangle in both
-// fonts), so its top and bottom are rasterised exactly like the letters. A box background
-// can't match: Chrome snaps it to whole pixels while text sits on a sub-pixel position.
-// Cyrillic І on /uk/ resolves to Unbounded (caps 0.75em), Latin I to Hegarty (0.7em).
-// Tracking sets the step to exactly half the I's ink width (Hegarty: advance 0.36, ink 0.28;
-// Unbounded: 0.378, 0.258), so every pixel is under exactly two glyphs and the anti-aliased
-// top and bottom rows stay even (uneven overlaps would show as faint dots along the edge).
-const bar = /[\u0400-\u04ff]/.test(hero.more)
-  ? { glyph: 'І', tracking: '-0.249em' }
-  : { glyph: 'I', tracking: '-0.22em' };
+const mask = 'overflow-x-visible overflow-y-clip'; // clips the slide-up, not the sides
 ---
 
-<section id="top" class="scroll-mt-4">
-  <Container class="pt-[39px] pb-[69px] text-center lg:grid lg:grid-cols-[1fr_auto] lg:pt-[64px] lg:pb-[88px] lg:text-left">
-    <div class="lg:self-end">
-      <h1 class="rise text-[23px] leading-[29px] font-medium">
-        {hero.h1.before}
-        <strong class="font-bold">{hero.h1.em}</strong>
-        {hero.h1.after}
+<section id="top" class="relative overflow-hidden bg-grey-100">
+  <div aria-hidden="true" class="absolute inset-0 [--d:1.05s] motion-safe:animate-fade-in">
+    <div class="absolute inset-0 bg-hero-grid"></div>
+    <div data-streaks class="absolute inset-0 overflow-hidden motion-reduce:hidden"></div>
+  </div>
+
+  <Container class="relative pt-[28px] pb-[48px] desk:pt-[calc(50*var(--u))] desk:pb-[calc(56*var(--u))]">
+    <!-- @container: «clients» is sized in cqw so it fills the container width exactly. -->
+    <div class="@container relative flex flex-col desk:block">
+      <h1
+        class="text-[clamp(16px,4.2vw,22px)] leading-[1.2] font-medium text-ink [--d:.45s] motion-safe:animate-blur-in desk:text-[max(14px,calc(23*var(--u)))]"
+      >
+        {hero.h1.before}<strong class="font-bold">{hero.h1.em}</strong>{hero.h1.after}
       </h1>
 
-      <!-- Bar: a run of overlapping I glyphs (see `bar` above), ~14em long, so it runs off the left
-           edge of the screen. Its right ink edge lands ~0.12em into the first letter (past the
-           letter's 0.04em side bearing), so bar and letter read as one shape. -->
-      <p
-        style="--d: 0.1s"
-        class="rise rise-bar relative mx-auto mt-[46.5px] w-fit font-hegarty text-more leading-[0.7] uppercase lg:mx-0 lg:mt-[16.5px] lg:ml-[0.5em]"
-      >
+      <p aria-hidden="true" class={mask}>
         <span
-          aria-hidden="true"
-          class="absolute top-0 right-[calc(100%+0.06em)] whitespace-nowrap select-none"
-          style={`letter-spacing: ${bar.tracking}`}
+          class="mt-[14px] flex items-end gap-[4px] font-hegarty text-[calc(20vw-8px)] leading-[0.74] tracking-[0.05em] whitespace-nowrap text-ink motion-safe:animate-mask-up uk:font-montserrat uk:font-black uk:tracking-[0.02em] desk:mt-[calc(18*var(--u))] desk:ml-[calc(6*var(--u))] desk:gap-[calc(2*var(--u))] desk:text-[calc(135*var(--u))]"
         >
-          {bar.glyph.repeat(100)}
+          <span
+            class="flex h-[0.72em] gap-[min(1.4vw,8px)] *:h-full *:bg-ink motion-safe:animate-bars-left desk:gap-[calc(8*var(--u))]"
+          >
+            <i class="w-[min(2vw,11px)] desk:w-[calc(11*var(--u))]"></i>
+            <i class="w-[min(1.5vw,8px)] desk:w-[calc(8*var(--u))]"></i>
+            <i class="w-[min(4.6vw,26px)] desk:w-[calc(26*var(--u))]"></i>
+          </span>
+          <span class="inline-block motion-safe:animate-wipe">{hero.more}</span>
         </span>
-        {hero.more}
+      </p>
+
+      <p aria-hidden="true" class={mask}>
+        <span
+          class="mt-[20px] -ml-[0.035em] block w-max font-helvetica text-[length:calc(100cqw/var(--clients-em))] leading-[0.82] font-thin tracking-[0.04em] text-ink [--clients-em:2.913] [--d:.15s] motion-safe:animate-mask-up uk:mb-[0.078em] uk:tracking-[0.015em] uk:[--clients-em:3.259] desk:mt-[calc(56*var(--u))]"
+        >
+          {hero.clients}
+        </span>
+      </p>
+      <!-- The two display words are decorative; this is what they say. -->
+      <p class="sr-only">{hero.more} {hero.clients}</p>
+
+      <p
+        class="mt-[20px] min-h-[3.2em] w-full self-end text-right font-head text-[clamp(34px,10vw,60px)] leading-none font-extrabold tracking-[-0.02em] text-ink desk:absolute desk:top-0 desk:right-0 desk:mt-0 desk:w-auto desk:text-[calc(48*var(--u))] desk:leading-[calc(47*var(--u))]"
+      >
+        <span class="sr-only">{s1} {s2} {s3}</span>
+        <span aria-hidden="true" data-type>
+          <span>{s1}</span><br /><span>{s2}</span>
+          <br class="max-desk:hidden" /><span>{s3}</span>
+        </span>
       </p>
     </div>
 
-    <!-- The em margins trim the line box to the ink (ascender top to baseline). Flex centring
-         lets the word overflow both sides equally; -mr cancels the trailing letter-spacing;
-         on desktop Figma's box starts at the column, so the ink sits one side bearing right. -->
-    <p
-      class="rise mt-[calc(27px-0.0525em)] mb-[-0.235em] flex justify-center font-helvetica text-clients font-thin whitespace-nowrap text-ink-soft lg:col-span-2 lg:[--clients-inset:48px] lg:mt-[calc(61px-0.0525em)]"
-      style={`--clients-em: ${hero.clientsEm}`}
-    >
-      <span class="-mr-[0.04em] lg:relative lg:left-[0.014em]">
-        {hero.clients}
-      </span>
-    </p>
-
-    <p
-      style="--d: 0.25s"
-      class="rise mt-[25px] font-display text-statement font-black text-graphite lg:col-start-2 lg:row-start-1 lg:mt-0 lg:-mb-[0.19em] lg:self-end lg:text-right"
-    >
-      {s1}
-      <br class="max-lg:hidden" /> {s2}
-      <br />
-      {s3}
-    </p>
-
     <div
-      style="--d: 0.4s"
-      class="rise mt-[75px] flex flex-col items-center lg:col-span-2 lg:mt-[71px] lg:flex-row lg:justify-end lg:gap-[55px]"
+      class="mt-[40px] flex flex-col items-start gap-[16px] desk:mt-[calc(134*var(--u))] desk:flex-row desk:items-center desk:justify-end desk:gap-[calc(48*var(--u))]"
     >
-      <p class="text-[23px] leading-[31px] font-medium tracking-[-0.03em]">
-        {hero.note[0]}
-        <br />
-        {hero.note[1]}
+      <p
+        class="text-[clamp(16px,4.2vw,20px)] leading-[1.35] font-bold text-ink [--d:.6s] motion-safe:animate-blur-in desk:text-[max(14px,calc(20*var(--u)))] desk:leading-[1.3]"
+      >
+        {hero.note[0]}<br />{hero.note[1]}
       </p>
-      <Button href="#contact" block class="mt-[52px] lg:mt-0 lg:w-auto">
+      <Button href="#contact" class="w-full [--d:.8s] motion-safe:animate-rise-in tab:w-auto">
         {hero.cta}
+        <span
+          aria-hidden="true"
+          class="inline-block transition-transform duration-200 ease-mv group-hover/btn:translate-x-[5px]"
+        >→</span>
       </Button>
     </div>
   </Container>
-
-  <div class="bg-white lg:bg-snow">
-    <Container>
-      <ul
-        aria-label={trust.label}
-        style="--d: 0.55s"
-        class="rise divide-y-2 divide-[#e8e8e8] pt-[9px] pb-[14px] text-center text-[23px] lg:tracking-[-0.04em] lg:flex lg:justify-between lg:divide-y-0 lg:pt-[21px] lg:pb-[17px]"
-      >
-        {trust.items.map((item) => (
-          <li class="py-[15.5px] lg:py-0">{item}</li>
-        ))}
-      </ul>
-    </Container>
-  </div>
 </section>
+
+<div class="overflow-hidden border-y border-line bg-snow py-[calc(20*var(--u))]">
+  <ul
+    aria-label={trust.label}
+    class="flex w-max items-center hover:[animation-play-state:paused] motion-safe:animate-marquee"
+  >
+    {
+      [false, true].map((copy) =>
+        trust.items.map((item) => (
+          <li
+            aria-hidden={copy ? 'true' : undefined}
+            class="inline-flex items-center gap-[calc(16*var(--u))] pr-[calc(58*var(--u))] text-[max(15px,calc(20*var(--u)))] font-medium whitespace-nowrap text-ink"
+          >
+            <i aria-hidden="true" class="size-[6px] bg-amber-500" />
+            {item}
+          </li>
+        )),
+      )
+    }
+  </ul>
+</div>
+
+<script>
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // «Not just a new website» types itself out line by line once the entrance has played.
+  const typed = document.querySelector<HTMLElement>('[data-type]');
+  if (typed && !reduce) {
+    const lines = [...typed.querySelectorAll('span')];
+    const texts = lines.map((l) => l.textContent ?? '');
+    typed.parentElement!.style.minHeight = `${typed.parentElement!.offsetHeight}px`;
+    lines.forEach((l) => (l.textContent = ''));
+    let li = 0;
+    let ci = 0;
+    const tick = () => {
+      if (li >= lines.length) return;
+      lines[li].textContent = texts[li].slice(0, ++ci);
+      if (ci >= texts[li].length) {
+        li++;
+        ci = 0;
+        setTimeout(tick, 140);
+      } else setTimeout(tick, 28);
+    };
+    setTimeout(tick, 1100);
+  }
+
+  // Thin amber streaks run along random grid lines, at most two at a time.
+  const box = document.querySelector<HTMLElement>('[data-streaks]');
+  if (box && !reduce) {
+    const spawn = () => {
+      if (document.hidden || box.childElementCount >= 2) return;
+      const c = Math.min(1, innerWidth / 1920) * 80; // grid cell, as in bg-hero-grid
+      const cols = Math.floor(box.clientWidth / c);
+      const rows = Math.floor(box.clientHeight / c);
+      const pick = (n: number) => Math.floor(Math.random() * Math.max(1, n)) * c;
+      const el = document.createElement('i');
+      const t = `${1.2 + Math.random() * 0.8}s`;
+      if (Math.random() < 0.6) {
+        el.className = 'streak h-px w-[calc(200*var(--u))]';
+        el.style.cssText = `top:${pick(rows)}px;left:${pick(cols - 4)}px;--dx:${c * 4}px;--t:${t}`;
+      } else {
+        el.className = 'streak w-px h-[calc(180*var(--u))] [--dir:180deg]';
+        el.style.cssText = `left:${pick(cols)}px;top:${pick(rows - 3)}px;--dy:${c * 3}px;--t:${t}`;
+      }
+      el.addEventListener('animationend', () => el.remove());
+      box.appendChild(el);
+    };
+    const loop = () => {
+      spawn();
+      setTimeout(loop, 1500 + Math.random() * 2000);
+    };
+    loop();
+  }
+</script>
