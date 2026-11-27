@@ -1,4 +1,4 @@
-import { yearRange, type Dict } from './en';
+import { copyright, type Dict } from './en';
 
 // review: Serhii (whole file is a draft translation until he approves it).
 export const uk: Dict = {
@@ -36,13 +36,14 @@ export const uk: Dict = {
     langGroup: 'Мова',
   },
   footer: {
-    navLabel: 'Нижня навігація',
-    slogan: 'Менше шуму. Більше результатів.',
-    email: 'EMAIL:',
-    phone: 'ТЕЛЕФОН:',
-    instagram: 'INST:',
-    years: yearRange,
-    studio: 'СТУДІЯ ДИЗАЙНУ Й РОЗРОБКИ MAVPY',
+    navLabel: 'Навігація у футері',
+    tagline: ['Менше шуму.', 'Більше сенсу.'],
+    navTitle: 'Навігація',
+    contactTitle: 'Контакти',
+    studioTitle: 'Студія',
+    studio: ['Дизайн і розробка', 'З 2022 року', 'UA / EN'],
+    copyright,
+    toTop: 'Нагору ↑',
   },
   hero: {
     h1: { before: 'Сайти, що працюють ', em: 'на результат', after: '' },

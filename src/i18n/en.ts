@@ -1,7 +1,7 @@
 // All English copy. This file is the source of truth (synced from Webflow once, 2026-11-20); changes now come from Serhii via Figma.
-// The footer's year range, counted at build time (pages are prerendered).
-const thisYear = new Date().getFullYear();
-export const yearRange = `2021-${thisYear},`;
+// The footer's copyright years; the year is set at build time in astro.config.mjs.
+declare const __BUILD_YEAR__: number;
+export const copyright = `© 2022–${__BUILD_YEAR__} MAVPY Design & Dev`;
 
 export const en = {
   meta: {
@@ -41,12 +41,13 @@ export const en = {
   },
   footer: {
     navLabel: 'Footer',
-    slogan: 'Less noise. More results.',
-    email: 'EMAIL:',
-    phone: 'PHONE:',
-    instagram: 'INST:',
-    years: yearRange,
-    studio: 'MAVPY DESIGN & DEVELOPMENT STUDIO',
+    tagline: ['Less noise.', 'More substance.'],
+    navTitle: 'Navigate',
+    contactTitle: 'Contact',
+    studioTitle: 'Studio',
+    studio: ['Design & development', 'Since 2022', 'UA / EN'],
+    copyright,
+    toTop: 'Back to top ↑',
   },
   hero: {
     // The design sets the end of the line in bold, so it's split around it.

@@ -52,6 +52,8 @@ export default defineConfig({
   build: { inlineStylesheets: 'always' },
   vite: {
     plugins: [tailwindcss()],
+    // Prerendering runs in workerd, where Date is frozen at 1970; the config runs in Node.
+    define: { __BUILD_YEAR__: JSON.stringify(new Date().getFullYear()) },
   },
 });
 

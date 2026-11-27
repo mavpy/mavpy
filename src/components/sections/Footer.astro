@@ -1,84 +1,100 @@
 ---
-// Desktop (lg+): brand | contacts | nav columns (at +0 / +515 / +974 px of the 1226 column),
-// then the giant wordmark and the copyright. Mobile: one centred column in the order
-// brand, nav, contacts. DOM follows the mobile order; desktop swaps nav and contacts.
-import LogoWhite from '../../assets/logos/logo-white.svg';
+// Footer (design v3.15): dark band; logo + tagline (6fr), then Navigate / Contact / Studio (2fr
+// each), stacked in one column below 1200px. A rule, the full-width wordmark, and the bottom bar.
+// Contacts match the Contact section (no Telegram until Serhii confirms the handle).
+import { Image } from 'astro:assets';
+import Logo from '../../assets/v3/logo-light.svg';
+import MailIcon from '../../assets/v3/icons/mail.svg';
+import PhoneIcon from '../../assets/v3/icons/phone.svg';
+import InstaIcon from '../../assets/v3/icons/insta.svg';
+import wordmark from '../../assets/v3/footer-wordmark.png';
 import Container from '../ui/Container.astro';
 import { site } from '../../data/site';
 import { getLang, localizePath, navLinks, t } from '../../i18n/utils';
 
 const lang = getLang(Astro.url);
 const { nav, footer } = t(lang);
-const link =
-  'transition-colors duration-300 ease-out-quart hover:text-orange relative after:absolute after:inset-x-0 after:-bottom-0.5 after:h-0.5 after:origin-right after:scale-x-0 after:bg-current after:transition-transform after:duration-300 after:ease-out-quart hover:after:origin-left hover:after:scale-x-100';
 const contacts = [
-  { label: footer.email, value: site.email, href: `mailto:${site.email}` },
-  { label: footer.phone, value: site.phone.display, href: site.phone.href },
-  {
-    label: footer.instagram,
-    value: site.instagram.handle,
-    href: site.instagram.href,
-  },
+  { Icon: MailIcon, value: site.email, href: `mailto:${site.email}` },
+  { Icon: PhoneIcon, value: site.phone.display, href: site.phone.href },
+  { Icon: InstaIcon, value: site.instagram.handle, href: site.instagram.href },
 ];
+const col = 'flex flex-col gap-3';
+const title = 'mb-1 font-mono text-[13px] font-medium text-amber-500';
+const link = 'transition-colors hover:text-amber-400';
 ---
 
-<footer class="bg-night pt-[27px] pb-[30px] text-center text-nav text-white lg:pt-[124px] lg:pb-[15px] lg:text-left">
-  <Container>
-    <div class="flex flex-col items-center lg:grid lg:grid-cols-[515fr_459fr_252fr] lg:items-start">
-      <div class="flex flex-col items-center lg:items-start">
-        <a href={localizePath(lang, '#top')} aria-label={nav.home}>
-          <LogoWhite aria-hidden="true" class="h-auto w-[120px] lg:w-[156px]" />
-        </a>
-        <p class="mt-[9px] text-[16px] lg:mt-[27px] lg:text-[28px]">
-          {footer.slogan}
+<footer class="overflow-hidden bg-ink pt-[max(88px,calc(160*var(--u)))] text-[max(15px,calc(17*var(--u)))] text-[#ededeb]">
+  <Container wide>
+    <div class="grid gap-g pb-[max(64px,calc(120*var(--u)))] desk:grid-cols-[6fr_2fr_2fr_2fr]">
+      <div class="flex flex-col items-start">
+        <Logo
+          aria-hidden="true"
+          class="mb-[max(24px,calc(40*var(--u)))] h-[max(36px,calc(48*var(--u)))] w-auto"
+        />
+        <p class="text-[max(26px,calc(44*var(--u)))] leading-[1.1] font-thin tracking-[-0.015em] text-white">
+          {footer.tagline[0]}
+          <br />
+          {footer.tagline[1]}
         </p>
       </div>
 
-      <nav
-        aria-label={footer.navLabel}
-        class="mt-[67px] lg:order-3 lg:mt-[13px]"
-      >
-        <ul class="flex flex-col gap-[21px] uppercase lg:gap-2.5">
-          {navLinks.map(([id, key]) => (
-            <li>
-              <a href={localizePath(lang, `#${id}`)} class={link}>
-                {nav[key]}
-              </a>
-            </li>
-          ))}
-        </ul>
+      <nav aria-label={footer.navLabel} class={col}>
+        <p class={title}>{footer.navTitle}</p>
+        {navLinks.map(([id, key]) => (
+          <a
+            href={localizePath(lang, `#${id}`)}
+            class:list={['self-start', link]}
+          >
+            {nav[key]}
+          </a>
+        ))}
       </nav>
 
-      <ul class="mt-[71px] flex flex-col gap-3 lg:order-2 lg:mt-3">
-        {contacts.map((c) => (
-          <li>
-            {c.label}{' '}
-            <a href={c.href} class={link}>
-              {c.value}
-            </a>
-          </li>
+      <div class={col}>
+        <p class={title}>{footer.contactTitle}</p>
+        {contacts.map(({ Icon, value, href }) => (
+          <a
+            href={href}
+            {...(href.startsWith('http') && {
+              target: '_blank',
+              rel: 'noopener',
+            })}
+            class:list={[
+              'inline-flex items-center gap-2.5 self-start text-[#b9b9b4]',
+              link,
+            ]}
+          >
+            <Icon aria-hidden="true" class="size-5 flex-none" />
+            {value}
+          </a>
         ))}
-      </ul>
+      </div>
+
+      <div class:list={[col, 'text-[#b9b9b4]']}>
+        <p class={title}>{footer.studioTitle}</p>
+        {footer.studio.map((line) => (
+          <span>{line}</span>
+        ))}
+      </div>
     </div>
 
-    <!-- Decorative: the logo above already names the studio. BBH Hegarty caps are 0.7em tall, so
-         leading-[0.7] makes the box exactly the letters; the ink is 4.45em wide, so the size
-         fits the column; -ml cancels the M's side bearing so the ink starts at the column edge. -->
-    <p
-      aria-hidden="true"
-      class="mt-[93px] -ml-[0.04em] font-hegarty text-[length:min(280px,(100vw-48px)/4.45)] leading-[0.7] tracking-[0.06em] whitespace-nowrap text-paper lg:mt-[104px]"
-    >
-      {site.brand}
-    </p>
+    <hr class="mb-[max(24px,calc(40*var(--u)))] border-graphite" />
 
-    <p class="mt-12 text-center lg:mt-[95px]">
-      {footer.years}{' '}
-      <a
-        href={localizePath(lang, '#top')}
-        class:list={[link, 'underline underline-offset-2']}
-      >
-        {footer.studio}
+    <!-- Decorative: the logo and the copyright already name the studio. -->
+    <Image
+      src={wordmark}
+      alt=""
+      widths={[640, 1271]}
+      sizes="calc(100vw - 40px)"
+      class="mt-[max(24px,calc(48*var(--u)))] mb-[max(16px,calc(32*var(--u)))] block h-auto w-full"
+    />
+
+    <div class="flex justify-between gap-4 border-t border-graphite py-5 font-mono text-[13px] text-[#9a9a96]">
+      <span>{footer.copyright}</span>
+      <a href={localizePath(lang, '#top')} class={link}>
+        {footer.toTop}
       </a>
-    </p>
+    </div>
   </Container>
 </footer>
