@@ -359,15 +359,26 @@ export const en = {
     ],
   },
   contact: {
-    title: "Tell us your goal, we'll price it",
-    sub: "You've seen the ballpark — from $700. Exact figure on a short call. No sales marathon. We reply within 24 hours.",
-    name: 'Your name',
+    label: 'Contact',
+    title: 'Free 15‑minute\nsite review',
+    sub: 'We’ll look at your site or idea together and show what will bring more enquiries. Free, no obligation.',
+    // The contacts column next to the form.
+    side: {
+      title: 'Prefer to talk directly?',
+      phone: 'Phone',
+      email: 'Email',
+      instagram: 'Instagram',
+    },
+    name: 'Name',
+    namePlaceholder: 'How should we address you?',
     phone: 'Phone',
     // Country-code picker (screen-reader name) and the number hint for the default +380.
     country: 'Country code',
     phoneHint: '67 123 45 67',
-    email: 'Email address',
-    cta: 'Get an estimate',
+    email: 'Email',
+    emailPlaceholder: 'you@company.com',
+    cta: 'Book a free review',
+    reply: 'We reply within 24 hours · no spam',
     errors: {
       required: 'Please fill this in',
       email: 'Enter a valid e-mail',
@@ -375,12 +386,12 @@ export const en = {
       short: 'Too short',
     },
     // Replaces the form after a successful submit.
-    successTitle: 'Thank you!',
-    success: "We've got your request and will reply within 24 hours.",
+    successTitle: 'Got it, thanks',
+    success: 'We’ll get back within 24 hours to set a time for the call.',
     // Success-card button to the studio bot (shown when the lead got an id). TODO(copy)
     telegram: 'Confirm in Telegram',
     // The studio e-mail is appended, so people can still reach us.
-    error: "Couldn't send. Please e-mail us:",
+    error: 'The request didn’t go through. Try again or write to',
     // Auto-reply e-mail to the person who submitted the form. {name} is replaced.
     // TODO(copy): draft, check with Serhii.
     autoReply: {

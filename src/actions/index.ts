@@ -1,6 +1,7 @@
 import { ActionError, defineAction } from 'astro:actions';
 import { z } from 'astro/zod';
 import { countries, toE164 } from '../data/phone';
+import { en } from '../i18n/en';
 import { renderAutoReply } from '../lib/autoreply-email';
 import { sendAutoReply, sendLead, telegramLink } from '../lib/leads';
 
@@ -17,6 +18,8 @@ export const server = {
         phone: z.string().max(30),
         email: z.email().max(254),
         locale: z.enum(['en', 'uk']),
+        // Set by a pricing plan's button; '' when the visitor came straight to the form.
+        goal: z.string().max(20).optional(),
         // Honeypot: hidden from people, bots fill it.
         website: z.string().optional(),
         elapsed: z.coerce.number(),
@@ -31,6 +34,8 @@ export const server = {
         phone: toE164(input.country, input.phone)!,
         email: input.email,
         locale: input.locale,
+        // The plan's English name for the studio's Telegram message (unknown goals are dropped).
+        plan: en.pricing.plans.find((p) => p.goal === input.goal)?.kind,
         page: ctx.request.headers.get('referer') ?? undefined,
       });
       if (!ok)

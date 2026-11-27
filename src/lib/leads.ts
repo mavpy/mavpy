@@ -18,6 +18,8 @@ export type Lead = {
   phone: string;
   email: string;
   locale: string;
+  /** The pricing plan the visitor picked (Telegram only; Airtable has no column for it). */
+  plan?: string;
   page?: string;
 };
 
@@ -134,6 +136,7 @@ async function toTelegram(lead: Lead) {
     `Phone: ${esc(lead.phone)}`,
     `Email: ${esc(lead.email)}`,
   ];
+  if (lead.plan) lines.push(`Plan: ${esc(lead.plan)}`);
   if (lead.page) lines.push(`Page: ${esc(lead.page)}`);
   await toStudio(lines.join('\n'));
 }

@@ -1,72 +1,41 @@
 ---
 import type { HTMLAttributes } from 'astro/types';
 
-// Labelled form field: one underline style at every breakpoint (label above, body-size value).
-// `as="select"` renders a select with the cases-accordion chevron; pass <option>s as children.
-// A `prefix` slot sits before the control on the same underline (the phone country code).
-// Focus thickens the underline (not the global ring); the error slot keeps its height so the layout doesn't jump.
+// Labelled form field, the design's .v-field (v3.15): small label above a framed 17px input; focus
+// turns the frame amber with a soft amber ring (instead of the global focus ring).
+// A `prefix` slot sits before the control on the same row (the phone country code); give it the
+// exported `frame` classes so it matches. The error line keeps its height so the layout doesn't jump.
 type Props = {
   label: string;
   name: string;
-  as?: 'input' | 'select';
   /** Inline error (from client or server validation). */
   error?: string;
   class?: string;
-} & HTMLAttributes<'input'> &
-  HTMLAttributes<'select'>;
+} & HTMLAttributes<'input'>;
 
-const {
-  label,
-  name,
-  as: Tag = 'input',
-  error,
-  class: className,
-  ...rest
-} = Astro.props;
+const { label, name, error, class: className, ...rest } = Astro.props;
 const id = rest.id ?? `field-${name}`;
 const errorId = `${id}-error`;
 ---
 
-<div class:list={['flex flex-col gap-2', className]}>
-  <label for={id} class="text-[18px] leading-[1.172]">
+<div class:list={['flex flex-col gap-[8px]', className]}>
+  <label for={id} class="text-[15px] font-medium text-ink-2">
     {label}
   </label>
-  <div class:list={['relative', Astro.slots.has('prefix') && 'flex']}>
+  <div class:list={[Astro.slots.has('prefix') && 'flex gap-[8px]']}>
     <slot name="prefix" />
-    <Tag
+    <input
       {...rest}
       id={id}
       name={name}
       aria-invalid={error ? 'true' : undefined}
       aria-describedby={error ? errorId : undefined}
-      class:list={[
-        // Focus: the underline thickens to 2px (inset shadow, no layout shift) instead of the global
-        // ring, which boxes the field. Black on grey-light is well over 3:1, so it stays visible.
-        'w-full min-w-0 appearance-none rounded-none border-b border-grey-light bg-transparent py-2 text-body transition-[border-color,box-shadow] duration-300 hover:border-grey focus-visible:border-black focus-visible:shadow-[inset_0_-1px_0_var(--color-black)] focus-visible:outline-none aria-invalid:border-error aria-invalid:focus-visible:shadow-[inset_0_-1px_0_var(--color-error)]',
-        Tag === 'select' && 'cursor-pointer pr-10',
-      ]}
-    >
-      <slot />
-    </Tag>
-    {Tag === 'select' && (
-      <svg
-        viewBox="0 0 89 45"
-        class="pointer-events-none absolute top-1/2 right-1 w-[20px] -translate-y-1/2"
-        fill="none"
-        stroke="currentColor"
-        aria-hidden="true"
-      >
-        <path
-          d="M1 1 44.5 44 88 1"
-          stroke-width="2"
-          vector-effect="non-scaling-stroke"
-        />
-      </svg>
-    )}
+      class="frame w-full min-w-0 px-[16px] placeholder:text-ink-3/70 aria-invalid:border-error"
+    />
   </div>
   <p
     id={errorId}
-    class="min-h-[1.2em] text-btn-sm text-error"
+    class="min-h-[1.2em] text-[14px] text-error"
     aria-live="polite"
   >
     {error}
