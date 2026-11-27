@@ -50,10 +50,16 @@
   --color-snow: #fdfdfd; /* cards ("white" in the design) */
   --color-graphite: #313131;
   --color-line: rgb(15 15 15 / 0.12);
+  --color-white: #fff;
+  --color-error: #b3261e; /* form errors (not in the design) */
 
   --font-head: 'Archivo', 'Inter', system-ui, sans-serif;
   --font-mono: 'Roboto Mono', ui-monospace, monospace;
   --font-montserrat: 'Montserrat', 'Arial Black', sans-serif;
+  --font-sans: 'Roboto', system-ui, sans-serif;
+  --font-hegarty: 'BBH Hegarty', 'Archivo', system-ui, sans-serif; /* hero «MORE», 404 */
+  --font-helvetica:
+    'Helvetica Neue Thin', 'Helvetica Neue', 'Roboto', system-ui, sans-serif; /* hero «clients» */
 
   --text-h2: max(34px, calc(64 * var(--u)));
   --text-h3: max(22px, calc(32 * var(--u)));
@@ -168,81 +174,6 @@
   }
 }
 
-/* Design tokens. Source: Figma UI kit (1:1886) plus pixel measurements of the desktop (1:331,
-   1920 wide) and mobile (1:904, 375 wide) frames. Fluid sizes interpolate linearly from the
-   mobile value at 375px to the desktop value at 1280px, where the 1226px column is reached. */
-@theme {
-  --color-white: #fff;
-
-  /* btn_main ramp from the UI kit. #ffab01 is confirmed by pixel sampling;
-     the other four are read off a kit screenshot. TODO(figma): confirm their exact hex. */
-  --color-orange-900: #9c6800;
-  --color-orange-700: #c88300;
-  --color-orange: #ffab01;
-  --color-orange-300: #ffbd3a;
-  --color-orange-200: #ffcc66;
-
-  /* Neutrals: all in the UI kit and confirmed by sampling the frames. */
-  --color-night: #313131; /* footer */
-  --color-paper: #f2f2f2; /* page background */
-  --color-sand: #efedea; /* beige sections and panels */
-  --color-snow: #fdfdfd; /* trust bar */
-  /* Sampled from the frames, not in the kit. */
-  --color-graphite: #2b2b2b; /* hero "Not just a new website" */
-  --color-cream: #fff6e9; /* pricing "You get" box */
-  --color-mist: #f9f9f9; /* testimonial card footer */
-  --color-grey: #606060; /* secondary text */
-  --color-grey-light: #949494; /* hairlines, input underline. Figma's #a0a0a0 is 2.6:1 on white; 3:1 needed for a field edge */
-  /* Form states: not in Figma, taken from the Webflow build's system colors. */
-  --color-error: #b3261e;
-  --color-error-bg: #f8e4e4;
-  --color-success: #114e0b;
-  --color-success-bg: #cef5ca;
-
-  --font-sans: 'Roboto', system-ui, sans-serif;
-  --font-display: 'Archivo', 'Roboto', system-ui, sans-serif;
-  --font-hegarty: 'BBH Hegarty', 'Archivo', 'Roboto', system-ui, sans-serif;
-  --font-helvetica:
-    'Helvetica Neue Thin', 'Helvetica Neue', 'Roboto', system-ui, sans-serif;
-
-  /* Type scale. "auto" line height in Figma = the font's normal metrics (1.172 for Roboto). */
-  --text-btn-sm: 16px; /* pricing card button */
-  --text-btn-sm--line-height: 1.172;
-  --text-nav: 18px; /* Roboto Medium 18 */
-  --text-nav--line-height: 1.172;
-  --text-btn: 23px; /* btn_main: Roboto Medium 23 */
-  --text-btn--line-height: 1.172;
-  --text-card: clamp(32px, 28.7px + 0.88vw, 40px); /* Roboto Bold 40 */
-  --text-card--line-height: 1.172;
-  --text-statement: clamp(
-    29px,
-    21.13px + 2.1vw,
-    48px
-  ); /* Archivo Black 48, "Not just a new website" */
-  --text-statement--line-height: clamp(
-    30px,
-    23.37px + 1.768vw,
-    46px
-  ); /* measured 30 / 46 */
-  --text-statement--letter-spacing: -0.03em;
-  --text-more: clamp(43px, 4.9px + 10.17vw, 135px); /* BBH Hegarty 135, +5% */
-  --text-more--line-height: 1;
-  --text-more--letter-spacing: 0.01em; /* kit says +5%; the frames measure ~1% */
-
-  /* Layout: 1226px content column on desktop, 24px gutter on mobile. */
-  --container-content: 1226px;
-  --spacing-gutter: 24px;
-  /* Section top/bottom padding: 73px mobile, 127px desktop (top of section to h2). */
-  --spacing-section: clamp(72px, 50.6px + 5.97vw, 128px);
-
-  --radius-card: 12px; /* measured on the cards */
-
-  --shadow-btn: 0 2px 5px rgb(0 0 0 / 0.1); /* from the Webflow button */
-
-  /* Webflow hover timing (audit §2). */
-  --ease-out-quart: cubic-bezier(0.165, 0.84, 0.44, 1);
-}
-
 @layer base {
   :root {
     --u: min(1px, calc(100vw / 1920));
@@ -270,12 +201,12 @@
     --font-head: 'Inter', system-ui, sans-serif;
   }
 
-  /* Orange on the light backgrounds is under 3:1, so the focus ring is black with an orange
+  /* Amber on the light backgrounds is under 3:1, so the focus ring is black with an amber
      halo: brand-coloured but always visible. */
   :focus-visible {
     outline: 2px solid var(--color-black);
     outline-offset: 2px;
-    box-shadow: 0 0 0 4px var(--color-orange);
+    box-shadow: 0 0 0 4px var(--color-amber-500);
   }
 
   /* EN ⇄ UK switch cross-fades (cross-document View Transition; browsers without it just navigate). */
@@ -296,39 +227,6 @@
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
     }
-  }
-}
-
-/* Motion (M7). Only transform/opacity, and none of it exists under prefers-reduced-motion
-   (so no hidden-until-delay states either). Pure CSS, so content is visible without JS.
-   Reveals use `transform`; hover lifts use Tailwind's `translate`, so the two don't fight. */
-@layer components {
-  @media (prefers-reduced-motion: no-preference) {
-    /* Hero entrance on load, staggered by --d. The LCP word ("clients") starts at 0 delay,
-       so it paints on the first frame. */
-    .rise {
-      animation: rise 0.9s var(--ease-out-quart) var(--d, 0s) both;
-    }
-
-    /* Scroll reveal: rises in as the element enters the bottom quarter of the viewport.
-       --i staggers cards in a row (they enter together, so each starts a bit later).
-       Scroll-driven, so it plays back if you scroll up past it; Firefox (no view()) gets static content. */
-    @supports (animation-timeline: view()) {
-      .reveal {
-        animation: rise linear both;
-        animation-timing-function: var(--ease-out-quart);
-        animation-timeline: view();
-        animation-range: cover calc(var(--i, 0) * 4vh) cover
-          calc(25vh + var(--i, 0) * 4vh);
-      }
-    }
-  }
-}
-
-@keyframes rise {
-  from {
-    opacity: 0;
-    transform: translateY(32px);
   }
 }
 

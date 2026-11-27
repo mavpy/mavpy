@@ -1,7 +1,7 @@
 ---
 // One 404 for every missing URL (the host serves this file for /en/... too), so it carries both
 // languages: Ukrainian (the default) first, then the English block in its own lang. Big "404" reuses
-// the hero "MORE" style (BBH Hegarty); noindex keeps it out of search results.
+// BBH Hegarty, as the hero's «MORE»; noindex keeps it out of search results.
 import Base from '../layouts/Base.astro';
 import Button from '../components/ui/Button.astro';
 import Container from '../components/ui/Container.astro';
@@ -12,23 +12,23 @@ const en = t('en').notFound;
 ---
 
 <Base title={`404: ${uk.title} | MAVPY`} noindex>
-  <Container class="flex flex-col items-center pt-[60px] pb-[120px] text-center lg:pt-[100px] lg:pb-[180px]">
-    <p aria-hidden="true" class="rise font-hegarty text-more leading-[0.7]">
+  <Container class="flex flex-col items-center py-[max(80px,calc(140*var(--u)))] text-center">
+    <p aria-hidden="true" class="font-hegarty text-[max(96px,calc(200*var(--u)))] leading-[0.7] text-black motion-safe:animate-rise-in">
       404
     </p>
-    <h1 class="rise mt-[48px] font-display text-h2 font-extrabold [--d:0.1s] max-lg:tracking-[-0.03em]">
+    <h1 class="mt-[48px] font-head text-h2 leading-none font-bold tracking-[-0.02em] text-black [--d:0.1s] motion-safe:animate-rise-in">
       {uk.title}
     </h1>
-    <p class="rise mt-[20px] [--d:0.2s]">{uk.text}</p>
-    <Button href={localizePath('uk')} class="rise mt-[40px] [--d:0.3s]">
+    <p class="mt-[20px] text-lead text-text-2 [--d:0.2s] motion-safe:animate-rise-in">{uk.text}</p>
+    <Button href={localizePath('uk')} class="mt-[40px] [--d:0.3s] motion-safe:animate-rise-in">
       {uk.cta}
     </Button>
 
     <div
       lang="en"
-      class="rise mt-[64px] border-t border-grey-light pt-[32px] [--d:0.4s]"
+      class="mt-[64px] border-t border-line pt-[32px] [--d:0.4s] motion-safe:animate-rise-in"
     >
-      <p class="text-card font-bold">{en.title}</p>
+      <p class="font-head text-h3 font-bold text-black">{en.title}</p>
       <p class="mt-[12px]">
         {en.text}{' '}
         <a
