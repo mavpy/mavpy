@@ -95,7 +95,7 @@ const photo = (name: string) =>
               aria-hidden="true"
               class="absolute inset-x-0 top-0 h-[3px] bg-warm-100"
             >
-              <i class="tab-bar block h-full w-0 bg-amber-500" />
+              <i class="tab-bar block h-full bg-amber-500" />
             </span>
             <Image
               src={photo(m.photo)}
@@ -152,6 +152,7 @@ const photo = (name: string) =>
     team.addEventListener('mouseenter', stop);
     team.addEventListener('mouseleave', start);
     team.addEventListener('focusin', stop);
+    show(0); // restart the first bar: it is pressed in the HTML, so it would start full
     start();
   }
 </script>
