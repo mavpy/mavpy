@@ -1,14 +1,14 @@
 ---
 import type { HTMLAttributes } from 'astro/types';
 
-// btn_main from the UI kit (styles and states follow the Webflow build).
-// lg: hero and form (Roboto Medium 23, 58px tall). sm: pricing cards (16px, about 41px tall).
+// btn_main from the design (.mv-btn, v3.15): amber, Roboto Medium; on hover it lifts and grows a
+// little with a soft amber glow, the text colour never changes. lg: hero, forms, menu. sm: header.
 // Renders an <a> when href is given, otherwise a <button>.
 type Props = {
   size?: 'lg' | 'sm';
   /** telegram: Telegram's brand blue with white text (the bot link). */
-  tone?: 'orange' | 'telegram';
-  /** Full width (used on mobile). Pass responsive classes via `class` to undo it on desktop. */
+  tone?: 'amber' | 'telegram';
+  /** Full width. Pass responsive classes via `class` to undo it on wider screens. */
   block?: boolean;
   class?: string;
 } & (HTMLAttributes<'a'> | HTMLAttributes<'button'>);
@@ -16,26 +16,28 @@ type Props = {
 // `type` is pulled out: spreading it after a default would render the attribute twice (first wins).
 const {
   size = 'lg',
-  tone = 'orange',
+  tone = 'amber',
   block = false,
   class: className,
   type,
   ...rest
 } = Astro.props;
 const sizes = {
-  lg: 'text-btn px-[38px] py-[15.5px]',
-  sm: 'text-btn-sm px-[18px] py-[11px]',
+  lg: 'h-[max(48px,calc(58*var(--u)))] text-[max(16px,calc(23*var(--u)))]',
+  sm: 'h-[max(40px,calc(48*var(--u)))] text-[max(14px,calc(18*var(--u)))]',
 };
 const tones = {
-  orange:
-    'bg-orange text-black hover:bg-orange-300 active:bg-orange-700 disabled:bg-orange-200',
+  amber:
+    'bg-amber-500 text-ink hover:bg-[#ffb829] focus-visible:bg-[#ffb829] disabled:bg-amber-300',
   // Deeper than Telegram's #2AABEE: white on that is 2.6:1; #0077B5 is 4.9:1 (AA).
-  telegram: 'bg-[#0077B5] text-white hover:bg-[#006DAD] active:bg-[#005F96]',
+  telegram: 'bg-[#0077B5] text-white hover:bg-[#006DAD]',
 };
 const classes = [
-  'inline-flex items-center justify-center gap-2 rounded-btn text-center font-medium shadow-btn',
-  'transition-colors duration-300',
-  'disabled:cursor-not-allowed disabled:shadow-none aria-busy:cursor-wait',
+  'group/btn inline-flex shrink-0 cursor-pointer items-center justify-center gap-3 rounded-btn px-[max(20px,calc(28*var(--u)))] text-center font-medium whitespace-nowrap',
+  'transition-[background-color,translate,scale,box-shadow] duration-250 ease-mv',
+  'hover:-translate-y-px hover:scale-[1.03] hover:shadow-btn-hover focus-visible:-translate-y-px focus-visible:scale-[1.03] focus-visible:shadow-btn-hover',
+  'active:translate-y-0 active:shadow-none',
+  'disabled:pointer-events-none aria-busy:cursor-wait',
   tones[tone],
   sizes[size],
   block && 'w-full',

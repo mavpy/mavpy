@@ -28,6 +28,8 @@
 
 /* `uk:` styles the Ukrainian page only (its <html lang="uk">), e.g. uk:font-montserrat. */
 @custom-variant uk (&:lang(uk));
+/* Inside the header while the mobile menu (a popover) is open: the burger turns into a cross. */
+@custom-variant menu-open (header:has(#mobile-menu:popover-open) &);
 
 /* Redesign v3.15 tokens (mavpy-design styles.css, :root + .mv, all versions merged).
    Sizes scale with --u: 1px at a 1920 frame, smaller below it; max() floors keep text readable. */
@@ -68,6 +70,15 @@
   --radius-card: 20px;
 
   --ease-mv: cubic-bezier(0.2, 0.7, 0.2, 1);
+
+  /* The design's breakpoints, mobile-first: tablet from 601px, desktop from 1200px. */
+  --breakpoint-tab: 37.5625rem;
+  --breakpoint-desk: 75rem;
+
+  /* Sticky header height; sections scroll to just below it. */
+  --spacing-head: max(72px, calc(108 * var(--u)));
+  /* btn_main hover glow. */
+  --shadow-btn-hover: 0 6px 14px -10px rgb(204 136 0 / 0.5);
 }
 
 /* Design tokens. Source: Figma UI kit (1:1886) plus pixel measurements of the desktop (1:331,
@@ -164,6 +175,11 @@
 @layer base {
   :root {
     --u: min(1px, calc(100vw / 1920));
+  }
+
+  /* Anchor targets land below the sticky header. */
+  [id] {
+    scroll-margin-top: var(--spacing-head);
   }
 
   html {

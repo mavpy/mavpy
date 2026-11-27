@@ -1,0 +1,37 @@
+---
+// UA / EN links (header and mobile menu). The current language is marked, not linked away;
+// the other one is the switch: Header's script saves the choice and carries the section over.
+import { getLang, langNames, langs, localizePath, t } from '../../i18n/utils';
+
+const lang = getLang(Astro.url);
+const { nav } = t(lang);
+const link =
+  'inline-flex min-h-11 min-w-9 items-center justify-center text-[#8e8e8a] transition-colors hover:text-amber-700 aria-[current=true]:text-ink';
+---
+
+<div
+  role="group"
+  aria-label={nav.langGroup}
+  class="flex items-center gap-0.5 text-[max(13px,calc(18*var(--u)))] font-medium"
+>
+  {langs.map((l, i) => (
+    <>
+      {i > 0 && (
+        <span aria-hidden="true" class="text-[#bdbdb8]">
+          /
+        </span>
+      )}
+      <a
+        href={localizePath(l)}
+        hreflang={l}
+        lang={l}
+        aria-label={langNames[l].name}
+        aria-current={l === lang ? 'true' : 'false'}
+        data-lang-switch={l === lang ? undefined : l}
+        class={link}
+      >
+        {langNames[l].short}
+      </a>
+    </>
+  ))}
+</div>

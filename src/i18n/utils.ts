@@ -13,6 +13,12 @@ export function getLang(url: URL): Lang {
   return langs.includes(first as Lang) ? (first as Lang) : defaultLang;
 }
 
+/** The UA / EN switcher: short label and the language's own name (for screen readers). */
+export const langNames: Record<Lang, { short: string; name: string }> = {
+  uk: { short: 'UA', name: 'Українська' },
+  en: { short: 'EN', name: 'English' },
+};
+
 /** The copy dictionary for a language. */
 export const t = (lang: Lang) => dicts[lang];
 

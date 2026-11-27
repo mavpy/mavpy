@@ -4,6 +4,30 @@ How this file works: the agent takes the first unchecked task under **Now**, tic
 
 ## Now (unblocked)
 
+### Redesign v3.15 port (branch `redesign/v3`, M12)
+
+Port of Serhii's redesign from `~/dev/mavpy-design` (v3.15, commit `d1fbc8b`; `git pull` there first). Full plan: `~/.claude/plans/our-designer-finished-a-noble-frog-of-f60286dc-b132-43ca-b1ed-98678c0abc4d.md`. Rules: no inline `style=` or `<style>` in components, pages or layouts (Tailwind first; CSS Tailwind can't express goes in `global.css`); one commit per step; push the branch after each step; nothing goes to `main` without a PR.
+
+- [x] 0. Routing: UA at `/`, EN at `/en/`, `public/_redirects` sends `/uk/*` to `/` with a 301. Language pick on `/` in Base.astro: saved choice, then browser language, then UA; bots skipped. `preview_urls` in wrangler.jsonc.
+- [x] 1. Foundation: v3.15 tokens in `@theme` (amber-*, ink, ink-2/3, warm-50/100, snow, line; text-h2/h3/lead/body/small/quote via `--u`), fonts regenerated (+Inter, Montserrat 900, Roboto Mono, Roboto 100; −Inter Tight, Unbounded), images in `src/assets/v3/`.
+- [x] 2. Header: sticky, `data-stuck` background, popover menu, `LangSwitch.astro`, new `Button` (amber, lift + scale on hover) and `Container` (1280u, 20px gutters). Scroll script: opens at the top, honours #hash once and then drops it, in-page links don't write #.
+  - Breakpoints `tab:` (≥601px) and `desk:` (≥1200px); variants `uk:` and `menu-open:`. Old tokens (paper, sand, orange, text-card…) stay until step 14.
+- [ ] 3. Hero + trust strip
+- [ ] 4. Featured case (new `FeaturedCase.astro`)
+- [ ] 5. Situation (`Pain.astro`)
+- [ ] 6. Process
+- [ ] 7. Cases
+- [ ] 8. Testimonials
+- [ ] 9. Team (`About.astro`)
+- [ ] 10. Pricing (`goal` preset)
+- [ ] 11. Contact (keep the Action + phone picker; optional `goal`; restyle)
+- [ ] 12. Footer
+- [ ] 13. Allow indexing (`indexable = true` in robots.txt.ts), last commit before the merge
+- [ ] 14. Cleanup (old tokens, components, images; `uk` as the reference type in i18n is optional), AGENTS.md (sources of truth, UA default), TASKS.md; Lighthouse; PR
+- Method: serve the design (`python3 -m http.server 8080` in mavpy-design). Run `~/.claude/plans/mavpy-design-dump.js` in its console with the receiver `python3 -I ~/.claude/plans/mavpy-design-recv.py` running, which writes the winning CSS per element, breakpoint and state to `dumps/`. The design's copy lives in `tools/build.py` (dicts `E`/`U`); behaviours are in `main.js`.
+- For Nikita: Cloudflare → Workers → `mavpy` → Settings → Builds → turn on non-production branch builds (gives a preview URL per push).
+- To check with Serhii: the design's phone is +380 99 220 83 43 but `site.ts` has +380 99 320 84 54 (kept `site.ts` for now). The design adds Telegram @mavpy_agency. The design's favicon differs from ours (we kept ours, which has .ico and dark variants).
+
 - [ ] Lighthouse re-check on production, `/` and `/uk/`, mobile + desktop (last run 2026-11-20; since then: phone picker, bot links, carousel autoplay).
 
 ## Waiting on Serhii: design

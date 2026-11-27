@@ -70,9 +70,10 @@ export const en = {
     contact: 'Contact',
     menuOpen: 'Open menu',
     menuClose: 'Close menu',
+    cta: 'Get my estimate',
+    // Name of the UA / EN link group (the links themselves: langNames in utils.ts).
+    langGroup: 'Language',
   },
-  // The link that switches to the other language; its label is written in that language.
-  langSwitch: { short: 'UA', label: 'Українською' },
   footer: {
     navLabel: 'Footer',
     slogan: 'Less noise. More results.',

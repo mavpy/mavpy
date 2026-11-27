@@ -47,8 +47,9 @@ export const uk: Dict = {
     contact: 'Контакти',
     menuOpen: 'Відкрити меню',
     menuClose: 'Закрити меню',
+    cta: 'Дізнатися вартість',
+    langGroup: 'Мова',
   },
-  langSwitch: { short: 'EN', label: 'English' },
   footer: {
     navLabel: 'Нижня навігація',
     slogan: 'Менше шуму. Більше результатів.',
