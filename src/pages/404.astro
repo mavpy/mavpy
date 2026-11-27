@@ -1,47 +1,41 @@
 ---
-// One 404 for every missing URL (the host serves this file for /uk/... too), so it carries both
-// languages: English first, then the Ukrainian block in its own lang. Big "404" reuses the hero
-// "MORE" style (BBH Hegarty); noindex keeps it out of search results.
+// One 404 for every missing URL (the host serves this file for /en/... too), so it carries both
+// languages: Ukrainian (the default) first, then the English block in its own lang. Big "404" reuses
+// BBH Hegarty, as the hero's «MORE»; noindex keeps it out of search results.
 import Base from '../layouts/Base.astro';
 import Button from '../components/ui/Button.astro';
 import Container from '../components/ui/Container.astro';
 import { localizePath, t } from '../i18n/utils';
 
-const en = t('en').notFound;
 const uk = t('uk').notFound;
+const en = t('en').notFound;
 ---
 
-<Base title={`404: ${en.title} | MAVPY`} noindex>
-  <Container class="flex flex-col items-center pt-[60px] pb-[120px] text-center lg:pt-[100px] lg:pb-[180px]">
-    <p aria-hidden="true" class="rise font-hegarty text-more leading-[0.7]">
+<Base title={`404: ${uk.title} | MAVPY`} noindex>
+  <Container class="flex flex-col items-center py-[max(80px,calc(140*var(--u)))] text-center">
+    <p aria-hidden="true" class="font-hegarty text-[max(96px,calc(200*var(--u)))] leading-[0.7] text-black motion-safe:animate-rise-in">
       404
     </p>
-    <h1
-      style="--d: 0.1s"
-      class="rise mt-[48px] font-display text-h2 font-extrabold max-lg:tracking-[-0.03em]"
-    >
-      {en.title}
+    <h1 class="mt-[48px] font-head text-h2 leading-none font-bold tracking-[-0.02em] text-black [--d:0.1s] motion-safe:animate-rise-in">
+      {uk.title}
     </h1>
-    <p style="--d: 0.2s" class="rise mt-[20px]">
-      {en.text}
-    </p>
-    <Button href={localizePath('en')} class="rise mt-[40px]" style="--d: 0.3s">
-      {en.cta}
+    <p class="mt-[20px] text-lead text-text-2 [--d:0.2s] motion-safe:animate-rise-in">{uk.text}</p>
+    <Button href={localizePath('uk')} class="mt-[40px] [--d:0.3s] motion-safe:animate-rise-in">
+      {uk.cta}
     </Button>
 
     <div
-      lang="uk"
-      style="--d: 0.4s"
-      class="rise mt-[64px] border-t border-grey-light pt-[32px]"
+      lang="en"
+      class="mt-[64px] border-t border-line pt-[32px] [--d:0.4s] motion-safe:animate-rise-in"
     >
-      <p class="text-card font-bold">{uk.title}</p>
+      <p class="font-head text-h3 font-bold text-black">{en.title}</p>
       <p class="mt-[12px]">
-        {uk.text}{' '}
+        {en.text}{' '}
         <a
-          href={localizePath('uk')}
+          href={localizePath('en')}
           class="font-medium underline underline-offset-2"
         >
-          {uk.cta}
+          {en.cta}
         </a>
       </p>
     </div>

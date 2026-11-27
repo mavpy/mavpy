@@ -4,11 +4,14 @@ Brief for the coding agent. Planning happens in a separate chat. **TASKS.md** is
 
 ## Goal
 
-Port the Mavpy (Мавпы) web studio's Webflow site to code, matching the Figma design: pixel-faithful, responsive, in English and Ukrainian, with a working contact form that delivers leads automatically. It's a real client-facing site, so prioritise quality and speed. I'm also learning as I go: explain non-obvious choices briefly, in a line or two.
+Port the Mavpy (Мавпы) web studio's Webflow site to code, matching Serhii's design: pixel-faithful, responsive, in Ukrainian and English, with a working contact form that delivers leads automatically. It's a real client-facing site, so prioritise quality and speed. I'm also learning as I go: explain non-obvious choices briefly, in a line or two.
 
 ## Sources of truth
 
-- **Figma:** `https://www.figma.com/design/daR2lf05KfRp9cp6oHdj02/MAVPY-for-dev?node-id=0-1&p=f&t=G6gqhxcFwnKDoFUS-0`. Frames: desktop, mobile, UI kit. Before building a section, look at its desktop and mobile frames.
+- **Design v3 (current, from 2026-11-27):** Serhii's HTML/CSS design in `~/dev/mavpy-design` (`git pull` first; v3.15 was ported on branch `redesign/v3`). Copy is in `tools/build.py` (dicts `E`/`U`), behaviour in `main.js`, styles in `styles.css`. Later rules override earlier ones there (e.g. since v3.3 every section uses the 1280u column), so read the cascade, not the first match.
+  - Token names follow the design's variables: `black` #0F0F0F (headings), `ink` #202020 (body text, footer), `text-2`, `text-3`, `amber-*`. Sizes scale with `--u` (1px at 1920).
+  - Intended deviations from the design are listed in TASKS.md under the redesign («To check with Serhii»). Keep them.
+- **Figma (pre-v3 reference):** `https://www.figma.com/design/daR2lf05KfRp9cp6oHdj02/MAVPY-for-dev?node-id=0-1&p=f&t=G6gqhxcFwnKDoFUS-0`. Frames: desktop, mobile, UI kit. Before building a section, look at its desktop and mobile frames.
   - **Don't use the Figma MCP server.** The account is on a View seat with a tiny call limit (it failed even on the first call of a session). Instead, ask Nikita for what you need: screenshots, full-res frame exports, assets, or values copied from Inspect (hex, font, size). Say exactly which node or element and what format.
   - Full-res frame exports can be measured precisely: convert with `sips -s format bmp`, then read pixels in stdlib Python (color runs for backgrounds and edges, dark-pixel row profiles for text; Roboto cap height ≈ 0.711 em). Prefer values from the UI kit when it lists them.
 - **This site is now the source of truth** (decided 2026-11-20). It replaces the Webflow site. The copy was synced from Webflow once (commit `95e3cfd`); from here on, all changes come from Serhii (the designer) through Figma.
@@ -16,14 +19,13 @@ Port the Mavpy (Мавпы) web studio's Webflow site to code, matching the Figm
   - Where a Figma change conflicts with how the site was built on purpose (accessibility, consistency, behaviour Figma doesn't show), keep the build and list it under "To settle with Serhii".
   - **Don't take spacing or sizes from Webflow.** It was built by hand. Measure from the Figma frames.
 - **Webflow (retired):** `https://mavpy.webflow.io/`. Only a historical reference now (original behaviour, form messages, the CSS variables behind the button and form states). Don't sync copy or visuals from it.
-- **Full-res frame exports** (1×) are committed in `docs/figma/`: `desktop-1-331.png` (1920 × 9269) and `mobile-1-904.png` (375 × 12561). Measure from these first; ask Nikita only for what they don't show (UI kit, hover states, assets, exact hex).
-- The about section shows one founder (Serhii), as in Figma. There is no second co-founder or CTO block.
+- The team section (design v3.15) shows four people: Serhii, Nikita, Julia and Marina, with photos (decided by Nikita 2026-11-27).
 - Copy fixes and the team section come from Serhii. Use placeholders marked `TODO(copy)` until they arrive.
 
 ## Stack
 
 - Astro (latest) + TypeScript (strict)
-- Tailwind CSS v4 (`npx astro add tailwind`), with design tokens from the UI kit in `@theme` inside `src/styles/global.css`
+- Tailwind CSS v4 (`npx astro add tailwind`), with the design's tokens in `@theme` inside `src/styles/global.css`. No inline `style=` or `<style>` in components, pages or layouts: Tailwind first, and CSS Tailwind can't express goes in `global.css`
 - `@astrojs/cloudflare` adapter (Workers, `wrangler.jsonc`): pages are pre-rendered (static), and only the form action and the Telegram webhook run on the server
 - Images through `astro:assets` `<Image />`, stored in `src/assets/`. Export them from Figma at 2x and as SVG for icons and the logo
 - Fonts: the ones the UI kit uses, self-hosted through Fontsource, with only the weights we need. **They must include Cyrillic subsets**
@@ -35,12 +37,12 @@ Port the Mavpy (Мавпы) web studio's Webflow site to code, matching the Figm
 ```
 src/
   layouts/Base.astro        <head>, SEO meta, hreflang, fonts, lang attribute
-  components/ui/            Button, Container, Section, Heading, Card, Input... (from the UI kit)
+  components/ui/            Button, Container, SectionHead, Input, LangSwitch
   components/sections/      one component per page section
-  i18n/en.ts, i18n/uk.ts    all copy, same keys in both (uk typed as `typeof en`)
+  i18n/en.ts, i18n/uk.ts    all copy, same keys in both (uk typed as `Dict` = `typeof en`)
   i18n/utils.ts             getLang(Astro.url), t(lang), localized path helper
-  pages/index.astro         English (/)
-  pages/uk/index.astro      Ukrainian (/uk/)
+  pages/index.astro         Ukrainian (/), the default
+  pages/en/index.astro      English (/en/)
   actions/index.ts          contact form action
 ```
 
@@ -48,8 +50,9 @@ Components stay presentational: copy comes in through props or `t()`. **No hard-
 
 ## i18n
 
-- Astro built-in i18n: `defaultLocale: 'en'`, `locales: ['en', 'uk']`, `prefixDefaultLocale: false`
-- URL paths use the ISO 639-1 language code, same as `hreflang` and `<html lang>`: Ukrainian is `/uk/`, not `/ua/` (`ua` is the country code). Decided 2026-11-20
+- Astro built-in i18n: `defaultLocale: 'uk'`, `locales: ['uk', 'en']`, `prefixDefaultLocale: false`. Ukrainian at `/`, English at `/en/` (redesign v3, 2026-11-27). `public/_redirects` sends the old `/uk/*` to `/` with a 301
+- On `/`, Base.astro picks the language once: saved choice, then browser language, then UA (bots are skipped)
+- Language codes are ISO 639-1, same as `hreflang` and `<html lang>`: Ukrainian is `uk`, not `ua` (`ua` is the country code). Decided 2026-11-20
 - A language switcher in the header keeps the same section anchor when switching
 - `<html lang>`, `hreflang` alternates, and localized `<title>`/description/OG for each language
 - Ukrainian copy: draft the translation in natural Ukrainian (not word-for-word) and mark it `// review: Serhii` until it is approved
@@ -77,4 +80,4 @@ Components stay presentational: copy comes in through props or `t()`. **No hard-
 - Don't add dependencies beyond the ones above without saying why
 - Nikita and Serhii are equal partners. **Nikita makes every technical decision** (hosting, services, accounts, architecture): recommend, and add open ones to "Decisions for Nikita" in TASKS.md. Copy, translation, prices, contact details and brand content are decided by both together: add those to "To settle with Serhii"
 - When something is blocked on one of those lists, add it there and move on to the next task
-- This is a private studio project: don't add my name, personal links or portfolio credits to the site
+- Nikita appears in the team section as a team member (name, role, photo). Don't add personal links or portfolio credits beyond that

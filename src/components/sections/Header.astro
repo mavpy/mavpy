@@ -1,155 +1,138 @@
 ---
-// Desktop (md+): logo left, nav + language link right. Not sticky, as on Webflow.
-// Mobile: language link | centred logo (as in Figma) | menu button. The menu is a native
-// The language link's sr-only full name uses a system font: in Roboto it would make EN pages
-// download the Cyrillic file just for invisible text.
-// popover: Esc, focus return and top-layer stacking come free; the script only closes it on
-// link click and carries the current section over when switching language.
-import Logo from '../../assets/logos/logo.svg';
+// Sticky header (design .mv-head). Its height never changes; once the page scrolls it gets a
+// translucent warm background with blur. Desktop (1200+): nav, UA / EN, small CTA. Below that: logo +
+// burger. The menu is a native popover (Esc, outside click and focus return come free), dropped
+// under the header like the design's .mv-mnav.
+import Logo from '../../assets/v3/logo-dark.svg';
+import Button from '../ui/Button.astro';
 import Container from '../ui/Container.astro';
+import LangSwitch from '../ui/LangSwitch.astro';
 import { getLang, localizePath, navLinks, t } from '../../i18n/utils';
 
 const lang = getLang(Astro.url);
-const other = lang === 'en' ? 'uk' : 'en';
-const { nav, langSwitch } = t(lang);
+const { nav } = t(lang);
 const home = localizePath(lang, '#top');
-const linkClass =
-  'uppercase transition-colors duration-300 ease-out-quart hover:text-grey relative after:absolute after:inset-x-0 after:-bottom-0.5 after:h-0.5 after:origin-right after:scale-x-0 after:bg-current after:transition-transform after:duration-300 after:ease-out-quart hover:after:origin-left hover:after:scale-x-100';
+const contact = localizePath(lang, '#contact');
+const link =
+  'uppercase text-black transition-colors hover:text-amber-700 text-[max(13px,calc(18*var(--u)))] font-medium';
+const bar =
+  'absolute left-0 h-[1.6px] w-full bg-black transition-[top,rotate] duration-250 ease-mv';
 ---
 
-<header class="pt-[19px] pb-4 md:pt-8.5">
-  <Container class="grid grid-cols-[1fr_auto_1fr] items-center md:flex md:justify-between">
-    <a
-      href={localizePath(other)}
-      hreflang={other}
-      lang={other}
-      data-lang-switch
-      class:list={[
-        linkClass,
-        'justify-self-start text-nav font-medium md:order-3 md:ml-6 lg:ml-10',
-      ]}
+<header
+  data-head
+  class="sticky top-0 z-60 border-b border-black/[0.045] transition-colors duration-300 ease-mv data-stuck:bg-warm-50/94 data-stuck:backdrop-blur-[8px]"
+>
+  <Container class="flex h-head items-center justify-between">
+    <a href={home} aria-label={nav.home} class="flex items-center">
+      <Logo aria-hidden="true" class="h-[max(30px,calc(44*var(--u)))] w-auto" />
+    </a>
+
+    <nav
+      aria-label={nav.label}
+      class="hidden items-center gap-[max(24px,calc(48*var(--u)))] desk:flex"
     >
-      {langSwitch.short}
-      <span class="sr-only font-[system-ui]">, {langSwitch.label}</span>
-    </a>
-
-    <a href={home} aria-label={nav.home} class="md:order-1 md:mr-auto">
-      <Logo aria-hidden="true" width={157} height={42} />
-    </a>
-
-    <nav aria-label={nav.label} class="hidden md:order-2 md:block">
-      <ul class="flex gap-6 text-nav font-medium lg:gap-10">
-        {navLinks.map(([id, key]) => (
-          <li>
-            <a href={localizePath(lang, `#${id}`)} class={linkClass}>
-              {nav[key]}
-            </a>
-          </li>
-        ))}
-      </ul>
+      {navLinks.map(([id, key]) => (
+        <a href={localizePath(lang, `#${id}`)} class={link}>
+          {nav[key]}
+        </a>
+      ))}
+      <LangSwitch />
+      <Button href={contact} size="sm">
+        {nav.cta}
+      </Button>
     </nav>
 
     <button
       type="button"
       popovertarget="mobile-menu"
       aria-label={nav.menuOpen}
-      class="-mr-2 justify-self-end p-2 md:hidden"
+      class="inline-flex size-11 items-center justify-center rounded-btn border-[1.5px] border-black desk:hidden"
     >
-      <svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true">
-        <path
-          d="M3 7h22M3 14h22M3 21h22"
-          stroke="currentColor"
-          stroke-width="1.5"
-        />
-      </svg>
+      <span aria-hidden="true" class="relative h-3 w-[18px]">
+        <i
+          class:list={[bar, 'top-px menu-open:top-[5px] menu-open:rotate-45']}
+        ></i>
+        <i
+          class:list={[
+            bar,
+            'top-[9px] menu-open:top-[5px] menu-open:-rotate-45',
+          ]}
+        ></i>
+      </span>
     </button>
   </Container>
 
-  <div
+  <nav
     id="mobile-menu"
     popover
-    class="m-0 h-dvh max-h-none w-full max-w-none bg-paper p-0 text-black md:hidden"
+    aria-label={nav.label}
+    class="inset-x-0 top-head bottom-auto m-0 w-auto max-w-none gap-1 border-0 border-b border-line bg-warm-50 px-5 pt-2 pb-6 text-black shadow-[0_24px_32px_-24px_rgb(15_15_15/0.35)] open:grid desk:hidden"
   >
-    <!-- Same row as the closed header, so nothing moves when the menu opens. -->
-    <Container class="grid grid-cols-[1fr_auto_1fr] items-center pt-[19px]">
+    {navLinks.map(([id, key]) => (
       <a
-        href={localizePath(other)}
-        hreflang={other}
-        lang={other}
-        data-lang-switch
-        class:list={[linkClass, 'justify-self-start text-nav font-medium']}
+        href={localizePath(lang, `#${id}`)}
+        data-menu-link
+        class="py-3 text-lg font-medium uppercase transition-colors hover:text-amber-700"
       >
-        {langSwitch.short}
-        <span class="sr-only font-[system-ui]">, {langSwitch.label}</span>
+        {nav[key]}
       </a>
-      <a href={home} aria-label={nav.home} data-menu-link>
-        <Logo aria-hidden="true" width={157} height={42} />
-      </a>
-      <button
-        type="button"
-        popovertarget="mobile-menu"
-        popovertargetaction="hide"
-        aria-label={nav.menuClose}
-        autofocus
-        class="-mr-2 justify-self-end p-2"
-      >
-        <svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true">
-          <path
-            d="M5 5l18 18M23 5L5 23"
-            stroke="currentColor"
-            stroke-width="1.5"
-          />
-        </svg>
-      </button>
-    </Container>
-    <nav aria-label={nav.label}>
-      <ul class="mt-16 flex flex-col items-center gap-8 text-card font-bold">
-        {navLinks.map(([id, key]) => (
-          <li>
-            <a
-              href={localizePath(lang, `#${id}`)}
-              class={linkClass}
-              data-menu-link
-            >
-              {nav[key]}
-            </a>
-          </li>
-        ))}
-      </ul>
-    </nav>
-  </div>
+    ))}
+    <div class="flex items-center justify-between gap-3 pt-2">
+      <LangSwitch />
+      <Button href={contact} data-menu-link>
+        {nav.cta}
+      </Button>
+    </div>
+  </nav>
 </header>
 
-<style>
-  /* No page scroll behind the open menu. */
-  :global(html:has(#mobile-menu:popover-open)) {
-    overflow: hidden;
-  }
-</style>
-
 <script>
+  const head = document.querySelector<HTMLElement>('[data-head]')!;
   const menu = document.getElementById('mobile-menu')!;
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)');
+
+  // Background once the page scrolls (the height stays the same, so nothing jumps).
+  const stuck = () => head.toggleAttribute('data-stuck', scrollY > 24);
+  stuck();
+  addEventListener('scroll', stuck, { passive: true });
+
   menu
     .querySelectorAll('[data-menu-link]')
     .forEach((a) => a.addEventListener('click', () => menu.hidePopover()));
 
-  // A popover isn't modal, so Tab would walk out onto the page hidden behind it: make the rest
-  // inert while it's open. `beforetoggle` (not `toggle`) so the menu button is no longer inert
-  // when the popover returns focus to it on close.
-  const behind = [
-    menu.previousElementSibling,
-    ...document.querySelectorAll('main, footer, [href="#main"]'),
-  ];
-  menu.addEventListener('beforetoggle', (e) => {
-    const open = (e as ToggleEvent).newState === 'open';
-    behind.forEach((el) => ((el as HTMLElement).inert = open));
+  // The page opens at the top, not where the browser last left it. A #section in the address
+  // (language switch, a link from the 404) is honoured once, then dropped from the URL.
+  history.scrollRestoration = 'manual';
+  const target =
+    location.hash && document.getElementById(location.hash.slice(1));
+  if (location.hash) history.replaceState(null, '', location.pathname);
+  if (target) target.scrollIntoView();
+  else scrollTo(0, 0);
+
+  // In-page links scroll to their section without writing #anchor into the address.
+  document.addEventListener('click', (e) => {
+    const a = (e.target as Element).closest<HTMLAnchorElement>('a[href*="#"]');
+    if (!a || a.pathname !== location.pathname || e.metaKey || e.ctrlKey)
+      return;
+    const id = a.hash.slice(1);
+    const el = id === 'top' ? null : document.getElementById(id);
+    if (id !== 'top' && !el) return;
+    e.preventDefault();
+    const behavior = reduce.matches ? 'auto' : 'smooth';
+    if (el) el.scrollIntoView({ behavior });
+    else scrollTo({ top: 0, behavior });
   });
 
-  // Keep the reader's place: switch language to the section currently in view.
+  // Language switch: remember the choice for the next visit to / (see Base.astro) and keep the
+  // reader's place by carrying over the section in view.
   document
     .querySelectorAll<HTMLAnchorElement>('[data-lang-switch]')
     .forEach((a) =>
       a.addEventListener('click', () => {
+        try {
+          localStorage.setItem('mavpy-lang', a.dataset.langSwitch!);
+        } catch {}
         const current = [...document.querySelectorAll('main section[id]')]
           .filter((s) => s.getBoundingClientRect().top <= innerHeight / 3)
           .pop();

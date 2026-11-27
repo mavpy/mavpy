@@ -1,174 +1,130 @@
 ---
-// Cases ("Real projects, real results"): an exclusive accordion built on <details name>, so the
-// browser handles "one open at a time" and the ARIA state; a 3-line script keeps the open one
-// from closing (Webflow behaviour). Opening animates in browsers with `interpolate-size`.
-// Layout: mobile stacks screenshot → title → facts → link. lg: a [437px | rest] grid; the
-// screenshot "mat" is absolutely placed in column 2, so the text sets the closed row height
-// (203px) and a min-height (the mat's 761:757 shape + 69px of insets) sets the open one.
-// Figma is inconsistent between the open and closed cards (title offsets, mat padding, gaps);
-// both states use the closed-card values so the title doesn't jump when a card opens.
-// Link: black with an orange arrow, as on desktop. The mobile frame's #ff6b31 text is under
-// 3:1 on sand, so it's not used.
+// Cases: dark section, an accordion of case rows. Built on
+// <details name>, so the browser handles "one open at a time", keyboard and ARIA state; the open
+// animation (.case in global.css) needs `interpolate-size`, other browsers just snap open.
+// Differences from the design: the whole row toggles (not just the round button); the first case
+// is open from the start instead of opening when the block scrolls in; and the design's script that
+// holds the clicked row still while a panel above collapses is left to native scroll anchoring
+// (ponytail: Safari has no scroll anchoring, so the row can jump there; port the design's rAF hold
+// if that matters).
 import { Image } from 'astro:assets';
-import Heading from '../ui/Heading.astro';
-import Section from '../ui/Section.astro';
-import clinic from '../../assets/images/cases/medical-clinic.png';
-import massage from '../../assets/images/cases/massage-studio.png';
-import school from '../../assets/images/cases/english-school.png';
-// TODO(asset): only a strip exists; the open card needs a full screenshot.
-import crypto from '../../assets/images/cases/crypto-company-strip.png';
-import solar from '../../assets/images/cases/solar-company.png';
+import Button from '../ui/Button.astro';
+import Container from '../ui/Container.astro';
+import SectionHead from '../ui/SectionHead.astro';
 import { getLang, t } from '../../i18n/utils';
 
 const { cases } = t(getLang(Astro.url));
-const shots = [clinic, massage, school, crypto, solar];
-const factKeys = ['goal', 'start', 'did', 'time', 'result'] as const;
+const shots = import.meta.glob<{ default: ImageMetadata }>(
+  '../../assets/v3/cases/*.jpg',
+  {
+    eager: true,
+  },
+);
+const shot = (name: string) =>
+  shots[`../../assets/v3/cases/${name}.jpg`].default;
 ---
 
-<Section
+<section
   id="cases"
-  tone="white"
-  class="pt-[54px] pb-[87px] lg:pt-[97px] lg:pb-[132px]"
+  class="bg-[#2a2a2a] py-[max(80px,calc(140*var(--u)))] text-[#ededeb]"
 >
-  <div class="lg:flex lg:items-start lg:justify-between">
-    <Heading>{cases.title}</Heading>
-    <!-- Decorative section tag, desktop only (not in the mobile frame). -->
-    <p aria-hidden="true" class="mt-[8px] max-lg:hidden">
-      {cases.label}
-      <span class="ml-[25px]">|</span>
-    </p>
-  </div>
-  <p class="mx-auto mt-[29px] max-w-[290px] text-center text-[15px] leading-[18px] lg:mx-0 lg:mt-[22px] lg:max-w-none lg:text-left lg:text-body lg:leading-[1.172]">
-    {cases.sub}
-  </p>
-
-  <ul class="mt-[67px] grid gap-[16px] lg:mt-[69px] lg:gap-[28px]">
-    {cases.items.map((item, i) => {
-      const shot = shots[i];
-      const Link = item.url ? 'a' : 'span';
-      return (
-        <li class="reveal group relative grid rounded-card bg-sand pb-[27px] transition-[min-height] duration-300 lg:grid-cols-[437px_1fr] lg:grid-rows-[auto_1fr] lg:pb-[18px] lg:has-open:min-h-[calc((min(var(--container-content),100vw-2*var(--spacing-gutter))-465px)*757/761+69px)]">
-          <details
-            name="cases"
-            open={i === 0}
-            class="case row-start-2 mt-[45px] px-6 lg:row-start-1 lg:mt-0 lg:pt-[30px] lg:pl-[19px]"
-          >
-            <summary class="grid cursor-pointer list-none grid-cols-[1fr_auto] items-start gap-x-4 [&::-webkit-details-marker]:hidden">
-              <h3 class="text-[30px] leading-[34px] lg:text-[40px] lg:leading-[1.172]">
-                {item.title}
+  <Container>
+    <SectionHead
+      label={cases.label}
+      title={cases.title}
+      lead={cases.sub}
+      dark
+    />
+    <div class="border-t border-white/16">
+      {cases.items.map((c, i) => (
+        <details
+          data-ri
+          name="cases"
+          open={i === 0}
+          class="case group border-b border-white/16"
+        >
+          <summary class="group/s relative grid cursor-pointer list-none items-center gap-[2px] py-[max(18px,calc(30*var(--u)))] max-desk:pr-[60px] desk:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] desk:gap-g desk:px-[max(16px,calc(24*var(--u)))] [&::-webkit-details-marker]:hidden">
+            <span class="flex items-center gap-[14px] desk:gap-[max(16px,calc(40*var(--u)))]">
+              <span class="font-mono text-[max(13px,calc(16*var(--u)))] font-medium text-[#9a9a96]">
+                {String(i + 1).padStart(2, '0')}
+              </span>
+              <h3 class="font-head text-[max(24px,calc(40*var(--u)))] leading-none font-bold tracking-[-0.01em] text-snow">
+                {c.name}
               </h3>
-              <!-- Mobile: chevron in a grey circle beside the title. lg: a big thin chevron at the
-                   row's right edge. Hidden on the open card, as in Figma. -->
-              <span
-                aria-hidden="true"
-                class="mt-[6px] mr-[11px] grid size-[39px] place-items-center rounded-full bg-grey-light transition-opacity group-has-open:opacity-0 lg:absolute lg:top-[80px] lg:right-[41px] lg:m-0 lg:size-auto lg:bg-transparent"
-              >
-                <svg
-                  viewBox="0 0 89 45"
-                  class="w-[26px] lg:w-[89px]"
-                  fill="none"
-                  stroke="currentColor"
-                >
-                  <path
-                    d="M1 1 44.5 44 88 1"
-                    stroke-width="2"
-                    vector-effect="non-scaling-stroke"
-                  />
-                </svg>
-              </span>
-              <span class="col-start-1 mt-[12px] text-[21px] leading-[1.172] lg:text-body">
-                {item.type}
-              </span>
-            </summary>
-            <dl class="mt-[56px] mb-[66px] space-y-[25px] text-[16px] leading-[20px] lg:mt-[68px] lg:mb-0 lg:max-w-[352px] lg:space-y-[30px] lg:text-[20px] lg:leading-[25px]">
-              {factKeys.map((key) => (
-                <div>
-                  <dt class="inline font-bold">{cases.facts[key]}</dt>{' '}
-                  <dd class="inline">{item.facts[key]}</dd>
-                </div>
-              ))}
-            </dl>
-          </details>
-
-          <Link
-            href={item.url || undefined}
-            target={item.url ? '_blank' : undefined}
-            rel={item.url ? 'noopener' : undefined}
-            class="group/link relative z-1 row-start-3 mt-[14px] ml-6 flex w-fit items-center gap-[13px] text-[26px] leading-[1.172] font-bold lg:row-start-2 lg:mt-[39px] lg:ml-[19px] lg:self-end"
-          >
-            <span class="underline decoration-2 underline-offset-[3px]">
-              {cases.link}
             </span>
-            {item.url && (
-              <span class="sr-only">
-                : {item.title} ({cases.newTab})
-              </span>
-            )}
-            <svg
-              viewBox="0 0 18 18"
-              class="size-[18px] text-orange transition-transform duration-300 ease-out-quart group-hover/link:translate-x-[3px] group-hover/link:-translate-y-[3px]"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
+            <span class="pl-[calc(2ch+14px)] text-[14px] text-[#c9c9c4] desk:pr-[64px] desk:pl-0 desk:text-[max(15px,calc(18*var(--u)))]">
+              {c.kind}
+            </span>
+            <span
               aria-hidden="true"
+              class="absolute top-1/2 right-0 flex size-[52px] -translate-y-1/2 items-center justify-center rounded-full border-[1.5px] border-white/50 text-snow transition-colors duration-150 group-hover/s:border-amber-500 group-hover/s:bg-amber-500 group-hover/s:text-black"
             >
-              <path d="M1 17 17 1M4 1h13v13" />
-            </svg>
-          </Link>
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 18 18"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.6"
+                class="transition-transform duration-300 ease-mv group-open:rotate-45"
+              >
+                <path d="M9 2v14M2 9h14" />
+              </svg>
+            </span>
+          </summary>
 
-          <!-- The screenshot mat. Clicks pass through to the summary's full-card overlay. -->
-          <div class="pointer-events-none row-start-1 mx-[18px] mt-[36px] rounded-[10px] bg-white p-[3px] transition-[top,right,bottom] duration-300 lg:absolute lg:col-start-2 lg:row-span-2 lg:inset-y-[17px] lg:right-[158px] lg:left-0 lg:m-0 lg:pt-[10px] lg:pr-[35px] lg:pb-[16px] lg:pl-[31px] lg:group-has-open:top-[40px] lg:group-has-open:right-[28px] lg:group-has-open:bottom-[29px]">
-            <Image
-              src={shot}
-              alt={item.title}
-              width={shot.width}
-              height={Math.min(
-                shot.height,
-                Math.round((shot.width * 757) / 761),
-              )}
-              fit="cover"
-              position="top"
-              widths={[400, 700, 1000, 1400, 1600]}
-              sizes="(min-width: 1024px) min(695px, 100vw - 579px), calc(100vw - 90px)"
-              class="aspect-video w-full rounded-[7px] object-cover object-top transition-[aspect-ratio] duration-300 group-has-open:aspect-[3/5] lg:size-full lg:group-has-open:aspect-auto"
-            />
+          <div class="mb-[max(24px,calc(40*var(--u)))] grid items-stretch gap-g rounded-[16px] bg-[#363636] p-[14px] desk:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] desk:p-[max(16px,calc(24*var(--u)))]">
+            <div class="overflow-hidden rounded-[12px] [--d:0.15s] group-open:motion-safe:animate-rise-in desk:relative desk:min-h-[calc(560*var(--u))]">
+              <Image
+                src={shot(c.shot)}
+                alt={c.name}
+                widths={[600, 1000, 1600]}
+                sizes="(min-width: 1200px) 50vw, 100vw"
+                class="block h-auto w-full rounded-[10px] desk:absolute desk:inset-0 desk:h-full desk:object-cover desk:object-top"
+              />
+            </div>
+            <div class="flex flex-col gap-[max(22px,calc(30*var(--u)))]">
+              <dl class="grid gap-[22px]">
+                {cases.facts.map((dt, k) => (
+                  <div>
+                    <dt class="inline-block rounded-[4px] bg-white/12 px-[10px] py-[4px] text-[max(13px,calc(15*var(--u)))] font-bold tracking-[0.02em] text-snow uppercase">
+                      {dt}
+                    </dt>
+                    <dd
+                      class:list={[
+                        'mt-[10px] text-body leading-[1.5] [&_b]:font-bold [&_b]:text-snow',
+                        k === 2 ? 'font-medium text-snow' : 'text-[#ededeb]',
+                      ]}
+                      set:html={c.facts[k]}
+                    />
+                  </div>
+                ))}
+              </dl>
+              <p class="mt-auto flex flex-wrap items-center gap-x-[16px] gap-y-[12px] pt-[max(24px,calc(32*var(--u)))]">
+                <Button
+                  href={c.url}
+                  target="_blank"
+                  rel="noopener"
+                  tone="outline"
+                  class="max-tab:w-full"
+                >
+                  {cases.live}
+                  <span class="sr-only">: {c.name}</span>
+                  <span
+                    aria-hidden="true"
+                    class="inline-block transition-transform duration-200 ease-mv group-hover/btn:translate-x-[5px]"
+                  >
+                    →
+                  </span>
+                </Button>
+                <span class="font-mono text-[max(13px,calc(15*var(--u)))] text-[#9a9a96]">
+                  {c.host}
+                </span>
+              </p>
+            </div>
           </div>
-        </li>
-      );
-    })}
-  </ul>
-</Section>
-
-<script>
-  // Keep one case open: clicking the open card's title does nothing (as on Webflow).
-  for (const d of document.querySelectorAll<HTMLDetailsElement>(
-    'details[name="cases"]',
-  ))
-    d.querySelector('summary')?.addEventListener(
-      'click',
-      (e) => d.open && e.preventDefault(),
-    );
-</script>
-
-<style>
-  /* Height animation for the facts; browsers without interpolate-size just snap open. */
-  .case {
-    interpolate-size: allow-keywords;
-  }
-  .case::details-content {
-    block-size: 0;
-    overflow: clip;
-    transition:
-      block-size 0.3s ease-in-out,
-      content-visibility 0.3s allow-discrete;
-  }
-  .case[open]::details-content {
-    block-size: auto;
-  }
-  /* Closed cards are clickable everywhere, not just on the title. */
-  .case:not([open]) summary::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-  }
-</style>
+        </details>
+      ))}
+    </div>
+  </Container>
+</section>

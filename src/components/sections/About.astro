@@ -1,53 +1,158 @@
 ---
-// About ("A craft studio, not a conveyor belt"): one founder, as in Figma. lg: a sand panel
-// holding the text card and the photo side by side (Figma's uneven insets: 24 left, 67 right).
-// Mobile: no panel, photo first, then the centred card.
-// Card title: Archivo. Desktop sets line 1 and "founder of MAVPY" in Medium and the rest in
-// Regular; mobile sets line 1 in a heavy weight (800, already loaded for h2) and line 2 smaller.
+// Team: one member at a time on a white stage, four tabs below. The
+// stage moves on every 6s (the active tab's amber bar fills meanwhile); hover or focus pauses it,
+// a click jumps to that person, reduced motion turns the rotation off. Inactive members are
+// visibility:hidden, so screen readers only meet the one on show (.member / .tab-bar in global.css).
 import { Image } from 'astro:assets';
-import Heading from '../ui/Heading.astro';
-import Section from '../ui/Section.astro';
-import serhii from '../../assets/images/team/serhii.png';
+import Container from '../ui/Container.astro';
+import SectionHead from '../ui/SectionHead.astro';
 import { getLang, t } from '../../i18n/utils';
 
-const { about } = t(getLang(Astro.url));
+const { team } = t(getLang(Astro.url));
+const photos = import.meta.glob<{ default: ImageMetadata }>(
+  '../../assets/v3/team/*.{jpg,png}',
+  { eager: true },
+);
+const photo = (name: string) =>
+  Object.entries(photos).find(([path]) => path.includes(`/${name}.`))![1]
+    .default;
 ---
 
-<Section id="about" class="pt-[69px] pb-[85px] lg:pt-[120px] lg:pb-[151px]">
-  <div class="lg:flex lg:items-start lg:justify-between">
-    <Heading class="whitespace-pre-line">{about.title}</Heading>
-    <p aria-hidden="true" class="mt-[8px] max-lg:hidden">
-      {about.label}
-      <span class="ml-[25px]">|</span>
-    </p>
-  </div>
-  <p class="mx-auto mt-[23px] max-w-[290px] text-center text-[15px] leading-[18px] lg:mx-0 lg:mt-[23px] lg:max-w-none lg:text-left lg:text-body lg:leading-[1.172]">
-    {about.sub}
-  </p>
-
-  <div class="reveal mt-[30px] grid gap-[22px] lg:mt-[51px] lg:grid-cols-[1fr_356px] lg:gap-[27px] lg:rounded-card lg:bg-sand lg:pt-[49px] lg:pr-[67px] lg:pb-[39px] lg:pl-[24px]">
-    <Image
-      src={serhii}
-      alt={about.photoAlt}
-      widths={[360, 560, 720, 843]}
-      sizes="(min-width: 1024px) 356px, calc(100vw - 48px)"
-      class="aspect-[327/362] w-full rounded-card bg-white object-cover lg:col-start-2 lg:row-start-1 lg:aspect-auto lg:h-full"
-    />
-    <div class="rounded-card bg-white px-[15px] pt-[6px] pb-[55px] text-center lg:col-start-1 lg:row-start-1 lg:px-[26px] lg:pt-[39px] lg:pb-[62px] lg:text-left">
-      <h3 class="font-display">
-        <span class="block text-[32px] leading-[52px] font-extrabold lg:leading-[41px] lg:font-medium">
-          {about.hi}
-        </span>
-        <span class="block text-[24px] leading-[32px] lg:text-[32px] lg:leading-[41px]">
-          <span class="max-lg:block lg:font-medium">{about.role.em}</span>
-          {about.role.after}
-        </span>
-      </h3>
-      <div class="mt-[38px] space-y-[25px] text-[21px] leading-[25px] whitespace-pre-line italic lg:mt-[35px] lg:max-w-[632px] lg:space-y-[27px] lg:text-[23px] lg:leading-[27px]">
-        {about.paragraphs.map((p) => (
-          <p>{p}</p>
+<section
+  id="team"
+  class="scroll-mt-[max(72px,calc(108*var(--u)))] bg-warm-100 py-[max(80px,calc(140*var(--u)))]"
+>
+  <Container>
+    <SectionHead label={team.label} title={team.title} />
+    <div data-team class="rounded-[16px] bg-snow">
+      <div
+        data-ri
+        class="grid rounded-[16px] border border-line p-[16px] desk:p-[max(16px,calc(32*var(--u)))]"
+      >
+        {team.members.map((m, i) => {
+          const src = photo(m.photo);
+          return (
+            <div
+              id={`member-${i}`}
+              data-member
+              class:list={[
+                'member col-start-1 row-start-1 grid justify-items-center gap-g desk:grid-cols-[4fr_8fr] desk:justify-items-stretch',
+                i === 0 && 'is-on',
+              ]}
+            >
+              <Image
+                src={src}
+                alt={m.name}
+                widths={[480, 720, 960]}
+                sizes="(min-width: 1200px) 28vw, (min-width: 601px) 440px, calc(100vw - 72px)"
+                class="aspect-[4/5] w-full rounded-[12px] border border-amber-500 bg-warm-100 object-cover object-[50%_20%] tab:max-desk:max-w-[440px] desk:object-[50%_15%]"
+              />
+              <div class="flex w-full flex-col justify-between gap-[max(24px,calc(32*var(--u)))]">
+                <blockquote class="text-quote leading-[1.45] tracking-[-0.005em] text-black">
+                  {m.quote.map((p, k) => (
+                    <p class="not-first:mt-[0.8em]">
+                      {k === 0 && '“'}
+                      {p}
+                      {k === m.quote.length - 1 && '”'}
+                    </p>
+                  ))}
+                </blockquote>
+                <div class="mt-auto">
+                  <p>
+                    <strong class="block text-[max(18px,calc(26*var(--u)))] font-medium text-black">
+                      {m.name}
+                    </strong>
+                    <span class="text-text-2">{m.role}</span>
+                  </p>
+                  <div class="mt-[max(16px,calc(20*var(--u)))] grid grid-cols-2 gap-[8px] border-t border-line pt-[max(16px,calc(20*var(--u)))] desk:flex desk:flex-wrap">
+                    <p class="col-span-full w-full font-mono text-[13px] text-text-3">
+                      {team.what}
+                    </p>
+                    <ul class="contents">
+                      {m.tags.map((tag) => (
+                        <li class="rounded-[6px] border border-line px-[12px] py-[6px] text-center text-[max(14px,calc(15*var(--u)))] text-text-2 desk:text-left">
+                          {tag}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      <div class="grid grid-cols-4 gap-[8px] border-t border-line p-[max(16px,calc(24*var(--u)))] desk:gap-g">
+        {team.members.map((m, i) => (
+          <button
+            type="button"
+            data-tab
+            aria-controls={`member-${i}`}
+            aria-pressed={i === 0 ? 'true' : 'false'}
+            class="group relative flex cursor-pointer flex-col items-start gap-[8px] pt-[20px] text-left opacity-60 transition-opacity duration-300 ease-mv hover:opacity-100 aria-pressed:opacity-100 desk:flex-row desk:items-center desk:gap-[16px]"
+          >
+            <span
+              aria-hidden="true"
+              class="absolute inset-x-0 top-0 h-[3px] bg-warm-100"
+            >
+              <i class="tab-bar block h-full bg-amber-500" />
+            </span>
+            <Image
+              src={photo(m.photo)}
+              alt=""
+              width={128}
+              height={128}
+              class="size-[48px] shrink-0 rounded-full bg-warm-100 object-cover outline outline-offset-1 outline-amber-500 desk:size-[64px]"
+            />
+            <span class="min-w-0">
+              <strong class="block font-medium text-black">{m.name}</strong>
+              <em class="block font-mono text-[13px] text-text-3 not-italic max-desk:hidden">
+                {m.role}
+              </em>
+            </span>
+          </button>
         ))}
       </div>
     </div>
-  </div>
-</Section>
+  </Container>
+</section>
+
+<script>
+  // The design's rotation (main.js, "team"): show(i) swaps the member and restarts the tab's bar.
+  const team = document.querySelector<HTMLElement>('[data-team]');
+  if (team) {
+    const members = [...team.querySelectorAll<HTMLElement>('[data-member]')];
+    const tabs = [...team.querySelectorAll<HTMLButtonElement>('[data-tab]')];
+    const auto = !matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let cur = 0;
+    let timer = 0;
+    const show = (i: number) => {
+      cur = (i + members.length) % members.length;
+      members.forEach((m, k) => m.classList.toggle('is-on', k === cur));
+      tabs.forEach((b) => b.setAttribute('aria-pressed', 'false'));
+      void tabs[cur].offsetWidth; // reflow, so the bar fills from empty again
+      tabs[cur].setAttribute('aria-pressed', 'true');
+    };
+    const start = () => {
+      if (!auto) return;
+      clearInterval(timer);
+      team.classList.remove('is-paused');
+      timer = window.setInterval(() => show(cur + 1), 6000);
+    };
+    const stop = () => {
+      clearInterval(timer);
+      team.classList.add('is-paused');
+    };
+    tabs.forEach((b, k) =>
+      b.addEventListener('click', () => {
+        show(k);
+        start();
+      }),
+    );
+    team.addEventListener('mouseenter', stop);
+    team.addEventListener('mouseleave', start);
+    team.addEventListener('focusin', stop);
+    show(0); // restart the first bar: it is pressed in the HTML, so it would start full
+    start();
+  }
+</script>

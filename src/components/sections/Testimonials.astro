@@ -1,230 +1,76 @@
 ---
-// Testimonials ("What it's like to work with us"). One CSS scroll-snap row at every size:
-// swipe, trackpad and keyboard work natively. Mobile: one card per view, the next one peeking
-// in the gutter, plus a "2 / 6" counter. lg: the row bleeds off the right edge (as in the
-// desktop frame); two arrow buttons (Webflow has them, Figma doesn't) cover mouse users. Negative margin + matching padding (and scroll-padding) let the list run
-// edge to edge while cards still snap to the column; cqw (the section is a size container)
-// is used instead of vw, which would include the scrollbar.
-// Infinite: the items render three times (the outer copies are inert, so screen readers and Tab
-// see each card once); the script starts on the middle copy and, once scrolling settles in an
-// outer copy, jumps one copy's width back. Same cards there, so the jump is invisible.
+// Testimonials: the reviews run left in an endless line (the trust
+// strip's marquee, slower), paused on hover, still with reduced motion. Four copies of the three
+// cards so the line never shows a gap at 1920px; only the first copy is exposed to screen readers.
+// Phones: no running line, a swipe row with snap instead of the design's ← 1 / 3 → pager.
 import { Image } from 'astro:assets';
-import Heading from '../ui/Heading.astro';
-import Section from '../ui/Section.astro';
-// TODO(asset): Natalia's avatar is 95px (1x).
-// TODO(photo): Dmytro, Julia and Daria have no photos yet; they get initials circles (avatar: 'placeholder').
-import natalia from '../../assets/images/avatars/natalia.png';
-import bram from '../../assets/images/avatars/bram.png';
-import ivan from '../../assets/images/avatars/ivan.jpg';
+import Container from '../ui/Container.astro';
+import SectionHead from '../ui/SectionHead.astro';
 import { getLang, t } from '../../i18n/utils';
 
-const { testimonials: tm } = t(getLang(Astro.url));
-const avatars = { natalia, bram, ivan };
-// "Dmytro V." -> "DV" (Cyrillic on /uk/). Placeholder tints cycle through the orange ramp.
-const initials = (name: string) => name.match(/\p{Lu}/gu)?.join('') ?? '';
-const tints = ['bg-orange-200', 'bg-orange', 'bg-orange-300'];
-const looped = [0, 1, 2].flatMap((copy) =>
-  tm.items.map((item, i) => ({ item, i, clone: copy !== 1 })),
+const { testimonials: r } = t(getLang(Astro.url));
+const avatars = import.meta.glob<{ default: ImageMetadata }>(
+  '../../assets/v3/reviews/*.png',
+  {
+    eager: true,
+  },
 );
+const avatar = (name: string) =>
+  avatars[`../../assets/v3/reviews/${name}.png`].default;
 ---
 
-<Section
-  id="clients"
-  tone="sand"
-  class="@container pt-[54px] pb-[78px] lg:pt-[118px] lg:pb-[76px]"
->
-  <div class="lg:flex lg:items-start lg:justify-between">
-    <Heading class="lg:max-w-[620px] lg:text-wrap">{tm.title}</Heading>
-    <p aria-hidden="true" class="mt-[8px] max-lg:hidden">
-      {tm.label}
-      <span class="ml-[25px]">|</span>
-    </p>
-  </div>
-  <div class="lg:flex lg:items-end lg:justify-between lg:gap-8">
-    <p class="mx-auto mt-[28px] max-w-[290px] text-center text-[15px] leading-[18px] lg:mx-0 lg:mt-[31px] lg:max-w-none lg:text-left lg:text-body lg:leading-[1.172]">
-      {tm.sub}
-    </p>
-    <div class="flex shrink-0 gap-3 max-lg:hidden" data-arrows>
-      {[tm.prev, tm.next].map((label, i) => (
-        <button
-          type="button"
-          aria-label={label}
-          aria-controls="testimonials-list"
-          class="grid size-[48px] cursor-pointer place-items-center rounded-full border border-black transition-colors hover:bg-black hover:text-white"
-        >
-          <svg
-            viewBox="0 0 10 18"
-            class:list={['h-[16px]', i === 0 && 'rotate-180']}
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.5"
-            aria-hidden="true"
+<section class="border-t border-line bg-warm-50 py-[max(80px,calc(140*var(--u)))]">
+  <Container>
+    <SectionHead label={r.label} title={r.title} lead={r.sub} />
+  </Container>
+  <div class="overflow-hidden py-[4px] max-tab:snap-x max-tab:snap-mandatory max-tab:scroll-px-[20px] max-tab:overflow-x-auto max-tab:px-[20px]">
+    <ul
+      aria-label={r.listLabel}
+      class="flex w-max [animation-delay:-30s] [animation-duration:90s] hover:[animation-play-state:paused] tab:motion-safe:animate-marquee"
+    >
+      {[0, 1, 2, 3].map((copy) =>
+        r.items.map((item) => (
+          <li
+            aria-hidden={copy ? 'true' : undefined}
+            class:list={[
+              'mr-[16px] h-[max(400px,calc(480*var(--u)))] w-[min(84vw,340px)] shrink-0 snap-center tab:w-[max(300px,calc(560*var(--u)))]',
+              copy && 'max-tab:hidden',
+            ]}
           >
-            <path d="m1 1 8 8-8 8" />
-          </svg>
-        </button>
-      ))}
-    </div>
-  </div>
-
-  <ul
-    id="testimonials-list"
-    aria-label={tm.listLabel}
-    class="reveal mt-[53px] flex snap-x snap-mandatory data-auto:snap-none scroll-px-(--bleed) gap-[16px] overflow-x-auto scroll-smooth px-(--bleed) [--bleed:calc((100cqw-min(var(--container-content),100cqw-2*var(--spacing-gutter)))/2)] [scrollbar-width:none] -mx-(--bleed) motion-reduce:scroll-auto lg:mt-[49px] lg:gap-[24px]"
-  >
-    {looped.map(({ item, i, clone }) => (
-      <li
-        class="w-[88%] max-w-[483px] shrink-0 snap-start lg:w-[483px]"
-        inert={clone}
-      >
-        <figure class="flex h-full min-h-[305px] flex-col rounded-card bg-white p-[9px] lg:min-h-[451px] lg:p-[14px] lg:pb-[20px]">
-          <blockquote class="px-[11px] pt-[11px] pb-6 text-center text-[20px] leading-[1.172] lg:pr-[3px] lg:pl-[5px] lg:pt-[22px] lg:text-left lg:text-[28px]">
-            {item.quote.map((s, i) => (
-              <>
-                {i > 0 && ' '}
-                <span class="lg:block">{s}</span>
-              </>
-            ))}
-          </blockquote>
-          <figcaption class="mt-auto flex min-h-[77px] items-center justify-between gap-3 rounded-[8px] bg-mist py-[7px] pr-[16px] pl-[18px] lg:min-h-[110px] lg:pr-[40px] lg:pl-[20px]">
-            <span class="self-end text-[14px] leading-[17px] lg:text-[21px] lg:leading-[25px]">
-              <b class="block">{item.name},</b>
-              <b class="block">{item.company},</b>
-              {item.project}
-            </span>
-            {item.avatar === 'placeholder' ? (
+            <figure class="flex h-full flex-col rounded-[12px] border border-line bg-snow p-[max(24px,calc(36*var(--u)))]">
               <span
                 aria-hidden="true"
-                class:list={[
-                  'grid size-[60px] shrink-0 place-items-center rounded-full text-[20px] font-medium lg:size-[95px] lg:text-[32px]',
-                  tints[i % tints.length],
-                ]}
+                class="h-[28px] font-head text-[56px] leading-[0.6] font-extrabold text-amber-500"
               >
-                {initials(item.name)}
+                “
               </span>
-            ) : (
-              <Image
-                src={avatars[item.avatar]}
-                alt=""
-                width={190}
-                height={190}
-                class="size-[60px] shrink-0 rounded-full object-cover lg:size-[95px]"
-              />
-            )}
-          </figcaption>
-        </figure>
-      </li>
-    ))}
-  </ul>
-  <p
-    class="mt-[24px] text-center text-[15px] tabular-nums lg:hidden"
-    data-counter
-  >
-    1 / {tm.items.length}
-  </p>
-</Section>
-
-<script>
-  // Arrows (lg) scroll by one card (+ gap); the counter (mobile) shows the card snapped at the
-  // start. The list holds three copies of the items (see the top comment).
-  const list = document.getElementById('testimonials-list')!;
-  const counter = document.querySelector<HTMLElement>('[data-counter]')!;
-  const [prev, next] = document.querySelectorAll<HTMLButtonElement>(
-    '[data-arrows] button',
-  );
-  const n = list.children.length / 3;
-  const step = () =>
-    (list.firstElementChild as HTMLElement).offsetWidth +
-    parseFloat(getComputedStyle(list).columnGap);
-  // Back into the middle copy, instantly (the list is scroll-smooth).
-  const recenter = () => {
-    const set = n * step();
-    const shift =
-      list.scrollLeft < set - 1
-        ? set
-        : list.scrollLeft >= 2 * set - 1
-          ? -set
-          : 0;
-    if (shift)
-      list.scrollTo({ left: list.scrollLeft + shift, behavior: 'instant' });
-  };
-  let settle: ReturnType<typeof setTimeout>;
-  const update = () => {
-    // Focusable (arrow keys scroll it) only while it actually scrolls.
-    list.tabIndex = list.scrollWidth > list.clientWidth ? 0 : -1;
-    const i = Math.round(list.scrollLeft / step());
-    counter.textContent = `${(i % n) + 1} / ${n}`;
-    // ponytail: timer instead of `scrollend` (not in older Safari).
-    clearTimeout(settle);
-    settle = setTimeout(recenter, 150);
-  };
-  prev.addEventListener('click', () => list.scrollBy({ left: -step() }));
-  next.addEventListener('click', () => list.scrollBy({ left: step() }));
-  list.addEventListener('scroll', update, { passive: true });
-  addEventListener('resize', update);
-  list.scrollTo({ left: n * step(), behavior: 'instant' });
-  update();
-
-  // Autoplay: the row drifts left at SPEED px/s. Paused while the mouse is over the cards or
-  // arrows, while anything in the section has focus, for a few seconds after a touch, while
-  // off-screen, and never runs with prefers-reduced-motion. Snapping is off while it drifts
-  // (it would pull every frame back to a card) and back on whenever it's paused.
-  const SPEED = 30;
-  const section = list.closest('section')!;
-  const reduce = matchMedia('(prefers-reduced-motion: reduce)');
-  const holds = new Set<string>();
-  let frame = 0;
-  let last = 0;
-  let pos = 0; // own float: some browsers round scrollLeft, which would stall at 0.5px/frame
-  const tick = (now: number) => {
-    pos += ((now - last) / 1000) * SPEED;
-    last = now;
-    const set = n * step();
-    if (pos >= 2 * set) pos -= set;
-    list.scrollTo({ left: pos, behavior: 'instant' });
-    frame = requestAnimationFrame(tick);
-  };
-  const sync = () => {
-    const go = !holds.size && !reduce.matches;
-    list.toggleAttribute('data-auto', go);
-    if (go && !frame) {
-      pos = list.scrollLeft;
-      last = performance.now();
-      frame = requestAnimationFrame(tick);
-    } else if (!go && frame) {
-      cancelAnimationFrame(frame);
-      frame = 0;
-    }
-  };
-  const hold = (why: string, on: boolean) => {
-    if (on) holds.add(why);
-    else holds.delete(why);
-    sync();
-  };
-  for (const el of [list, prev.parentElement!]) {
-    el.addEventListener('pointerenter', (e) => {
-      if (e.pointerType === 'mouse') hold('hover', true);
-    });
-    el.addEventListener('pointerleave', () => hold('hover', false));
-  }
-  section.addEventListener('focusin', () => hold('focus', true));
-  section.addEventListener('focusout', (e) => {
-    if (!section.contains(e.relatedTarget as Node)) hold('focus', false);
-  });
-  let afterTouch: ReturnType<typeof setTimeout>;
-  list.addEventListener(
-    'touchstart',
-    () => {
-      clearTimeout(afterTouch);
-      hold('touch', true);
-    },
-    { passive: true },
-  );
-  list.addEventListener('touchend', () => {
-    afterTouch = setTimeout(() => hold('touch', false), 3000);
-  });
-  new IntersectionObserver(([e]) =>
-    hold('offscreen', !e.isIntersecting),
-  ).observe(list);
-  reduce.addEventListener('change', sync);
-</script>
+              <blockquote
+                lang={item.lang}
+                class="line-clamp-7 text-quote leading-[1.45] text-ink"
+              >
+                {item.quote}
+              </blockquote>
+              <figcaption class="mt-auto flex items-center gap-[14px] border-t border-line pt-[20px]">
+                <Image
+                  src={avatar(item.avatar)}
+                  alt=""
+                  width={104}
+                  height={104}
+                  class="size-[52px] shrink-0 rounded-full bg-warm-100 object-cover"
+                />
+                <span class="min-w-0">
+                  <strong class="block font-medium text-black">
+                    {item.name}
+                  </strong>
+                  <em class="block truncate font-mono text-[13px] text-text-3 not-italic">
+                    {item.project}
+                  </em>
+                </span>
+              </figcaption>
+            </figure>
+          </li>
+        )),
+      )}
+    </ul>
+  </div>
+</section>

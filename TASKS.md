@@ -4,6 +4,46 @@ How this file works: the agent takes the first unchecked task under **Now**, tic
 
 ## Now (unblocked)
 
+### Redesign v3.15 port (branch `redesign/v3`, M12)
+
+Port of Serhii's redesign from `~/dev/mavpy-design` (v3.15, commit `d1fbc8b`; `git pull` there first). Full plan: `~/.claude/plans/our-designer-finished-a-noble-frog-of-f60286dc-b132-43ca-b1ed-98678c0abc4d.md`. Rules: no inline `style=` or `<style>` in components, pages or layouts (Tailwind first; CSS Tailwind can't express goes in `global.css`); one commit per step; push the branch after each step; nothing goes to `main` without a PR.
+
+- [x] 0. Routing: UA at `/`, EN at `/en/`, `public/_redirects` sends `/uk/*` to `/` with a 301. Language pick on `/` in Base.astro: saved choice, then browser language, then UA; bots skipped. `preview_urls` in wrangler.jsonc.
+- [x] 1. Foundation: v3.15 tokens in `@theme` (amber-*, ink, ink-2/3, warm-50/100, snow, line; text-h2/h3/lead/body/small/quote via `--u`), fonts regenerated (+Inter, Montserrat 900, Roboto Mono, Roboto 100; −Inter Tight, Unbounded), images in `src/assets/v3/`.
+- [x] 2. Header: sticky, `data-stuck` background, popover menu, `LangSwitch.astro`, new `Button` (amber, lift + scale on hover) and `Container` (1280u, 20px gutters). Scroll script: opens at the top, honours #hash once and then drops it, in-page links don't write #.
+  - Breakpoints `tab:` (≥601px) and `desk:` (≥1200px); variants `uk:` and `menu-open:`. Old tokens (paper, sand, orange, text-card…) stay until step 14.
+- [x] 3. Hero + trust strip: entrance (mask-up, blur, wipe, bars), typed statement, grid + streaks, marquee strip. «clients» fills the container via `cqw` + a per-language em ratio (no JS fit).
+  - Kept the tagline as the h1 (the design makes «MORE clients» the h1); listed for Serhii.
+  - Visual checks per step dropped (Nikita, 2026-11-27): port from the HTML/CSS, one polish pass in step 14.
+- [x] 4. Featured case (new `FeaturedCase.astro`): white card, 5fr/7fr, text column `display: contents` below 1200px so the shot sits between intro and stats. Added `Container wide` (1680u, the design's .v-wrap), Button `tone="soft"`, and `src/scripts/reveal.ts` (cards with `data-ri` slide in, staggered; reuse it in later sections).
+  - CSS dumps of every remaining section (UA) are in `~/.claude/plans/dumps/uk-*.txt`; EN differs only by the `:lang(uk)` rules in the design's styles.css.
+- [x] 5. Situation (`Pain.astro`): new `ui/SectionHead.astro` (the design's .v-head, reuse in steps 6–12; slides in via `data-ri`), looping line icons (`.pi` in global.css), copy from the design in both languages.
+- [x] 6. Process: full-width step rows on the warm grid (`bg-hero-grid` renamed `bg-grid`); amber line + detail fade after each row's `data-ri` reveal (`.flow-side`/`.flow-more` in global.css). Rows start as each enters the view, not all three at once as in the design. Old mascot image unused (cleanup in 14).
+- [x] 7. Cases: dark accordion on `<details name>` (animation `.case` in global.css), first case open from the start, scroll hold left to native anchoring. Added Button `tone="outline"`, SectionHead `dark` and `\n` line breaks. Dropped the old case types and `tbd()`; old case images unused (cleanup in 14).
+- [x] 8. Testimonials: marquee (reuses `animate-marquee`, 90s), 4 copies with only the first exposed to screen readers; phones get a snap swipe row instead of the design's ← 1 / 3 → pager. Only the 3 real reviews in both languages (Bram's stays English, `lang="en"`).
+- [x] 9. Team (`About.astro`): all four as designed (Serhii, Nikita, Julia, Marina), approved by Nikita 2026-11-27. Nikita's photo is his own `team-nikita.png` (400 × 400, transparent background), replacing the design's jpg; it's smaller than the 960 × 1200 slot, so place it on a warm background and check it isn't upscaled on desktop.
+  - Stage rotates every 6s as in the design (hover/focus pauses, off with reduced motion); `.member`/`.tab-bar` in global.css. Section id is now `#team` (nothing linked `#about`). Nikita's cut-out uses `object-scale-down` at the slot's bottom, so it never renders above 400 CSS px. Old about copy, Serhii's old photo and the year-word helpers removed from i18n (photo file cleanup in 14).
+- [x] 10. Pricing (`goal` preset)
+  - Design's plans and prices (EN in $, UA in ₴ with ≈ $ under it), replacing the old three goals ($1000 / $700 / $40 a month). Both prices are in the markup and cross-fade on the section's `data-pay`, with no JS text swapping. The buttons set `input[name=goal]`, which arrives in step 11. `.ri` now also transitions `translate`, for the hover lift.
+- [x] 11. Contact (keep the Action + phone picker; optional `goal`; restyle). The goal goes in the Telegram message only; no new Airtable columns (Nikita, 2026-11-27)
+  - Two-column card (contacts | form in an amber frame; on phones the form comes first). `Input` is now the framed field (`.frame` in global.css, also used for the phone code box); `as="select"` dropped (unused). Kept: per-field inline errors (the design has one form-level message), the honeypot and min-time checks, and the Telegram success button. The goal arrives in Telegram as `Plan: <English plan name>`; unknown values are dropped. Checked in the browser: pay switch, goal preset, empty-submit errors and focus. Not submitted (the local .env would send a real lead).
+- [x] 12. Footer: logo + tagline, Navigate / Contact / Studio columns with icons, rule, full-width wordmark image, © bar with «Back to top». Contacts match the Contact section (site.ts phone, no Telegram). Old slogan/years copy dropped.
+  - Tokens renamed to the design's names: `black` #0F0F0F (headings), `ink` #202020 (body text, footer). Was `ink`/`ink-soft`, which mixed up the design's `--ink` in four places. Old `black` #000 removed. `ink-2`/`ink-3` are now `text-2`/`text-3` (classes `text-text-2` etc.).
+  - The year was rendering as 1970 (workerd freezes `Date` during prerender; production had «2021-1970» too). It now comes from `__BUILD_YEAR__`, defined in astro.config.mjs. Use that for any other build-time date.
+- [x] 13. ~~Allow indexing~~ Dropped (Nikita, 2026-11-27): robots.txt stays on Disallow until the real domain is live, so workers.dev never gets indexed. The Launch item «Allow search indexing» covers it.
+- [ ] 14. Cleanup, design match audit, Lighthouse, PR
+  - Done: old tokens, components, images and leftovers removed; every section on the 1280u column (`Container wide` gone); 404 on v3 tokens; AGENTS.md updated; Nikita's photo is a 960 × 1200 cut-out like the others.
+  - Audit tooling (`~/.claude/plans/audit/`): `python3 -I recv.py` (:8091, writes `x/`) and `python3 -m http.server 8092 --bind 127.0.0.1` there. In a tab on each origin (design `localhost:8080/notes/`, ours `localhost:4321/robots.txt`), load `http://127.0.0.1:8092/extract.js` with a script tag, call `__run('design'|'site', [1440,1280,1024,768,500], ['/','/en/'])`, then `python3 -I diff.py`. Keep the running tab in front (Chrome throttles background tabs). It compares text only: font, size, weight, line height, tracking, colour, position.
+  - Fixed by the audit: font fallbacks (`Roboto, Georgia` etc., as the design's vars; Georgia draws ↓ →), local Helvetica Neue Thin first, base size max(16px, 23u), UA typesetting (`uaTypo`), header/hero/featured/process details, team tab padding and timeline bar, case shots at natural ratio below 1200, contact form spacing, price gaps, UA prices in Inter Thin from 1200 (Nikita's call: the design renders Thin).
+  - Not differences: header x (different region origin), «НОВІ» box height, closed case panels, submit button line-height, footer −34px below 1200 (Telegram row), reviews swipe row at 500.
+  - Box audit (`box.js` → `__box(...)`, files `box-*`, then `python3 -I boxdiff.py`; same tooling): padding, borders, backgrounds, radii, shadows, image sizes. Fixed: hero and contact icon backgrounds #F7F5F2 (the design overrides `--grey-100` late in styles.css; token removed), placeholder #9A968F. Not differences: Chrome reports the design's 1.5px borders as 1px; Tailwind's oklab colours and stacked shadows; phone field narrower by the code box; team/featured offsets from reveals mid-slide.
+  - Preflight: the design has no reset beyond `box-sizing`, so margins and paddings show up in the position audit (all matched). Focus ring stays ours on purpose (black + amber halo; the design's is black only).
+  - Left: Lighthouse (Nikita runs it), then the PR (after Nikita's OK).
+  - Gotcha: CSS in `@layer components` loses to any utility on the same element that sets the same property (the team bar had `w-0`).
+- For Nikita: Cloudflare → Workers → `mavpy` → Settings → Builds → turn on non-production branch builds (gives a preview URL per push).
+- To check with Serhii: the new prices from the design ($399 / $699 / $1,200; UA ₴16 800 / ₴29 100 / ₴49 800), which replace $1000 / $700 / $40 a month. the h1 is the tagline («Сайти, що працюють на результат»), not «НОВІ клієнти» as in the design, for SEO and screen readers. The design's phone is +380 99 220 83 43 but `site.ts` has +380 99 320 84 54 (kept `site.ts` for now). The design adds Telegram @mavpy_agency. The design's favicon differs from ours (we kept ours, which has .ico and dark variants). Reviews: the design's EN page adds 3 placeholder reviews (Aurelia, The Nook, Unit Surface, stock avatars); left out until real ones arrive. Phones: swipe row instead of the ← 1 / 3 → pager. Situation: icons go by card index, but EN and UA have different cards, so in EN «Your site costs you deals» gets the rising line and «Traffic, but no enquiries» the calendar (kept as designed).
+
+- [ ] Send a real test lead from the preview URL: the Telegram message shows the `Plan:` line (when sent via a pricing button) and the Airtable record arrives.
 - [ ] Lighthouse re-check on production, `/` and `/uk/`, mobile + desktop (last run 2026-11-20; since then: phone picker, bot links, carousel autoplay).
 
 ## Waiting on Serhii: design
@@ -66,6 +106,8 @@ His Trello cards: **Update Figma**, **Block Design**, **Animations & Micro-inter
 ## Decisions for Nikita
 
 Technical and setup calls that are Nikita's alone.
+
+- [ ] Hero «clients» font: Macs now use the system Helvetica Neue Thin (as the design); other systems get our woff2 (slightly different cut, unknown licence). Keep it, or license the face.
 
 - Domain: mavpy.dev or mavpy.com.ua (when the design is final).
 - Whether Nikita's photo goes in the team block (waiting on Serhii's two variants).

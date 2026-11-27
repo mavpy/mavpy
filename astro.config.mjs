@@ -13,13 +13,13 @@ export default defineConfig({
   // No Astro sessions used; without this the adapter provisions a KV namespace for them.
   session: false,
   i18n: {
-    defaultLocale: 'en',
-    locales: ['en', 'uk'],
+    defaultLocale: 'uk',
+    locales: ['uk', 'en'],
     routing: { prefixDefaultLocale: false },
   },
   // Sitemap writes hreflang alternates for each page from the same locale list.
   integrations: [
-    sitemap({ i18n: { defaultLocale: 'en', locales: { en: 'en', uk: 'uk' } } }),
+    sitemap({ i18n: { defaultLocale: 'uk', locales: { uk: 'uk', en: 'en' } } }),
   ],
   // Lead delivery secrets, read through `astro:env/server` so they come from Cloudflare Worker
   // secrets in production and `.env` locally. Optional: a channel with missing config just counts as failed (see lib/leads.ts).
@@ -52,6 +52,8 @@ export default defineConfig({
   build: { inlineStylesheets: 'always' },
   vite: {
     plugins: [tailwindcss()],
+    // Prerendering runs in workerd, where Date is frozen at 1970; the config runs in Node.
+    define: { __BUILD_YEAR__: JSON.stringify(new Date().getFullYear()) },
   },
 });
 

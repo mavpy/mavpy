@@ -1,67 +1,121 @@
 ---
-// Pricing ("Pick your goal, see the price"): three cards. lg: equal columns; each card is a
-// 4-row subgrid (title, "You get", list, price row), so the boxes line up when a uk title
-// wraps, and the price row sits at the bottom. Mobile: stacked, with a
-// full-width button. Figma's insets differ per element and per breakpoint (title, cream box,
-// list, price); they're kept as measured.
+// Pricing: pay-once / pay-in-3 switch above three plan cards. Desktop:
+// each card is a 6-row subgrid (top, title, text, price, points, button), so the rows line up
+// across cards when a uk title wraps. Both prices are in the markup and cross-fade on the section's
+// data-pay (the design swaps the text with JS); without JS the pay-once price shows.
+// A plan's button presets the contact form's goal (input[name=goal], added in Contact).
 import Button from '../ui/Button.astro';
-import Heading from '../ui/Heading.astro';
-import Section from '../ui/Section.astro';
-import { getLang, t } from '../../i18n/utils';
+import Container from '../ui/Container.astro';
+import SectionHead from '../ui/SectionHead.astro';
+import { getLang, localizePath, t } from '../../i18n/utils';
 
-const { pricing } = t(getLang(Astro.url));
+const lang = getLang(Astro.url);
+const { pricing: p } = t(lang);
+const contact = localizePath(lang, '#contact');
+// Shown for one pay mode, faded out (and hidden from screen readers) for the other.
+const fade =
+  'col-start-1 row-start-1 transition-[opacity,visibility] duration-200 ease-mv';
+const onceCls = `${fade} group-data-[pay=3]/pay:invisible group-data-[pay=3]/pay:opacity-0`;
+const partsCls = `${fade} invisible opacity-0 group-data-[pay=3]/pay:visible group-data-[pay=3]/pay:opacity-100`;
 ---
 
-<Section
+<section
   id="pricing"
-  tone="sand"
-  class="pt-[36px] pb-[37px] lg:pt-[70px] lg:pb-[104px]"
+  data-pay="1"
+  class="group/pay scroll-mt-[max(72px,calc(108*var(--u)))] bg-warm-50 py-[max(80px,calc(140*var(--u)))]"
 >
-  <div class="lg:flex lg:items-start lg:justify-between">
-    <Heading>{pricing.title}</Heading>
-    <p aria-hidden="true" class="mt-[8px] max-lg:hidden">
-      {pricing.label}
-      <span class="ml-[25px]">|</span>
-    </p>
-  </div>
-  <p class="mx-auto mt-[23px] max-w-[290px] text-center text-[15px] leading-[18px] lg:mx-0 lg:mt-[39px] lg:max-w-none lg:text-left lg:text-body lg:leading-[1.172]">
-    {pricing.sub}
-  </p>
-
-  <ul class="mt-[46px] grid gap-[31px] lg:mt-[84px] lg:grid-cols-3 lg:gap-x-[25px] lg:gap-y-0">
-    {pricing.items.map((item, i) => (
-      <li
-        style={`--i: ${i}`}
-        class="reveal transition-[translate] duration-300 ease-out-quart hover:-translate-y-1 flex flex-col rounded-card bg-white lg:row-span-4 lg:grid lg:grid-rows-subgrid px-[11px] pt-[25px] pb-[20px] lg:px-[12px] lg:pt-[30px] lg:pb-[46px]"
-      >
-        <h3 class="ml-[9px] font-display text-[28px] leading-[1.067] font-medium lg:ml-[4px] lg:text-[32px]">
-          {item.title}
-        </h3>
-        <p class="mt-[29px] min-h-[92px] rounded-[8px] bg-cream px-[9px] pt-[9px] pb-[14px] text-[20px] leading-[23px] lg:mt-[38px] lg:min-h-[107px] lg:px-[12px] lg:pt-[11px] lg:pb-[12px] lg:text-body lg:leading-[28px]">
-          <b>{pricing.youGet}</b> {item.youGet}
-        </p>
-        <ul class="mt-[16px] ml-[23px] space-y-[12px] text-[20px] leading-[23px] lg:mt-[29px] lg:ml-[4px] lg:space-y-[15px] lg:text-body lg:leading-[27px]">
-          {item.bullets.map((b) => (
-            <li class="flex gap-[14px] before:mt-[0.56em] before:size-[0.2em] before:shrink-0 before:rounded-full before:bg-current before:content-[''] lg:gap-[16px]">
-              {b}
-            </li>
-          ))}
-        </ul>
-        <div class="mt-[22px] lg:mt-0 lg:flex lg:flex-wrap lg:items-center lg:self-end lg:justify-between lg:gap-3 lg:pt-[51px] lg:pr-[14px] lg:pl-[12px]">
-          <p class="ml-[39px] text-[24px] whitespace-nowrap leading-[1.172] font-bold lg:ml-0 lg:text-[28px]">
-            {pricing.from} {item.price}
+  <Container>
+    <SectionHead label={p.label} title={p.title} lead={p.sub} />
+    <div
+      role="group"
+      aria-label={`${p.pay.once} / ${p.pay.parts}`}
+      class="mb-[max(24px,calc(40*var(--u)))] inline-flex gap-[4px] rounded-[10px] border border-line bg-snow p-[4px]"
+    >
+      {[p.pay.once, p.pay.parts].map((label, i) => (
+        <button
+          type="button"
+          value={i ? '3' : '1'}
+          aria-pressed={i ? 'false' : 'true'}
+          class="cursor-pointer rounded-[8px] px-[22px] py-[12px] text-[max(14px,calc(16*var(--u)))] font-medium text-text-2 transition-colors duration-200 ease-mv aria-pressed:bg-ink aria-pressed:text-snow"
+        >
+          {label}
+        </button>
+      ))}
+    </div>
+    <ul class="grid gap-g desk:grid-cols-3 desk:grid-rows-[auto_auto_auto_auto_1fr_auto]">
+      {p.plans.map((plan) => (
+        <li
+          data-ri
+          class="relative flex flex-col gap-[max(16px,calc(22*var(--u)))] rounded-[12px] border-2 border-transparent bg-snow p-[max(24px,calc(40*var(--u)))] shadow-[0_0_0_1px_var(--color-line)] hover:-translate-y-1 hover:border-amber-500 hover:shadow-none desk:row-span-6 desk:grid desk:grid-cols-[minmax(0,1fr)] desk:grid-rows-subgrid"
+        >
+          <div class="flex items-center justify-between">
+            <span class="font-mono text-[max(13px,calc(15*var(--u)))] font-medium text-amber-700">
+              {plan.kind}
+            </span>
+            {plan.popular && (
+              <span class="rounded-full bg-amber-500 px-[12px] py-[4px] text-[13px] font-medium text-black">
+                {p.badge}
+              </span>
+            )}
+          </div>
+          <h3 class="font-head text-h3 leading-[1.05] font-bold tracking-[-0.005em] text-black">
+            {plan.title}
+          </h3>
+          <p class="text-body leading-[1.5] text-text-2">{plan.text}</p>
+          <p class="grid grid-cols-[auto_1fr] items-baseline gap-x-[0.4em] gap-y-[4px] text-[max(16px,calc(19*var(--u)))] leading-[1.45] text-text-2">
+            <span class="text-text-3">{p.from}</span>
+            <b class="grid justify-self-start font-head text-[max(40px,calc(64*var(--u)))] leading-none font-semibold tracking-[-0.02em] whitespace-nowrap text-black tabular-nums desk:font-medium uk:desk:font-thin">
+              <span class={onceCls}>{plan.once[0]}</span>
+              <span class={partsCls}>{plan.parts[0]}</span>
+            </b>
+            {plan.once[1] && (
+              <span class="col-start-2 grid text-small leading-[1.3] font-medium text-text-3">
+                <span class={onceCls}>{plan.once[1]}</span>
+                <span class={partsCls}>{plan.parts[1]}</span>
+              </span>
+            )}
           </p>
+          <ul>
+            {plan.points.map((point) => (
+              <li class="flex gap-[12px] border-t border-line py-[14px] text-small before:font-mono before:text-amber-700 before:content-['+']">
+                {point}
+              </li>
+            ))}
+          </ul>
           <Button
-            href="#contact"
-            size="sm"
+            href={contact}
+            data-goal={plan.goal}
             block
-            class="mt-[30px] max-lg:py-[12px] max-lg:text-[20px] lg:mt-0 lg:px-[21.5px] lg:w-auto lg:shrink-0"
+            class="tab:max-desk:w-auto tab:max-desk:self-start desk:self-end"
           >
-            {pricing.cta}
-            <span class="sr-only">: {item.title}</span>
+            {p.cta}
+            <span
+              aria-hidden="true"
+              class="inline-block transition-transform duration-200 ease-mv group-hover/btn:translate-x-[5px]"
+            >
+              →
+            </span>
           </Button>
-        </div>
-      </li>
-    ))}
-  </ul>
-</Section>
+        </li>
+      ))}
+    </ul>
+    <p class="mt-[20px] text-small text-text-2">{p.note}</p>
+  </Container>
+</section>
+
+<script>
+  const section = document.getElementById('pricing')!;
+  const payBtns = section.querySelectorAll<HTMLButtonElement>('button[value]');
+  for (const btn of payBtns)
+    btn.addEventListener('click', () => {
+      section.dataset.pay = btn.value;
+      for (const b of payBtns)
+        b.setAttribute('aria-pressed', String(b === btn));
+    });
+  for (const a of section.querySelectorAll<HTMLElement>('[data-goal]'))
+    a.addEventListener('click', () => {
+      const goal =
+        document.querySelector<HTMLInputElement>('input[name="goal"]');
+      if (goal) goal.value = a.dataset.goal!;
+    });
+</script>

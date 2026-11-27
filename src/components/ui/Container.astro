@@ -1,5 +1,6 @@
 ---
-// The 1226px content column, with a 24px gutter below that width.
+// The design's page column: 1280 units on desktop (scales with --u), 20px gutters below 1200px.
+// The hero and every section share this one width.
 interface Props {
   as?: 'div' | 'header' | 'footer' | 'nav';
   class?: string;
@@ -7,11 +8,6 @@ interface Props {
 const { as: Tag = 'div', class: className } = Astro.props;
 ---
 
-<Tag
-  class:list={[
-    'mx-auto w-[calc(100%-2*var(--spacing-gutter))] max-w-content',
-    className,
-  ]}
->
+<Tag class:list={['mx-auto w-[calc(100%-40px)] desk:w-site', className]}>
   <slot />
 </Tag>

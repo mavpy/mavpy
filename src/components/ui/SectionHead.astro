@@ -1,0 +1,47 @@
+---
+// The design's .v-head: h2 + lead on the left (9fr), a small mono label on the right (3fr).
+// Below 1200px it stacks, label first (that's also the DOM order, so screen readers match mobile).
+// Slides in with the cards (data-ri, reveal.ts). dark: colours for the dark Cases section.
+// A \n in the title is a forced line break from 1200px, as the design's <br> (hidden below that).
+interface Props {
+  label: string;
+  title: string;
+  lead?: string;
+  dark?: boolean;
+}
+const { label, title, lead, dark = false } = Astro.props;
+---
+
+<div
+  data-ri
+  class="mb-[32px] grid gap-[16px] desk:mb-[max(40px,calc(64*var(--u)))] desk:grid-cols-[9fr_3fr] desk:gap-g"
+>
+  <p
+    class:list={[
+      'font-mono text-[max(13px,calc(16*var(--u)))] desk:order-2 desk:text-right',
+      dark ? 'text-[#b9b9b4]' : 'text-text-3',
+    ]}
+  >
+    {label}
+  </p>
+  <div>
+    <h2
+      class:list={[
+        'font-head text-h2 leading-none font-bold tracking-[-0.02em] desk:whitespace-pre-line',
+        dark ? 'text-snow' : 'text-black',
+      ]}
+    >
+      {title}
+    </h2>
+    {lead && (
+      <p
+        class:list={[
+          'mt-[max(14px,calc(20*var(--u)))] text-lead leading-[1.4] desk:max-w-[calc(820*var(--u))]',
+          dark ? 'text-[#b9b9b4]' : 'text-text-2',
+        ]}
+      >
+        {lead}
+      </p>
+    )}
+  </div>
+</div>

@@ -1,42 +1,7 @@
-// All English copy. This file is the source of truth (synced from Webflow once, 2026-11-20); changes now come from Serhii via Figma.
-// Years since the studio started, counted at build time (pages are prerendered).
-const thisYear = new Date().getFullYear();
-export const studioYears = thisYear - 2021;
-export const yearRange = `2021-${thisYear},`;
-const yearsEn: Record<number, string> = {
-  5: 'Five',
-  6: 'Six',
-  7: 'Seven',
-  8: 'Eight',
-  9: 'Nine',
-  10: 'Ten',
-};
-
-type Facts = {
-  goal: string;
-  start: string;
-  did: string;
-  time: string;
-  result: string;
-};
-export type CaseItem = {
-  title: string;
-  type: string;
-  url: string;
-  facts: Facts;
-};
-export type Testimonial = {
-  quote: string[];
-  name: string;
-  company: string;
-  project: string;
-  avatar: 'natalia' | 'bram' | 'ivan' | 'placeholder'; // placeholder = initials circle, TODO(photo)
-};
-// TODO(copy): placeholder until Serhii sends the real facts for a case.
-export const tbd = (lang: 'en' | 'uk' = 'en'): Facts => {
-  const v = lang === 'uk' ? 'уточнюється' : 'to be confirmed';
-  return { goal: v, start: v, did: v, time: v, result: v };
-};
+// All English copy. uk.ts has the same keys (typed as Dict).
+// The footer's copyright years; the year is set at build time in astro.config.mjs.
+declare const __BUILD_YEAR__: number;
+export const copyright = `© 2022–${__BUILD_YEAR__} MAVPY Design & Dev`;
 
 export const en = {
   meta: {
@@ -69,266 +34,351 @@ export const en = {
     pricing: 'Pricing',
     contact: 'Contact',
     menuOpen: 'Open menu',
-    menuClose: 'Close menu',
+    cta: 'Get my estimate',
+    // Name of the UA / EN link group (the links themselves: langNames in utils.ts).
+    langGroup: 'Language',
   },
-  // The link that switches to the other language; its label is written in that language.
-  langSwitch: { short: 'UA', label: 'Українською' },
   footer: {
     navLabel: 'Footer',
-    slogan: 'Less noise. More results.',
-    email: 'EMAIL:',
-    phone: 'PHONE:',
-    instagram: 'INST:',
-    years: yearRange,
-    studio: 'MAVPY DESIGN & DEVELOPMENT STUDIO',
+    tagline: ['Less noise.', 'More substance.'],
+    navTitle: 'Navigate',
+    contactTitle: 'Contact',
+    studioTitle: 'Studio',
+    studio: ['Design & development', 'Since 2022', 'UA / EN'],
+    copyright,
+    toTop: 'Back to top ↑',
   },
   hero: {
-    // Figma sets "websites" in bold, so the line is split around it.
-    h1: {
-      before: 'Conversion-focused ',
-      em: 'websites',
-      after: ' for growing businesses',
-    },
-    more: 'More',
+    // The design sets the end of the line in bold, so it's split around it.
+    h1: { before: 'Websites built around ', em: 'business results', after: '' },
+    more: 'MORE',
     clients: 'clients',
-    // Desktop breaks after every line; mobile only before the last one.
+    // Desktop breaks after every line; below 1200px only before the last one.
     statement: ['Not just', 'a new', 'website'],
-    note: ['Designed and built in-house.', 'Priced upfront.'],
-    cta: 'Get an estimate',
-    // ink width of `clients` in ems (Helvetica Neue Thin, +4%): sizes the word to the column.
-    clientsEm: 2.8,
+    note: ['Scoped, priced upfront,', 'delivered end-to-end.'],
+    cta: 'Get my estimate',
   },
   trust: {
-    label: 'Why MAVPY',
+    label: 'Why clients work with us',
     items: [
-      '30+ projects',
+      '30+ projects since 2022',
       'Fixed price, no surprises',
-      'Designed and built in-house',
-      'PageSpeed 90+ on mobile',
+      'Founder-led, direct',
+      'Reply within 24h',
+      'Pay in 3 parts',
+      'Booking, CRM and bot wired in',
+      'You own the site and the code',
     ],
   },
+  featured: {
+    label: 'A case from our work',
+    title: 'Doctor LOR',
+    sub: 'ENT clinic in Kharkiv: from phone-only booking to a site that books itself',
+    text: 'Before: patients could only book by phone, on a site from the early 2000s. Now booking runs itself and reminders go out on their own.',
+    stats: [
+      { value: '271', label: 'organic clicks in 2 months' },
+      { value: '#1–2', label: 'in Google by clinic name and area' },
+      { value: '$0', label: 'spent on ads' },
+    ],
+    cta: 'Read the case ↓',
+    live: 'Open live site',
+    shotAlt: 'Doctor LOR website',
+    url: 'https://www.drlor-kh.com/',
+    host: 'drlor-kh.com',
+  },
   pain: {
-    label: 'situation',
-    title: 'Which of these sounds like you right now?',
-    sub: "Find yours below — that's what we'll build around.",
-    // Each title is [before, after] a line break that only shows on desktop (as in Figma).
+    label: 'Sound familiar?',
+    title: 'Which of these sounds like you?',
+    sub: 'Find yours — that’s where we start.',
     cards: [
       {
-        title: ['Your site', 'costs deals'],
+        title: 'Your site costs you deals',
         text: 'Visitors make up their minds in seconds, long before they ever read your pitch.',
       },
       {
-        title: ["Referrals aren't", 'enough'],
-        text: "Luck isn't a strategy. You need a steady, predictable stream of qualified leads.",
+        title: 'Referrals aren’t enough',
+        text: 'Luck isn’t a plan. You need a steady, predictable stream of qualified leads.',
       },
       {
-        title: ['Admins drown', 'in calls'],
-        text: 'Patients call, can’t get through and book elsewhere. No-shows eat the schedule.',
+        title: 'Traffic, but no enquiries',
+        text: 'People visit, but the site fails to turn them into real business enquiries.',
       },
-    ] as { title: [string, string]; text: string }[],
+    ],
   },
   process: {
-    label: 'process',
+    label: 'Process',
     title: 'How we do it',
-    intro:
-      'Design that can actually be built. Code that sells. Both under one roof.',
-    // Titles are [before, after] a desktop-only line break, as in pain.cards.
+    intro: 'One clear path. The right people for your goal, no more, no less.',
+    // fig: the big number and its word.
     steps: [
       {
-        title: ['Design and code', 'under one roof'],
-        text: 'Strategy, design, build and automation by the two founders. No hand-offs to outside contractors.',
+        fig: ['1', 'team'],
+        title: 'Full cycle, done for you',
+        text: 'From zero to a steady flow of clients. Nothing gets lost in hand-offs.',
+        more: 'Strategy, copy, design, build, booking and ads. One team and one contract, so nothing gets lost between contractors.',
       },
       {
-        title: ['Minimal load', 'on your side'],
-        text: 'We agree the decisions that matter, handle everything else, and leave you free to run your business.',
-      },
-      {
-        title: ['Result in 2–3', 'months'],
+        fig: ['2', 'weeks'],
+        title: 'Live in as little as 2 weeks',
         text: 'We set the timeline before we start, tie it to your scope, and hold to it.',
+        more: 'Week 1: plan and design. Week 2: build, integrations and launch. The timeline is fixed in the contract.',
       },
-    ] as { title: [string, string]; text: string }[],
+      {
+        fig: ['3', 'approvals'],
+        title: 'Minimal load on your side',
+        text: 'We agree on the decisions that matter, handle the rest, and leave you free to run your business.',
+        more: 'You approve three things: the plan, the design and the launch. We do the rest and show you the result.',
+      },
+    ],
   },
   cases: {
-    label: 'cases',
-    title: 'Real projects, real results',
-    sub: 'Same structure every card — so you can compare goals, not marketing.',
-    link: 'View live site',
-    // Appended to the link for screen readers: "View live site: Medical clinic (opens in a new tab)".
-    newTab: 'opens in a new tab',
-    facts: {
-      goal: 'Goal:',
-      start: 'Starting point:',
-      did: 'What we did:',
-      time: 'Timeframe:',
-      result: 'Result:',
-    },
-    // Only the clinic has real facts and a URL. TODO(copy): facts and URLs for cases 2–5 from Serhii.
+    label: 'Cases',
+    title: 'How our clients’\nbusiness changed',
+    sub: 'Where each client started, what we did and what changed.',
+    facts: ['Before', 'What we did', 'After'],
+    live: 'Open live site',
+    // facts: before, what we did, after. HTML: <b> marks the key figures.
     items: [
       {
-        title: 'Medical clinic',
-        type: 'from scratch',
+        name: 'Doctor LOR',
+        kind: 'ENT clinic · Kharkiv',
+        shot: 'case-doctor-lor',
         url: 'https://www.drlor-kh.com/',
-        facts: {
-          goal: 'steady patient flow, booking that runs itself',
-          start:
-            'early-2000s site, patients only by word of mouth, every appointment booked by phone',
-          did: 'research · UX analysis · redesign & build · booking + reminder automation',
-          time: '~1.5 months',
-          result:
-            'booking runs on its own, reminders go out automatically, a real stream of enquiries where there used to be only word of mouth',
-        },
+        host: 'drlor-kh.com',
+        facts: [
+          'Patients take months to choose a surgeon and fear the operation. Booking was by phone only, on a site from the early 2000s.',
+          'A first screen about the outcome: breathe freely, look natural. Price and sedation shown up front. Booking in <b>one click</b>.',
+          '<b>271</b> organic clicks and <b>#1–2</b> in Google within <b>2 months</b>, with <b>$0</b> on ads. Calls come in from search.',
+        ],
       },
-      { title: 'Massage studio', type: 'redesign', url: '', facts: tbd() },
-      { title: 'English school', type: 'from scratch', url: '', facts: tbd() },
-      { title: 'Crypto company', type: 'from scratch', url: '', facts: tbd() },
       {
-        title: 'B2B Solar company',
-        type: 'concept project',
-        url: '',
-        facts: tbd(),
+        name: 'Aurelia Dental',
+        kind: 'Premium dentistry · Antalya',
+        shot: 'case-aurelia-dental',
+        url: 'https://aurelia-dental.webflow.io/',
+        host: 'aurelia-dental.webflow.io',
+        facts: [
+          'Patients from abroad choose a clinic remotely and fear pain and hidden costs.',
+          'A calm, photo-led design and a fear-free promise. A <b>free online consultation</b> before the flight. Only <b>two actions</b>: book or consult.',
+          'Patients book the consultation <b>before they travel</b>. The site answers the questions the team used to repeat on every call.',
+        ],
       },
-    ] as CaseItem[],
+      {
+        name: 'SRT',
+        kind: 'Chronic pain therapy',
+        shot: 'case-srt-therapy',
+        url: 'https://srt-bf60b5.webflow.io/',
+        host: 'srt-bf60b5.webflow.io',
+        facts: [
+          'Clients come after years of pain and failed treatments. Booking took <b>half the administrator’s day</b>.',
+          'The method explained step by step, <b>10+ years</b> of practice on the first screen. Online booking synced with the calendar.',
+          'Booking runs on its own. The administrator got <b>half a day back</b>.',
+        ],
+      },
+      {
+        name: 'The Nook',
+        kind: '12-room hotel by the sea',
+        shot: 'case-the-nook',
+        url: 'https://the-nook----premium-coastal-coliving-we.webflow.io/',
+        host: 'the-nook.webflow.io',
+        facts: [
+          'Guests saw just another beach hotel, and rooms stood empty <b>off-season</b>.',
+          'New positioning for remote workers: “Work by the sea. Rest with purpose.” Quiet workspace, open <b>all year</b>, long-stay packages.',
+          'The off-season has its own guests: remote workers who stay for <b>weeks, not days</b>.',
+        ],
+      },
+      {
+        name: 'Unit Surface',
+        kind: 'B2B rooftop solar',
+        shot: 'case-unit-surface',
+        url: 'https://unit-surface-c8e2de.webflow.io/',
+        host: 'unit-surface.webflow.io',
+        facts: [
+          'Owners of industrial roofs don’t see solar as income, and B2B decisions take <b>months</b>.',
+          'Headline: “Your roof is an untapped financial asset”. An ROI calculator on the first screen: payback in <b>5–7 years</b>.',
+          'Visitors see <b>their own payback</b> before the first call, so sales talks start further along.',
+        ],
+      },
+    ],
   },
   testimonials: {
-    label: 'clients',
-    title: "What it's like to work with us",
-    sub: 'Real people, real projects — read them for one thing: was it calm, was it worth it.',
-    listLabel: 'Client testimonials',
-    prev: 'Previous testimonial',
-    next: 'Next testimonial',
-    // Webflow's 6. `quote` is split where the desktop frame breaks lines; mobile runs it together.
+    label: 'Reviews',
+    title: 'Client reviews',
+    sub: 'Reviews from people we’ve already launched with.',
+    listLabel: 'Client reviews',
+    // The three real reviews. Display order follows the design (it starts the line at the third).
     items: [
       {
-        quote: [
-          "“Booking used to eat half my administrator's day.",
-          'Now it runs on its own and patients just show up.',
-          'Serhii handled everything — I barely had to step in.”',
-        ],
-        name: 'Natalia M.',
-        company: 'SRT Massage clinic',
-        project: 'Design and development',
-        avatar: 'natalia',
-      },
-      {
-        quote: [
-          '“Serhii is strong in communication, super fast in delivering the scope, overdelivers and is a real professional.',
-          'Gladly recommend.”',
-        ],
+        avatar: 'review-bram-spacem',
         name: 'Bram V.',
-        company: 'Space’M Online',
-        project: 'Design and development',
-        avatar: 'bram',
+        project: 'Space’M Online · web design',
+        quote:
+          'Serhii is strong in communication, super fast in delivering the scope, overdelivers and is a real professional. Gladly recommend.',
+        lang: undefined as 'en' | undefined,
       },
       {
-        quote: [
-          '“We had visitors but almost no enquiries.',
-          "Serhii didn't just redesign — he asked why people were leaving first.",
-          "That's the difference.",
-          'The form finally started filling.”',
-        ],
+        avatar: 'review-natalia-srt',
+        name: 'Natalia M.',
+        project: 'SRT · online booking',
+        quote:
+          'Booking used to eat half my administrator’s day. Now it runs on its own and patients just show up. Serhii handled everything, I barely had to step in.',
+      },
+      {
+        avatar: 'review-ivan',
         name: 'Ivan V.',
-        company: 'Doctor LOR',
-        project: 'Design and development',
-        avatar: 'ivan',
+        project: 'Doctor LOR · new site and booking',
+        quote:
+          'We had visitors but almost no enquiries. Serhii didn’t just redesign, he asked why people were leaving first. That’s the difference. The form finally started filling.',
       },
-      {
-        quote: [
-          '“Our team wasted hours confirming appointments manually every single week. Serhii set up a self-serve system that patients love. Best operational upgrade we’ve made.”',
-        ],
-        name: 'Dmytro V.',
-        company: 'Dental clinic',
-        project: 'Full redesign',
-        avatar: 'placeholder',
-      },
-      {
-        quote: [
-          '“I was afraid setting up online scheduling would be a headache, but Serhii built everything smoothly. It saved us a full-time hire and works like clockwork 24/7.”',
-        ],
-        name: 'Julia G.',
-        company: 'Online store',
-        project: 'Full redesign',
-        avatar: 'placeholder',
-      },
-      {
-        quote: [
-          '“We used to lose so many bookings in mess generated by manual messaging. Serhii automated the entire flow in a few days. Now calendar fills itself up without a single glitch.”',
-        ],
-        name: 'Daria L.',
-        company: 'Design studio',
-        project: 'Full redesign',
-        avatar: 'placeholder',
-      },
-    ] as Testimonial[],
-  },
-  about: {
-    label: 'about',
-    // \n: the line break both frames use.
-    title: 'A craft studio,\nnot a conveyor belt',
-    sub: 'Building since 2021. A founder leads every project personally, start to launch.',
-    // The card title: line 1, then line 2 with its first part medium-weight on desktop (as in Figma).
-    hi: 'Serhii —',
-    role: { em: 'Co-founder,', after: ' strategy & design' },
-    // One string per paragraph; \n is a forced line break.
-    paragraphs: [
-      'I’m the one you talk to, from the first brief to launch.',
-      'Before any design, I write the plan: the problem, the audience, the offer — and the number we’re trying to move.',
-      'I work out who your clients are and what makes them book — then design the site around it.\nI write the copy too, so every word on the page has a job.',
-      `${yearsEn[studioYears] ?? studioYears} years, 30+ projects across Ukraine and worldwide.`,
     ],
-    photoAlt: 'Serhii, co-founder of MAVPY',
+  },
+  team: {
+    label: 'Team',
+    title: 'The people behind\nyour project',
+    what: 'What I do',
+    // photo: file name in src/assets/v3/team/. quote: one string per paragraph.
+    members: [
+      {
+        photo: 'team-serhii',
+        name: 'Serhii',
+        role: 'Designer & product manager',
+        quote: [
+          'I start with why people leave your site, then design the page that keeps them.',
+          'From the first call to launch, you talk to me. I keep the plan, the deadlines and the decisions in one place, so nothing gets lost between people.',
+        ],
+        tags: [
+          'Research & UX',
+          'Site structure',
+          'Design in Figma',
+          'Project lead',
+        ],
+      },
+      {
+        photo: 'team-nikita',
+        name: 'Nikita',
+        role: 'Developer & automation',
+        quote: [
+          'I build the site and connect it to what you already use: booking, CRM, a Telegram bot.',
+          'Every request lands where your team will see it. After launch I stay on the tech side, so updates and fixes don’t stall.',
+        ],
+        tags: [
+          'Webflow & custom code',
+          'Booking, CRM, Telegram bots',
+          'Integrations',
+          'Launch & support',
+        ],
+      },
+      {
+        photo: 'team-julia',
+        name: 'Julia',
+        role: 'Marketing & copywriting',
+        quote: [
+          'I write in your clients’ words, not ours. Each headline answers one question: why choose you over the business next door.',
+          'Before writing, I read your reviews, calls and competitors’ pages to find the phrases your clients actually use.',
+        ],
+        tags: [
+          'Positioning & offer',
+          'Website copy',
+          'Case studies',
+          'Ad content',
+        ],
+      },
+      {
+        photo: 'team-marina',
+        name: 'Marina',
+        role: 'Ads & analytics',
+        quote: [
+          'I run your ads and set up tracking, so you see which channel brings paying clients and which one only spends the budget.',
+          'You get a short report in plain words: what we spent, what came in, and what we change next.',
+        ],
+        tags: [
+          'Google & Meta ads',
+          'Analytics & tracking',
+          'Cost per enquiry reports',
+          'Budget planning',
+        ],
+      },
+    ],
   },
   pricing: {
-    label: 'pricing',
+    label: 'Pricing',
     title: 'Pick your goal, see the price',
-    sub: 'No form, no call to see a number. Find your goal, see where it starts.',
-    youGet: 'You get:',
+    sub: 'Pick a goal and see the price right away. We fix the final price before we start.',
+    pay: { once: 'Pay once', parts: 'Pay in 3 parts' },
     from: 'from',
-    cta: 'Get an estimate',
-    items: [
+    badge: 'Popular',
+    cta: 'Discuss your project',
+    note: 'Need a Telegram bot, CRM or another feature? It can be added to any package.',
+    // price: [main, line under it ('' for none)], once and in 3 parts. goal: the contact form's preset.
+    plans: [
       {
-        title: 'Attract new clients',
-        youGet:
-          'a site that turns strangers into enquiries — and ads that keep them coming.',
-        bullets: [
-          'online positioning',
-          'site design & build',
-          'ad setup & automation',
+        kind: 'Landing page',
+        title: 'A site that brings enquiries',
+        text: 'One page that explains your offer and turns visitors into enquiries.',
+        points: [
+          'One-page site',
+          'Copy that sells',
+          'Form with instant alerts',
+          '1 month of support after launch',
         ],
-        price: '$1000',
+        once: ['$399', ''],
+        parts: ['3 × $133', ''],
+        goal: 'clients',
+        popular: false,
       },
       {
-        title: 'Launch a new service',
-        youGet:
-          'one page that makes the new offer impossible to misunderstand.',
-        bullets: [
-          'landing page for the offer',
-          'copy & visuals',
-          'launch ad setup',
+        kind: 'Landing page + automation',
+        title: 'A site that books clients for you',
+        text: 'Takes bookings online and sends every lead straight to your team.',
+        points: [
+          'Everything in Landing page',
+          'Online booking & calendar',
+          'Leads to Telegram or CRM',
+          '1 month of support after launch',
         ],
-        price: '$700',
+        once: ['$699', ''],
+        parts: ['3 × $233', ''],
+        goal: 'service',
+        popular: true,
       },
       {
-        title: 'Care plan',
-        youGet: 'we keep it fast, safe and up to date after launch.',
-        bullets: [
-          'first 2 weeks free',
-          'fixes within 2–4 hours',
-          'small edits monthly',
+        kind: 'Multi-page website',
+        title: 'A site for a growing business',
+        text: 'A page for every service, with booking and lead handling built in.',
+        points: [
+          'Up to 5 pages',
+          'Booking & lead handling',
+          'Analytics & lead tracking',
+          'Priority support for 1 month',
         ],
-        price: '$40/m',
+        once: ['$1,200', ''],
+        parts: ['3 × $400', ''],
+        goal: 'redesign',
+        popular: false,
       },
     ],
   },
   contact: {
-    title: "Tell us your goal, we'll price it",
-    sub: "You've seen the ballpark — from $700. Exact figure on a short call. No sales marathon. We reply within 24 hours.",
-    name: 'Your name',
+    label: 'Contact',
+    title: 'Free 15‑minute\nsite review',
+    sub: 'We’ll look at your site or idea together and show what will bring more enquiries. Free, no obligation.',
+    // The contacts column next to the form.
+    side: {
+      title: 'Prefer to talk directly?',
+      phone: 'Phone',
+      email: 'Email',
+      instagram: 'Instagram',
+    },
+    name: 'Name',
+    namePlaceholder: 'How should we address you?',
     phone: 'Phone',
     // Country-code picker (screen-reader name) and the number hint for the default +380.
     country: 'Country code',
     phoneHint: '67 123 45 67',
-    email: 'Email address',
-    cta: 'Get an estimate',
+    email: 'Email',
+    emailPlaceholder: 'you@company.com',
+    cta: 'Book a free review',
+    reply: 'We reply within 24 hours · no spam',
     errors: {
       required: 'Please fill this in',
       email: 'Enter a valid e-mail',
@@ -336,12 +386,12 @@ export const en = {
       short: 'Too short',
     },
     // Replaces the form after a successful submit.
-    successTitle: 'Thank you!',
-    success: "We've got your request and will reply within 24 hours.",
+    successTitle: 'Got it, thanks',
+    success: 'We’ll get back within 24 hours to set a time for the call.',
     // Success-card button to the studio bot (shown when the lead got an id). TODO(copy)
     telegram: 'Confirm in Telegram',
     // The studio e-mail is appended, so people can still reach us.
-    error: "Couldn't send. Please e-mail us:",
+    error: 'The request didn’t go through. Try again or write to',
     // Auto-reply e-mail to the person who submitted the form. {name} is replaced.
     // TODO(copy): draft, check with Serhii.
     autoReply: {
