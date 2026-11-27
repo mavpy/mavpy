@@ -192,8 +192,10 @@
     -webkit-text-size-adjust: 100%;
   }
 
+  /* The design's base on .mv is max(16px, 23u), not the 19u body token: anything that inherits
+     (reviewer names, team roles, buttons) depends on it. */
   body {
-    @apply bg-warm-50 font-sans text-body/[1.45] text-ink antialiased;
+    @apply bg-warm-50 font-sans text-[max(16px,calc(23*var(--u)))]/[1.45] text-ink antialiased;
   }
 
   /* Archivo has no Cyrillic: UA headings are Inter (the design's :lang(uk) --f-head). */
