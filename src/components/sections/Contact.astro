@@ -93,7 +93,7 @@ const short = (c: keyof typeof dialCodes) => `${flag(c)} +${dialCodes[c]}`;
 
       <div class="rounded-[12px] border-2 border-amber-500 bg-snow p-[20px] max-tab:order-first desk:p-[max(24px,calc(56*var(--u)))]">
         <form method="post" novalidate data-messages={JSON.stringify(messages)}>
-          <div class="grid gap-x-g gap-y-[8px] desk:grid-cols-2">
+          <div class="grid gap-x-g gap-y-[28px] desk:grid-cols-2">
             <Input
               label={contact.name}
               name="name"
@@ -168,7 +168,7 @@ const short = (c: keyof typeof dialCodes) => `${flag(c)} +${dialCodes[c]}`;
               autocomplete="off"
             />
           </div>
-          <div class="mt-[28px] flex flex-wrap items-center gap-x-[20px] gap-y-[16px]">
+          <div class="mt-[36px] flex flex-wrap items-center gap-x-[20px] gap-y-[16px]">
             <Button type="submit" class="max-tab:w-full">
               {contact.cta}
               <span
