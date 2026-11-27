@@ -11,7 +11,10 @@
    cyrillic 10 KB instead of the 105 KB original. */
 @font-face {
   font-family: 'Helvetica Neue Thin';
-  src: url('/fonts/HelveticaNeue-Thin-latin.woff2') format('woff2');
+  src:
+    local('HelveticaNeue-Thin'),
+    local('Helvetica Neue Thin'),
+    url('/fonts/HelveticaNeue-Thin-latin.woff2') format('woff2');
   font-weight: 100;
   font-style: normal;
   font-display: swap;
@@ -19,7 +22,10 @@
 }
 @font-face {
   font-family: 'Helvetica Neue Thin';
-  src: url('/fonts/HelveticaNeue-Thin-cyrillic.woff2') format('woff2');
+  src:
+    local('HelveticaNeue-Thin'),
+    local('Helvetica Neue Thin'),
+    url('/fonts/HelveticaNeue-Thin-cyrillic.woff2') format('woff2');
   font-weight: 100;
   font-style: normal;
   font-display: swap;
@@ -53,13 +59,15 @@
   --color-white: #fff;
   --color-error: #b3261e; /* form errors (not in the design) */
 
-  --font-head: 'Archivo', 'Inter', system-ui, sans-serif;
+  --font-head: 'Archivo', Impact, sans-serif;
   --font-mono: 'Roboto Mono', ui-monospace, monospace;
   --font-montserrat: 'Montserrat', 'Arial Black', sans-serif;
-  --font-sans: 'Roboto', system-ui, sans-serif;
-  --font-hegarty: 'BBH Hegarty', 'Archivo', system-ui, sans-serif; /* hero «MORE», 404 */
+  --font-sans:
+    'Roboto', Georgia, sans-serif; /* Georgia draws the ↓ → Roboto lacks, as the design */
+  --font-hegarty:
+    'BBH Hegarty', 'Archivo', Arial, sans-serif; /* hero «MORE», 404 */
   --font-helvetica:
-    'Helvetica Neue Thin', 'Helvetica Neue', 'Roboto', system-ui, sans-serif; /* hero «clients» */
+    'Helvetica Neue Thin', 'Helvetica Neue', 'Inter', sans-serif; /* hero «clients» */
 
   --text-h2: max(34px, calc(64 * var(--u)));
   --text-h3: max(22px, calc(32 * var(--u)));
@@ -68,7 +76,9 @@
   --text-small: max(14px, calc(16 * var(--u)));
   --text-quote: max(18px, calc(24 * var(--u)));
 
-  --container-site: calc(1280 * var(--u)); /* every section (design v3.3+: one width) */
+  --container-site: calc(
+    1280 * var(--u)
+  ); /* every section (design v3.3+: one width) */
   --spacing-g: max(16px, calc(24 * var(--u))); /* grid gap */
 
   --radius-btn: 8px;
@@ -200,7 +210,7 @@
 
   /* Archivo has no Cyrillic: UA headings are Inter (the design's :lang(uk) --f-head). */
   :root:lang(uk) {
-    --font-head: 'Inter', system-ui, sans-serif;
+    --font-head: 'Inter', 'Arial Black', sans-serif;
   }
 
   /* Amber on the light backgrounds is under 3:1, so the focus ring is black with an amber
