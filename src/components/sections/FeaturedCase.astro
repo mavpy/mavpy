@@ -1,0 +1,71 @@
+---
+// Featured case (design v3.15, .v-fc): one white card, text left (5fr) and the site's screenshot
+// right (7fr). Below 1200px the text column dissolves (display: contents) so the screenshot can sit
+// between the intro and the stats.
+import { Image } from 'astro:assets';
+import Button from '../ui/Button.astro';
+import Container from '../ui/Container.astro';
+import shot from '../../assets/v3/cases/case-doctor-lor.jpg';
+import { getLang, t } from '../../i18n/utils';
+
+const { featured: f } = t(getLang(Astro.url));
+---
+
+<section class="bg-warm-50 py-[max(80px,calc(140*var(--u)))]">
+  <Container wide>
+    <div
+      data-ri
+      class="flex flex-col rounded-[16px] border border-line bg-snow p-[max(20px,calc(48*var(--u)))] desk:grid desk:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] desk:gap-[max(32px,calc(80*var(--u)))]"
+    >
+      <div class="contents desk:flex desk:h-full desk:flex-col desk:items-start">
+        <p class="order-1 mb-[max(16px,calc(24*var(--u)))] font-mono text-[max(13px,calc(16*var(--u)))] text-ink-3">
+          {f.label}
+        </p>
+        <h2 class="order-2 font-head text-h2 leading-none font-bold tracking-[-0.02em] text-ink">
+          {f.title}
+        </h2>
+        <p class="order-3 mt-[max(12px,calc(16*var(--u)))] text-lead leading-[1.35] font-medium text-ink">
+          {f.sub}
+        </p>
+        <p class="order-4 mt-[max(14px,calc(20*var(--u)))] text-body leading-[1.5] text-ink-2">{f.text}</p>
+        <ul
+          class="order-6 my-[max(20px,calc(28*var(--u)))] grid w-full gap-[12px] tab:grid-cols-3 desk:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)_minmax(0,0.6fr)] desk:gap-g"
+        >
+          {
+            f.stats.map((s) => (
+              <li class="flex flex-col gap-[4px] border-t border-line pt-[10px] desk:pt-[max(10px,calc(12*var(--u)))]">
+                <b class="font-head text-[24px] leading-none font-semibold whitespace-nowrap text-ink tabular-nums desk:text-[max(22px,calc(30*var(--u)))]">
+                  {s.value}
+                </b>
+                <span class="text-[13px] leading-[1.35] text-ink-2 desk:text-small">{s.label}</span>
+              </li>
+            ))
+          }
+        </ul>
+        <Button
+          href="#cases"
+          tone="soft"
+          class="order-7 w-full max-desk:px-[28px] max-desk:text-[18px] desk:mt-auto"
+        >
+          {f.cta}
+        </Button>
+      </div>
+
+      <a
+        href={f.url}
+        target="_blank"
+        rel="noopener"
+        aria-label={`${f.live}: ${f.host}`}
+        class="order-5 mt-[20px] block self-center overflow-hidden rounded-[12px] border-[1.5px] border-amber-500 bg-snow desk:mt-0"
+      >
+        <Image
+          src={shot}
+          alt={f.shotAlt}
+          widths={[600, 1000, 1600]}
+          sizes="(min-width: 1200px) 55vw, 100vw"
+          class="block h-auto w-full bg-warm-100 object-cover object-top max-desk:aspect-[16/11]"
+        />
+      </a>
+    </div>
+  </Container>
+</section>

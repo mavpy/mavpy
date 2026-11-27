@@ -1,6 +1,7 @@
 ---
-// The whole one-page site; both locale pages render this. Sections get added here in M4.
+// The whole one-page site; both locale pages render this.
 import Hero from './sections/Hero.astro';
+import FeaturedCase from './sections/FeaturedCase.astro';
 import Pain from './sections/Pain.astro';
 import Process from './sections/Process.astro';
 import Cases from './sections/Cases.astro';
@@ -11,6 +12,7 @@ import Contact from './sections/Contact.astro';
 ---
 
 <Hero />
+<FeaturedCase />
 <Pain />
 <Process />
 <Cases />
@@ -18,3 +20,7 @@ import Contact from './sections/Contact.astro';
 <About />
 <Pricing />
 <Contact />
+
+<script>
+  import '../scripts/reveal.ts';
+</script>

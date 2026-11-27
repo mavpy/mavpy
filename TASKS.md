@@ -15,7 +15,8 @@ Port of Serhii's redesign from `~/dev/mavpy-design` (v3.15, commit `d1fbc8b`; `g
 - [x] 3. Hero + trust strip: entrance (mask-up, blur, wipe, bars), typed statement, grid + streaks, marquee strip. «clients» fills the container via `cqw` + a per-language em ratio (no JS fit).
   - Kept the tagline as the h1 (the design makes «MORE clients» the h1); listed for Serhii.
   - Visual checks per step dropped (Nikita, 2026-11-27): port from the HTML/CSS, one polish pass in step 14.
-- [ ] 4. Featured case (new `FeaturedCase.astro`)
+- [x] 4. Featured case (new `FeaturedCase.astro`): white card, 5fr/7fr, text column `display: contents` below 1200px so the shot sits between intro and stats. Added `Container wide` (1680u, the design's .v-wrap), Button `tone="soft"`, and `src/scripts/reveal.ts` (cards with `data-ri` slide in, staggered; reuse it in later sections).
+  - CSS dumps of every remaining section (UA) are in `~/.claude/plans/dumps/uk-*.txt`; EN differs only by the `:lang(uk)` rules in the design's styles.css.
 - [ ] 5. Situation (`Pain.astro`)
 - [ ] 6. Process
 - [ ] 7. Cases

@@ -62,7 +62,8 @@
   --text-small: max(14px, calc(16 * var(--u)));
   --text-quote: max(18px, calc(24 * var(--u)));
 
-  --container-site: calc(1280 * var(--u));
+  --container-site: calc(1280 * var(--u)); /* header, hero (.mv-wrap) */
+  --container-wide: calc(1680 * var(--u)); /* sections (.v-wrap) */
   --spacing-g: max(16px, calc(24 * var(--u))); /* grid gap */
 
   --radius-btn: 8px;
@@ -330,5 +331,22 @@
   from {
     opacity: 0;
     transform: translateY(32px);
+  }
+}
+
+/* Cards slide up as they scroll into view, one after another (the design's .ri). reveal.ts adds
+   .ri (and --ri, the card's index among its siblings) only when JS runs and motion is allowed, so
+   without either the cards are simply there. */
+@layer components {
+  .ri {
+    opacity: 0;
+    transform: translateY(28px);
+    transition:
+      opacity 1s cubic-bezier(0.45, 0, 0.25, 1) calc(var(--ri, 0) * 120ms),
+      transform 1s cubic-bezier(0.45, 0, 0.25, 1) calc(var(--ri, 0) * 120ms);
+  }
+  .ri.ri-in {
+    opacity: 1;
+    transform: none;
   }
 }

@@ -105,6 +105,22 @@ export const en = {
       'You own the site and the code',
     ],
   },
+  featured: {
+    label: 'A case from our work',
+    title: 'Doctor LOR',
+    sub: 'ENT clinic in Kharkiv: from phone-only booking to a site that books itself',
+    text: 'Before: patients could only book by phone, on a site from the early 2000s. Now booking runs itself and reminders go out on their own.',
+    stats: [
+      { value: '271', label: 'organic clicks in 2 months' },
+      { value: '#1–2', label: 'in Google by clinic name and area' },
+      { value: '$0', label: 'spent on ads' },
+    ],
+    cta: 'Read the case ↓',
+    live: 'Open live site',
+    shotAlt: 'Doctor LOR website',
+    url: 'https://www.drlor-kh.com/',
+    host: 'drlor-kh.com',
+  },
   pain: {
     label: 'situation',
     title: 'Which of these sounds like you right now?',
