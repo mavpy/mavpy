@@ -1,0 +1,26 @@
+# Posts the Cloudflare preview URL in the PR conversation. Workers Builds only adds a check,
+# not a comment. The branch alias stays the same across pushes, so one comment on open is enough.
+name: Preview link
+
+on:
+  pull_request:
+    types: [opened]
+
+permissions:
+  pull-requests: write
+
+jobs:
+  comment:
+    runs-on: ubuntu-latest
+    steps:
+      - env:
+          GH_TOKEN: ${{ github.token }}
+          BRANCH: ${{ github.head_ref }} # passed via env, never inlined: branch names are untrusted
+          PR: ${{ github.event.pull_request.html_url }}
+        run: |
+          # Cloudflare's alias: lowercase, anything outside a-z0-9 becomes "-".
+          alias=$(printf '%s' "$BRANCH" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g')
+          url="https://${alias}-mavpy.mavpy-studio.workers.dev"
+          gh pr comment "$PR" --body "**Preview:** $url
+
+          Updates on every push; it's live once the **Workers Builds: mavpy** check passes. Uses production secrets: a form sent here reaches the real Telegram group and Airtable."
