@@ -3,8 +3,6 @@
 // stage moves on every 6s (the active tab's amber bar fills meanwhile); hover or focus pauses it,
 // a click jumps to that person, reduced motion turns the rotation off. Inactive members are
 // visibility:hidden, so screen readers only meet the one on show (.member / .tab-bar in global.css).
-// Nikita's photo is a 400px cut-out on a transparent background: it sits at the bottom of the warm
-// slot at its own size (object-fit: scale-down) instead of being stretched to fill it.
 import { Image } from 'astro:assets';
 import Container from '../ui/Container.astro';
 import SectionHead from '../ui/SectionHead.astro';
@@ -33,7 +31,6 @@ const photo = (name: string) =>
       >
         {team.members.map((m, i) => {
           const src = photo(m.photo);
-          const cutout = src.format === 'png';
           return (
             <div
               id={`member-${i}`}
@@ -46,19 +43,9 @@ const photo = (name: string) =>
               <Image
                 src={src}
                 alt={m.name}
-                {...(cutout
-                  ? { width: src.width }
-                  : {
-                      widths: [480, 720, 960],
-                      sizes:
-                        '(min-width: 1200px) 28vw, (min-width: 601px) 440px, calc(100vw - 72px)',
-                    })}
-                class:list={[
-                  'aspect-[4/5] w-full rounded-[12px] border border-amber-500 bg-warm-100 tab:max-desk:max-w-[440px]',
-                  cutout
-                    ? 'object-scale-down object-bottom'
-                    : 'object-cover object-[50%_20%] desk:object-[50%_15%]',
-                ]}
+                widths={[480, 720, 960]}
+                sizes="(min-width: 1200px) 28vw, (min-width: 601px) 440px, calc(100vw - 72px)"
+                class="aspect-[4/5] w-full rounded-[12px] border border-amber-500 bg-warm-100 object-cover object-[50%_20%] tab:max-desk:max-w-[440px] desk:object-[50%_15%]"
               />
               <div class="flex w-full flex-col justify-between gap-[max(24px,calc(32*var(--u)))]">
                 <blockquote class="text-quote leading-[1.45] tracking-[-0.005em] text-black">
