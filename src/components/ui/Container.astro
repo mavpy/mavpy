@@ -1,14 +1,13 @@
 ---
-// The design's .mv-wrap: a 1280-unit column on desktop (scales with --u), 20px gutters below 1200px.
-// wide: the sections' .v-wrap, 1680 units.
+// The design's page column: 1280 units on desktop (scales with --u), 20px gutters below 1200px.
+// Since v3.3 the hero and every section share this one width.
 interface Props {
   as?: 'div' | 'header' | 'footer' | 'nav';
-  wide?: boolean;
   class?: string;
 }
-const { as: Tag = 'div', wide = false, class: className } = Astro.props;
+const { as: Tag = 'div', class: className } = Astro.props;
 ---
 
-<Tag class:list={['mx-auto w-[calc(100%-40px)]', wide ? 'desk:w-wide' : 'desk:w-site', className]}>
+<Tag class:list={['mx-auto w-[calc(100%-40px)] desk:w-site', className]}>
   <slot />
 </Tag>

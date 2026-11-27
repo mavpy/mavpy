@@ -62,8 +62,7 @@
   --text-small: max(14px, calc(16 * var(--u)));
   --text-quote: max(18px, calc(24 * var(--u)));
 
-  --container-site: calc(1280 * var(--u)); /* header, hero (.mv-wrap) */
-  --container-wide: calc(1680 * var(--u)); /* sections (.v-wrap) */
+  --container-site: calc(1280 * var(--u)); /* every section (design v3.3+: one width) */
   --spacing-g: max(16px, calc(24 * var(--u))); /* grid gap */
 
   --radius-btn: 8px;

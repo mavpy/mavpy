@@ -15,7 +15,7 @@ const { process: p } = t(getLang(Astro.url));
   id="how-we-work"
   class="bg-warm-100 bg-grid py-[max(80px,calc(140*var(--u)))]"
 >
-  <Container wide>
+  <Container>
     <SectionHead label={p.label} title={p.title} lead={p.intro} />
     <ol class="grid gap-[max(12px,calc(16*var(--u)))]">
       {p.steps.map((s) => (
