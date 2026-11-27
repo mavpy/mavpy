@@ -31,7 +31,6 @@ export const uk: Dict = {
     pricing: 'Ціни',
     contact: 'Контакти',
     menuOpen: 'Відкрити меню',
-    menuClose: 'Закрити меню',
     cta: 'Дізнатися вартість',
     langGroup: 'Мова',
   },

@@ -1,5 +1,5 @@
 ---
-// Featured case (design v3.15, .v-fc): one white card, text left (5fr) and the site's screenshot
+// Featured case (design .v-fc): one white card, text left (5fr) and the site's screenshot
 // right (7fr). Below 1200px the text column dissolves (display: contents) so the screenshot can sit
 // between the intro and the stats.
 import { Image } from 'astro:assets';
@@ -27,20 +27,20 @@ const { featured: f } = t(getLang(Astro.url));
         <p class="order-3 mt-[max(12px,calc(16*var(--u)))] text-lead leading-[1.35] font-medium text-black">
           {f.sub}
         </p>
-        <p class="order-4 mt-[max(14px,calc(20*var(--u)))] text-body leading-[1.5] text-text-2">{f.text}</p>
-        <ul
-          class="order-6 my-[max(20px,calc(28*var(--u)))] grid w-full grid-cols-3 gap-[12px] desk:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)_minmax(0,0.6fr)] desk:gap-g"
-        >
-          {
-            f.stats.map((s) => (
-              <li class="flex flex-col gap-[4px] border-t border-line pt-[10px] desk:pt-[max(10px,calc(12*var(--u)))]">
-                <b class="font-head text-[max(22px,calc(30*var(--u)))] leading-none font-semibold whitespace-nowrap text-black tabular-nums">
-                  {s.value}
-                </b>
-                <span class="text-small leading-[1.35] text-text-2">{s.label}</span>
-              </li>
-            ))
-          }
+        <p class="order-4 mt-[max(14px,calc(20*var(--u)))] text-body leading-[1.5] text-text-2">
+          {f.text}
+        </p>
+        <ul class="order-6 my-[max(20px,calc(28*var(--u)))] grid w-full grid-cols-3 gap-[12px] desk:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)_minmax(0,0.6fr)] desk:gap-g">
+          {f.stats.map((s) => (
+            <li class="flex flex-col gap-[4px] border-t border-line pt-[10px] desk:pt-[max(10px,calc(12*var(--u)))]">
+              <b class="font-head text-[max(22px,calc(30*var(--u)))] leading-none font-semibold whitespace-nowrap text-black tabular-nums">
+                {s.value}
+              </b>
+              <span class="text-small leading-[1.35] text-text-2">
+                {s.label}
+              </span>
+            </li>
+          ))}
         </ul>
         <Button
           href="#cases"

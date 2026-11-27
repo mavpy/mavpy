@@ -1,4 +1,4 @@
-// All English copy. This file is the source of truth (synced from Webflow once, 2026-11-20); changes now come from Serhii via Figma.
+// All English copy. uk.ts has the same keys (typed as Dict).
 // The footer's copyright years; the year is set at build time in astro.config.mjs.
 declare const __BUILD_YEAR__: number;
 export const copyright = `© 2022–${__BUILD_YEAR__} MAVPY Design & Dev`;
@@ -34,7 +34,6 @@ export const en = {
     pricing: 'Pricing',
     contact: 'Contact',
     menuOpen: 'Open menu',
-    menuClose: 'Close menu',
     cta: 'Get my estimate',
     // Name of the UA / EN link group (the links themselves: langNames in utils.ts).
     langGroup: 'Language',

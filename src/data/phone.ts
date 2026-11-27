@@ -30,7 +30,6 @@ export const dialCodes = {
 } as const;
 export type Country = keyof typeof dialCodes;
 export const countries = Object.keys(dialCodes) as [Country, ...Country[]];
-export const defaultCountry: Country = 'UA';
 
 /** 🇺🇦 from "UA" (regional indicator letters; Windows shows them as plain "UA"). */
 export const flag = (c: string) =>

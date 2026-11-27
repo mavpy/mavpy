@@ -5,14 +5,16 @@ import { uk } from './uk';
 /** Ukrainian typesetting, as the design's build.py `ua_typo` does for the whole UA page: one-letter
  *  words stick to the next word, a dash to the word before it, numbers to their unit and thousands
  *  groups to each other (no-break spaces). Applied to text only, never inside a tag. */
-export function uaTypo(text: string) {
-  return text.replace(/(^|>)([^<]+)/g, (_, gt: string, x: string) =>
-    gt +
-    x
-      .replace(/(?<![\p{L}\p{N}_’'-])([ВУЗІЙАОвузійао])\s+/gu, '$1\u00a0')
-      .replace(/\s+—/g, '\u00a0—')
-      .replace(/(\d)\s+(?=[а-яіїєґА-ЯІЇЄҐ₴$%×])/g, '$1\u00a0')
-      .replace(/(\d)\s(?=\d{3}\b)/g, '$1\u00a0'),
+function uaTypo(text: string) {
+  return text.replace(
+    /(^|>)([^<]+)/g,
+    (_, gt: string, x: string) =>
+      gt +
+      x
+        .replace(/(?<![\p{L}\p{N}_’'-])([ВУЗІЙАОвузійао])\s+/gu, '$1\u00a0')
+        .replace(/\s+—/g, '\u00a0—')
+        .replace(/(\d)\s+(?=[а-яіїєґА-ЯІЇЄҐ₴$%×])/g, '$1\u00a0')
+        .replace(/(\d)\s(?=\d{3}\b)/g, '$1\u00a0'),
   );
 }
 

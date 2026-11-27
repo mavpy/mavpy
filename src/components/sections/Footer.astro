@@ -1,5 +1,5 @@
 ---
-// Footer (design v3.15): dark band; logo + tagline (6fr), then Navigate / Contact / Studio (2fr
+// Footer: dark band; logo + tagline (6fr), then Navigate / Contact / Studio (2fr
 // each), stacked in one column below 1200px. A rule, the full-width wordmark, and the bottom bar.
 // Contacts match the Contact section (no Telegram until Serhii confirms the handle).
 import { Image } from 'astro:assets';
@@ -92,7 +92,10 @@ const link = 'transition-colors hover:text-amber-400';
 
     <div class="flex justify-between gap-4 border-t border-graphite py-5 font-mono text-[13px] text-[#9a9a96]">
       <span>{footer.copyright}</span>
-      <a href={localizePath(lang, '#top')} class:list={['text-[#ededeb]', link]}>
+      <a
+        href={localizePath(lang, '#top')}
+        class:list={['text-[#ededeb]', link]}
+      >
         {footer.toTop}
       </a>
     </div>
