@@ -21,7 +21,7 @@ Port of Serhii's redesign from `~/dev/mavpy-design` (v3.15, commit `d1fbc8b`; `g
 - [x] 6. Process: full-width step rows on the warm grid (`bg-hero-grid` renamed `bg-grid`); amber line + detail fade after each row's `data-ri` reveal (`.flow-side`/`.flow-more` in global.css). Rows start as each enters the view, not all three at once as in the design. Old mascot image unused (cleanup in 14).
 - [x] 7. Cases: dark accordion on `<details name>` (animation `.case` in global.css), first case open from the start, scroll hold left to native anchoring. Added Button `tone="outline"`, SectionHead `dark` and `\n` line breaks. Dropped the old case types and `tbd()`; old case images unused (cleanup in 14).
 - [x] 8. Testimonials: marquee (reuses `animate-marquee`, 90s), 4 copies with only the first exposed to screen readers; phones get a snap swipe row instead of the design's ← 1 / 3 → pager. Only the 3 real reviews in both languages (Bram's stays English, `lang="en"`).
-- [ ] 9. Team (`About.astro`)
+- [ ] 9. Team (`About.astro`): all four as designed (Serhii, Nikita, Julia, Marina), approved by Nikita 2026-11-27. Nikita's photo is his own `team-nikita.png` (400 × 400, transparent background), replacing the design's jpg; it's smaller than the 960 × 1200 slot, so place it on a warm background and check it isn't upscaled on desktop.
 - [ ] 10. Pricing (`goal` preset)
 - [ ] 11. Contact (keep the Action + phone picker; optional `goal`; restyle)
 - [ ] 12. Footer

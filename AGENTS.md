@@ -17,7 +17,7 @@ Port the Mavpy (Мавпы) web studio's Webflow site to code, matching the Figm
   - **Don't take spacing or sizes from Webflow.** It was built by hand. Measure from the Figma frames.
 - **Webflow (retired):** `https://mavpy.webflow.io/`. Only a historical reference now (original behaviour, form messages, the CSS variables behind the button and form states). Don't sync copy or visuals from it.
 - **Full-res frame exports** (1×) are committed in `docs/figma/`: `desktop-1-331.png` (1920 × 9269) and `mobile-1-904.png` (375 × 12561). Measure from these first; ask Nikita only for what they don't show (UI kit, hover states, assets, exact hex).
-- The about section shows one founder (Serhii), as in Figma. There is no second co-founder or CTO block.
+- The team section (design v3.15) shows four people: Serhii, Nikita, Julia and Marina, with photos (decided by Nikita 2026-11-27).
 - Copy fixes and the team section come from Serhii. Use placeholders marked `TODO(copy)` until they arrive.
 
 ## Stack
@@ -77,4 +77,4 @@ Components stay presentational: copy comes in through props or `t()`. **No hard-
 - Don't add dependencies beyond the ones above without saying why
 - Nikita and Serhii are equal partners. **Nikita makes every technical decision** (hosting, services, accounts, architecture): recommend, and add open ones to "Decisions for Nikita" in TASKS.md. Copy, translation, prices, contact details and brand content are decided by both together: add those to "To settle with Serhii"
 - When something is blocked on one of those lists, add it there and move on to the next task
-- This is a private studio project: don't add my name, personal links or portfolio credits to the site
+- Nikita appears in the team section as a team member (name, role, photo). Don't add personal links or portfolio credits beyond that
