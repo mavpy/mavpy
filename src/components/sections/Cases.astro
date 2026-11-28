@@ -3,7 +3,8 @@
 // <details name>, so the browser handles "one open at a time", keyboard and ARIA state; the open
 // animation (.case in global.css) needs `interpolate-size`, other browsers just snap open.
 // Differences from the design: the whole row toggles (not just the round button); the first case
-// is open from the start instead of opening when the block scrolls in; and the design's script that
+// is open from the start instead of opening when the block scrolls in (on phones it starts closed:
+// the featured case above already shows it; its «View case» button opens it, 2026-11-28); and the design's script that
 // holds the clicked row still while a panel above collapses is left to native scroll anchoring
 // (ponytail: Safari has no scroll anchoring, so the row can jump there; port the design's rAF hold
 // if that matters).
@@ -45,7 +46,7 @@ const shot = (name: string) =>
         >
           <summary class="group/s relative grid cursor-pointer list-none items-center gap-[2px] py-[max(18px,calc(30*var(--u)))] max-desk:pr-[60px] desk:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] desk:gap-g desk:px-[max(16px,calc(24*var(--u)))] [&::-webkit-details-marker]:hidden">
             <span class="flex items-center gap-[14px] desk:gap-[max(16px,calc(40*var(--u)))]">
-              <span class="font-mono text-[max(13px,calc(16*var(--u)))] font-medium text-[#9a9a96]">
+              <span class="font-mono text-[max(13px,calc(16*var(--u)))] max-tab:text-[14px] font-medium text-[#9a9a96]">
                 {String(i + 1).padStart(2, '0')}
               </span>
               <h3 class="font-head text-[max(24px,calc(40*var(--u)))] leading-none font-bold tracking-[-0.01em] text-snow">
@@ -87,7 +88,7 @@ const shot = (name: string) =>
               <dl class="grid gap-[22px]">
                 {cases.facts.map((dt, k) => (
                   <div>
-                    <dt class="inline-block rounded-[4px] bg-white/12 px-[10px] py-[4px] text-[max(13px,calc(15*var(--u)))] font-bold tracking-[0.02em] text-snow uppercase">
+                    <dt class="inline-block rounded-[4px] bg-white/12 px-[10px] py-[4px] text-[max(13px,calc(15*var(--u)))] max-tab:text-[14px] font-bold tracking-[0.02em] text-snow uppercase">
                       {dt}
                     </dt>
                     <dd
@@ -117,7 +118,7 @@ const shot = (name: string) =>
                     →
                   </span>
                 </Button>
-                <span class="font-mono text-[max(13px,calc(15*var(--u)))] text-[#9a9a96]">
+                <span class="font-mono text-[max(13px,calc(15*var(--u)))] max-tab:text-[14px] text-[#9a9a96]">
                   {c.host}
                 </span>
               </p>
@@ -128,3 +129,11 @@ const shot = (name: string) =>
     </div>
   </Container>
 </section>
+
+<script>
+  // Phones: case 01 starts closed (the featured case shows it just above); «View case» opens it.
+  const first = document.querySelector<HTMLDetailsElement>('#cases details');
+  if (first && matchMedia('(width < 37.5625rem)').matches) first.open = false;
+  for (const a of document.querySelectorAll('[data-open-case]'))
+    a.addEventListener('click', () => first && (first.open = true));
+</script>

@@ -46,7 +46,7 @@ export const en = {
     studioTitle: 'Studio',
     studio: ['Design & development', 'Since 2022', 'UA / EN'],
     copyright,
-    toTop: 'Back to top ↑',
+    toTop: 'Back to top',
   },
   hero: {
     // The design sets the end of the line in bold, so it's split around it.

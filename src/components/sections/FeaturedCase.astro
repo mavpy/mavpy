@@ -1,7 +1,7 @@
 ---
 // Featured case (design .v-fc): one white card, text left (5fr) and the site's screenshot
 // right (7fr). Below 1200px the text column dissolves (display: contents) so the screenshot can sit
-// between the intro and the stats.
+// between the intro and the stats. Phones: the stats stack, figure left and label right.
 import { Image } from 'astro:assets';
 import Button from '../ui/Button.astro';
 import Container from '../ui/Container.astro';
@@ -18,7 +18,7 @@ const { featured: f } = t(getLang(Astro.url));
       class="flex flex-col rounded-[16px] border border-line bg-snow p-[max(20px,calc(48*var(--u)))] desk:grid desk:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] desk:gap-[max(32px,calc(80*var(--u)))]"
     >
       <div class="contents desk:flex desk:h-full desk:flex-col desk:items-start">
-        <p class="order-1 mb-[max(16px,calc(24*var(--u)))] font-mono text-[max(13px,calc(16*var(--u)))] text-text-3">
+        <p class="order-1 mb-[max(16px,calc(24*var(--u)))] font-mono text-[max(13px,calc(16*var(--u)))] max-tab:text-[14px] text-text-3">
           {f.label}
         </p>
         <h2 class="order-2 font-head text-h2 leading-none font-bold tracking-[-0.02em] text-black">
@@ -30,9 +30,9 @@ const { featured: f } = t(getLang(Astro.url));
         <p class="order-4 mt-[max(14px,calc(20*var(--u)))] text-body leading-[1.5] text-text-2">
           {f.text}
         </p>
-        <ul class="order-6 my-[max(20px,calc(28*var(--u)))] grid w-full grid-cols-3 gap-[12px] desk:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)_minmax(0,0.6fr)] desk:gap-g">
+        <ul class="order-6 my-[max(20px,calc(28*var(--u)))] grid w-full gap-[12px] max-tab:gap-0 tab:grid-cols-3 desk:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)_minmax(0,0.6fr)] desk:gap-g">
           {f.stats.map((s) => (
-            <li class="flex flex-col gap-[4px] border-t border-line pt-[10px] desk:pt-[max(10px,calc(12*var(--u)))]">
+            <li class="flex flex-col gap-[4px] border-t border-line pt-[10px] max-tab:grid max-tab:grid-cols-[96px_minmax(0,1fr)] max-tab:items-baseline max-tab:gap-[12px] max-tab:py-[12px] desk:pt-[max(10px,calc(12*var(--u)))]">
               <b class="font-head text-[max(22px,calc(30*var(--u)))] leading-none font-semibold whitespace-nowrap text-black tabular-nums">
                 {s.value}
               </b>
@@ -44,6 +44,7 @@ const { featured: f } = t(getLang(Astro.url));
         </ul>
         <Button
           href="#cases"
+          data-open-case
           tone="soft"
           class="order-7 w-full max-desk:px-[28px] max-desk:text-[18px] desk:mt-auto"
         >

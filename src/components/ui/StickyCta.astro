@@ -1,0 +1,39 @@
+---
+// Phones only: a call to action pinned to the bottom of the screen, so there is always a way to the
+// form (Serhii, 2026-11-28). It shows once the hero is gone and hides while the hero, the prices
+// (they have their own buttons), the form or the footer is on screen, so it never meets «Back to top».
+import Button from './Button.astro';
+import { getLang, localizePath, t } from '../../i18n/utils';
+
+const lang = getLang(Astro.url);
+const { pricing } = t(lang);
+---
+
+<div
+  data-sticky-cta
+  inert
+  class="fixed inset-x-0 bottom-0 z-40 translate-y-full border-t border-line bg-snow/95 px-[20px] pt-[12px] pb-[max(12px,env(safe-area-inset-bottom))] backdrop-blur transition-transform duration-300 ease-mv tab:hidden data-[on]:translate-y-0 motion-reduce:transition-none"
+>
+  <Button href={localizePath(lang, '#contact')} class="w-full">
+    {pricing.cta}
+    <span aria-hidden="true">→</span>
+  </Button>
+</div>
+
+<script>
+  const bar = document.querySelector<HTMLElement>('[data-sticky-cta]');
+  const hide = ['#top', '#pricing', '#contact', 'footer']
+    .map((s) => document.querySelector(s))
+    .filter((el): el is Element => !!el);
+  if (bar && hide.length) {
+    const seen = new Set<Element>();
+    const io = new IntersectionObserver((entries) => {
+      for (const e of entries)
+        e.isIntersecting ? seen.add(e.target) : seen.delete(e.target);
+      const on = seen.size === 0;
+      bar.toggleAttribute('data-on', on);
+      bar.inert = !on;
+    });
+    hide.forEach((el) => io.observe(el));
+  }
+</script>

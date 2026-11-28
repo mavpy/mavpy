@@ -42,7 +42,7 @@ export const uk: Dict = {
     studioTitle: 'Студія',
     studio: ['Дизайн і розробка', 'З 2022 року', 'UA / EN'],
     copyright,
-    toTop: 'Нагору ↑',
+    toTop: 'Нагору',
   },
   hero: {
     h1: { before: 'Сайти, що працюють ', em: 'на результат', after: '' },
@@ -203,16 +203,8 @@ export const uk: Dict = {
     // Phone pager (← 1 / 3 →).
     prev: 'Попередній відгук',
     next: 'Наступний відгук',
-    // The three real reviews. Display order follows the design (it starts the line at the third).
+    // The three real reviews. UA starts with a Ukrainian one; Bram's (English) goes last (2026-11-28).
     items: [
-      {
-        avatar: 'review-bram-spacem',
-        name: 'Bram V.',
-        project: 'Space’M Online · вебдизайн · відгук з Upwork',
-        quote:
-          'Serhii is strong in communication, super fast in delivering the scope, overdelivers and is a real professional. Gladly recommend.',
-        lang: 'en', // Upwork review, kept in the original
-      },
       {
         avatar: 'review-natalia-srt',
         name: 'Наталія М.',
@@ -226,6 +218,14 @@ export const uk: Dict = {
         project: 'Doctor LOR · новий сайт і запис',
         quote:
           'Відвідувачі були, а заявок — майже ні. Сергій спершу з’ясував, чому люди йдуть, і лише потім узявся за дизайн. Форма нарешті почала заповнюватися.',
+      },
+      {
+        avatar: 'review-bram-spacem',
+        name: 'Bram V.',
+        project: 'Space’M Online · вебдизайн · відгук з Upwork',
+        quote:
+          'Serhii is strong in communication, super fast in delivering the scope, overdelivers and is a real professional. Gladly recommend.',
+        lang: 'en', // Upwork review, kept in the original
       },
     ],
   },
