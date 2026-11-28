@@ -2,6 +2,7 @@
 // Featured case (design .v-fc): one white card, text left (5fr) and the site's screenshot
 // right (7fr). Below 1200px the text column dissolves (display: contents) so the screenshot can sit
 // between the intro and the stats. Phones: the stats stack, figure left and label right.
+import Arrow from '../ui/Arrow.astro';
 import { Image } from 'astro:assets';
 import Button from '../ui/Button.astro';
 import Container from '../ui/Container.astro';
@@ -49,6 +50,7 @@ const { featured: f } = t(getLang(Astro.url));
           class="order-7 w-full max-desk:px-[28px] max-desk:text-[18px] desk:mt-auto"
         >
           {f.cta}
+          <Arrow dir="down" />
         </Button>
       </div>
 

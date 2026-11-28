@@ -1,5 +1,6 @@
 ---
-// Phones show only the short text under each title; the longer one is hidden (Serhii, 2026-11-28).
+// Phones show only the short text under each title (the longer one is hidden), with a thin amber
+// rule under the figure (Serhii, 2026-11-28).
 // Process: head + three full-width step rows on the warm grid.
 // Each row: big figure (3fr), title + text (5fr), detail (4fr) behind an amber line. Below 1200px
 // they stack and the line runs across the top of the detail. Rows slide in with data-ri; the line
@@ -24,7 +25,7 @@ const { process: p } = t(getLang(Astro.url));
           data-ri
           class="grid items-start gap-[14px] rounded-[16px] border border-line bg-snow px-[max(24px,calc(40*var(--u)))] py-[28px] desk:grid-cols-[minmax(0,3fr)_minmax(0,5fr)_minmax(0,4fr)] desk:gap-g desk:py-[max(28px,calc(48*var(--u)))]"
         >
-          <p class="flex flex-wrap items-baseline gap-[12px] font-head text-[max(40px,calc(72*var(--u)))] leading-none font-semibold tracking-[-0.02em] text-black">
+          <p class="flex flex-wrap items-baseline gap-[12px] max-tab:border-b-[1.5px] max-tab:border-amber-500 max-tab:pb-[16px] font-head text-[max(40px,calc(72*var(--u)))] leading-none font-semibold tracking-[-0.02em] text-black">
             <b class="text-[max(56px,calc(96*var(--u)))] leading-[0.85] font-semibold">
               {s.fig[0]}
             </b>

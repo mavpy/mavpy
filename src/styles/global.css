@@ -251,12 +251,17 @@
     html {
       scroll-behavior: auto;
     }
-    *,
+    *:not(.marquee-always),
     *::before,
     *::after {
       animation-duration: 0.01ms !important;
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
+    }
+    /* The trust strip keeps running, slower (Serhii, 2026-11-28): phones in power-saving or
+       «Reduce motion» mode would otherwise show a frozen, cut-off line. */
+    .marquee-always {
+      animation-duration: 120s !important;
     }
   }
 }

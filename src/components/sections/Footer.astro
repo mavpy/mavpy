@@ -3,6 +3,7 @@
 // each), stacked in one column below 1200px. A rule, the full-width wordmark, and the bottom bar.
 // Contacts match the Contact section. Below the line over the wordmark: the hero grid, faint, full
 // width; «Back to top» is a 52px round button sitting on that line (Serhii's option A, 2026-11-28).
+import Arrow from '../ui/Arrow.astro';
 import { Image } from 'astro:assets';
 import Logo from '../../assets/v3/logo-light.svg';
 import MailIcon from '../../assets/v3/icons/mail.svg';
@@ -98,7 +99,7 @@ const link =
           aria-hidden="true"
           class="grid size-[52px] place-items-center rounded-full border-[1.5px] bg-ink border-white/50 text-[20px] transition-colors group-hover:border-amber-500 group-hover:bg-amber-500 group-hover:text-black"
         >
-          ↑
+          <Arrow dir="up" />
         </span>
       </a>
 

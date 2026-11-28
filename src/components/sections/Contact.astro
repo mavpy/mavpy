@@ -7,6 +7,7 @@
 // Phone: a country-code picker (a transparent native select over a "🇺🇦 +380" label, so keyboard,
 // screen readers and mobile pickers work as usual) plus the national number; toE164 (shared with
 // the server) checks it. goal: preset by a pricing plan's button, sent to Telegram as the plan name.
+import Arrow from '../ui/Arrow.astro';
 import Button from '../ui/Button.astro';
 import Container from '../ui/Container.astro';
 import Input from '../ui/Input.astro';
@@ -180,9 +181,9 @@ const short = (c: keyof typeof dialCodes) => `${flag(c)} +${dialCodes[c]}`;
               {contact.cta}
               <span
                 aria-hidden="true"
-                class="inline-block transition-transform duration-200 ease-mv group-hover/btn:translate-x-[5px]"
+                class="inline-flex transition-transform duration-200 ease-mv group-hover/btn:translate-x-[5px]"
               >
-                →
+                <Arrow />
               </span>
             </Button>
             <span class="font-mono text-[max(13px,calc(15*var(--u)))] max-tab:text-[14px] text-text-3">

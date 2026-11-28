@@ -4,6 +4,7 @@
 // cards so the line never shows a gap at 1920px; only the first copy is exposed to screen readers.
 // Phones: no running line; one card at a time with the design's ← 1 / 3 → pager, looping (no swipe,
 // Serhii 2026-11-28). The script slides the row to the current card.
+import Arrow from '../ui/Arrow.astro';
 import { Image } from 'astro:assets';
 import Container from '../ui/Container.astro';
 import SectionHead from '../ui/SectionHead.astro';
@@ -85,7 +86,7 @@ const avatar = (name: string) =>
         aria-label={r.prev}
         class="grid size-[56px] place-items-center rounded-full border-[1.5px] border-black/25 bg-snow text-[22px] text-black transition-colors active:bg-amber-500 hover:border-amber-500"
       >
-        <span aria-hidden="true">←</span>
+        <Arrow dir="left" />
       </button>
       <span class="min-w-[4ch] text-center font-mono text-[15px] text-text-2">
         <span data-cur>1</span> / {r.items.length}
@@ -96,7 +97,7 @@ const avatar = (name: string) =>
         aria-label={r.next}
         class="grid size-[56px] place-items-center rounded-full border-[1.5px] border-black/25 bg-snow text-[22px] text-black transition-colors active:bg-amber-500 hover:border-amber-500"
       >
-        <span aria-hidden="true">→</span>
+        <Arrow />
       </button>
     </div>
   </div>

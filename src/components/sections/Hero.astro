@@ -6,6 +6,7 @@
 // The CTA leads to the prices: «Find out the cost» should land on the cost (2026-11-28).
 // The tagline stays the h1: the design puts «MORE clients» in the h1, which says
 // little to search engines or screen readers.
+import Arrow from '../ui/Arrow.astro';
 import Button from '../ui/Button.astro';
 import Container from '../ui/Container.astro';
 import { getLang, t } from '../../i18n/utils';
@@ -83,9 +84,9 @@ const mask = 'overflow-x-visible overflow-y-clip'; // clips the slide-up, not th
         {hero.cta}
         <span
           aria-hidden="true"
-          class="inline-block transition-transform duration-200 ease-mv group-hover/btn:translate-x-[5px]"
+          class="inline-flex transition-transform duration-200 ease-mv group-hover/btn:translate-x-[5px]"
         >
-          →
+          <Arrow />
         </span>
       </Button>
     </div>
@@ -95,7 +96,7 @@ const mask = 'overflow-x-visible overflow-y-clip'; // clips the slide-up, not th
 <div class="overflow-hidden border-y border-line bg-snow py-[calc(20*var(--u))]">
   <ul
     aria-label={trust.label}
-    class="flex w-max items-center hover:[animation-play-state:paused] motion-safe:animate-marquee"
+    class="flex w-max items-center marquee-always animate-marquee hover:[animation-play-state:paused]"
   >
     {[false, true].map((copy) =>
       trust.items.map((item) => (
