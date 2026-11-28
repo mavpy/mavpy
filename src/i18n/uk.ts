@@ -200,6 +200,9 @@ export const uk: Dict = {
     title: 'Відгуки наших клієнтів',
     sub: 'Відгуки тих, з ким ми вже запустили сайт.',
     listLabel: 'Відгуки клієнтів',
+    // Phone pager (← 1 / 3 →).
+    prev: 'Попередній відгук',
+    next: 'Наступний відгук',
     // The three real reviews. Display order follows the design (it starts the line at the third).
     items: [
       {
@@ -361,6 +364,7 @@ export const uk: Dict = {
       phone: 'Телефон',
       email: 'Email',
       instagram: 'Instagram',
+      telegram: 'Telegram',
     },
     name: 'Ім’я',
     namePlaceholder: 'Як до вас звертатися?',

@@ -206,6 +206,9 @@ export const en = {
     title: 'Client reviews',
     sub: 'Reviews from people we’ve already launched with.',
     listLabel: 'Client reviews',
+    // Phone pager (← 1 / 3 →).
+    prev: 'Previous review',
+    next: 'Next review',
     // The three real reviews. Display order follows the design (it starts the line at the third).
     items: [
       {
@@ -368,6 +371,7 @@ export const en = {
       phone: 'Phone',
       email: 'Email',
       instagram: 'Instagram',
+      telegram: 'Telegram',
     },
     name: 'Name',
     namePlaceholder: 'How should we address you?',

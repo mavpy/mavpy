@@ -156,6 +156,25 @@
   background-size: calc(80 * var(--u)) calc(80 * var(--u));
 }
 
+/* Hero bars beside «MORE»: exactly the capitals' height in whichever font is active (1cap);
+   0.7em is the fallback for browsers without the cap unit. */
+@utility h-cap {
+  height: 0.7em;
+  height: 1cap;
+}
+
+/* Footer: only the crossings of the hero grid, as faint grey dots on the dark band (same step).
+   The offset puts each dot's centre on a crossing (cell corners), as in the hero. */
+@utility bg-dots {
+  background-image: radial-gradient(
+    circle,
+    rgb(255 255 255 / 0.16) 1px,
+    transparent 1.5px
+  );
+  background-size: calc(80 * var(--u)) calc(80 * var(--u));
+  background-position: calc(-40 * var(--u)) calc(-40 * var(--u));
+}
+
 /* A thin amber streak running along a hero grid line; Hero.astro spawns them (at most 2) and sets
    the position, distance (--dx/--dy) and duration (--t). */
 @utility streak {

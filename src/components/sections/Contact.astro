@@ -14,6 +14,7 @@ import SectionHead from '../ui/SectionHead.astro';
 import PhoneIcon from '../../assets/v3/icons/phone.svg';
 import MailIcon from '../../assets/v3/icons/mail.svg';
 import InstaIcon from '../../assets/v3/icons/insta.svg';
+import TelegramIcon from '../../assets/v3/icons/telegram.svg';
 import { countries, dialCodes, flag } from '../../data/phone';
 import { site } from '../../data/site';
 import { getLang, t } from '../../i18n/utils';
@@ -36,6 +37,12 @@ const plaques = [
     label: contact.side.email,
     value: site.email,
     href: `mailto:${site.email}`,
+  },
+  {
+    Icon: TelegramIcon,
+    label: contact.side.telegram,
+    value: site.telegram.handle,
+    href: site.telegram.href,
   },
   {
     Icon: InstaIcon,
