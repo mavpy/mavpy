@@ -375,8 +375,13 @@ export const en = {
       short: 'Too short',
     },
     // Replaces the form after a successful submit.
-    successTitle: 'Got it, thanks',
-    success: 'We’ll get back within 24 hours to set a time for the call.',
+    // After the form (variant A, Serhii 2026-11-28). plain*: when there is no bot link.
+    successTitle: 'Got it. One step left',
+    success:
+      'Confirm it in Telegram: we’ll get in touch faster and ask 2–⁠3 quick questions right away.',
+    successNote: 'Opens Telegram · @MavpyLeadsBot',
+    plainTitle: 'Got it, thanks',
+    plain: 'We’ll get back within 24 hours to set a time for the call.',
     // Success-card button to the studio bot (shown when the lead got an id). TODO(copy)
     telegram: 'Confirm in Telegram',
     // The studio e-mail is appended, so people can still reach us.

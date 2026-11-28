@@ -1,6 +1,6 @@
 import { copyright, type Dict } from './en';
 
-// review: Serhii (whole file is a draft translation until he approves it).
+// Ukrainian copy approved by Serhii 2026-11-28 (was a draft translation).
 export const uk: Dict = {
   meta: {
     title: 'MAVPY: сайти, що приводять клієнтів, для бізнесу, який росте',
@@ -282,7 +282,6 @@ export const uk: Dict = {
       },
     ],
   },
-  // review: Serhii
   pricing: {
     label: 'Ціни',
     title: 'Ціни без дзвінків і форм',
@@ -340,7 +339,6 @@ export const uk: Dict = {
       },
     ],
   },
-  // review: Serhii
   contact: {
     label: 'Контакти',
     title: 'Безкоштовний\n15‑хвилинний розбір',
@@ -361,15 +359,19 @@ export const uk: Dict = {
     emailPlaceholder: 'you@company.com',
     cta: 'Записатися на розбір',
     reply: 'Відповімо протягом доби · без спаму',
-    // review: Serhii
     errors: {
       required: 'Заповніть це поле',
       email: 'Введіть коректний e-mail',
       phone: 'Введіть коректний номер телефону',
       short: 'Занадто коротко',
     },
-    successTitle: 'Дякуємо, заявку отримали',
-    success: 'Зв’яжемося протягом доби, щоб домовитися про час дзвінка.',
+    // After the form (variant A, Serhii 2026-11-28). plain*: when there is no bot link.
+    successTitle: 'Заявку отримали. Лишився один крок',
+    success:
+      'Підтвердьте її в Telegram: так ми зв’яжемося швидше й одразу поставимо 2–⁠3 уточнювальні питання.',
+    successNote: 'Відкриється Telegram · @MavpyLeadsBot',
+    plainTitle: 'Дякуємо, заявку отримали',
+    plain: 'Зв’яжемося протягом доби, щоб домовитися про час дзвінка.',
     telegram: 'Підтвердити в Telegram',
     error: 'Не вдалося надіслати заявку. Спробуйте ще раз або напишіть нам на',
     autoReply: {
@@ -390,7 +392,6 @@ export const uk: Dict = {
         '🎉 Дякуємо, {name}!\n\nЗаявку підтверджено. Ми зв’яжемося з вами протягом 24 годин.',
       hello:
         '👋 Вітаємо! Це бот студії MAVPY.\n\nЗалиште заявку на сайті, і ми з вами зв’яжемося: {site}',
-      // review: Serhii
       intro:
         '🐒 Кілька коротких запитань допоможуть нам підготуватися до дзвінка (будь-яке можна пропустити).\nПомилилися з відповіддю? Надішліть /start, щоб почати знову.',
       restart: '🔄 Почати спочатку',
