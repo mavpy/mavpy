@@ -1,0 +1,28 @@
+---
+// A drawn arrow for buttons and round controls: heavier than the font's → and centred on the
+// text's middle, the same in every font (Serhii, 2026-11-28). Decorative: the label says it all.
+interface Props {
+  dir?: 'right' | 'left' | 'up' | 'down';
+  class?: string;
+}
+const { dir = 'right', class: cls } = Astro.props;
+const turn = {
+  right: '',
+  down: 'rotate-90',
+  left: 'rotate-180',
+  up: '-rotate-90',
+}[dir];
+---
+
+<svg
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2.25"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  aria-hidden="true"
+  class:list={['size-[1.1em] shrink-0', turn, cls]}
+>
+  <path d="M4 12h15M13 6l6 6-6 6"></path>
+</svg>

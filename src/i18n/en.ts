@@ -46,7 +46,7 @@ export const en = {
     studioTitle: 'Studio',
     studio: ['Design & development', 'Since 2022', 'UA / EN'],
     copyright,
-    toTop: 'Back to top ↑',
+    toTop: 'Back to top',
   },
   hero: {
     // The design sets the end of the line in bold, so it's split around it.
@@ -80,7 +80,7 @@ export const en = {
       { value: '#1–2', label: 'in Google by clinic name and area' },
       { value: '$0', label: 'spent on ads' },
     ],
-    cta: 'Read the case ↓',
+    cta: 'Read the case',
     live: 'Open live site',
     shotAlt: 'Doctor LOR website',
     url: 'https://www.drlor-kh.com/',
@@ -206,6 +206,9 @@ export const en = {
     title: 'Client reviews',
     sub: 'Reviews from people we’ve already launched with.',
     listLabel: 'Client reviews',
+    // Phone pager (← 1 / 3 →).
+    prev: 'Previous review',
+    next: 'Next review',
     // The three real reviews. Display order follows the design (it starts the line at the third).
     items: [
       {
@@ -246,12 +249,7 @@ export const en = {
           'I start with why people leave your site, then design the page that keeps them.',
           'From the first call to launch, you talk to me. I keep the plan, the deadlines and the decisions in one place, so nothing gets lost between people.',
         ],
-        tags: [
-          'Research & UX',
-          'Site structure',
-          'Design in Figma',
-          'Project lead',
-        ],
+        tags: ['UX research', 'Structure', 'Design', 'Project lead'],
       },
       {
         photo: 'team-nikita',
@@ -261,12 +259,7 @@ export const en = {
           'I build the site and connect it to what you already use: booking, CRM, a Telegram bot.',
           'Every request lands where your team will see it. After launch I stay on the tech side, so updates and fixes don’t stall.',
         ],
-        tags: [
-          'Webflow & custom code',
-          'Booking, CRM, Telegram bots',
-          'Integrations',
-          'Launch & support',
-        ],
+        tags: ['Webflow & code', 'CRM & bots', 'Integrations', 'Support'],
       },
       {
         photo: 'team-julia',
@@ -276,12 +269,7 @@ export const en = {
           'I write in your clients’ words, not ours. Each headline answers one question: why choose you over the business next door.',
           'Before writing, I read your reviews, calls and competitors’ pages to find the phrases your clients actually use.',
         ],
-        tags: [
-          'Positioning & offer',
-          'Website copy',
-          'Case studies',
-          'Ad content',
-        ],
+        tags: ['Positioning', 'Website copy', 'Case studies', 'Ad copy'],
       },
       {
         photo: 'team-marina',
@@ -292,10 +280,10 @@ export const en = {
           'You get a short report in plain words: what we spent, what came in, and what we change next.',
         ],
         tags: [
-          'Google & Meta ads',
-          'Analytics & tracking',
-          'Cost per enquiry reports',
-          'Budget planning',
+          'Google & Meta Ads',
+          'Analytics',
+          'Cost per enquiry',
+          'Ad budget',
         ],
       },
     ],
@@ -368,6 +356,7 @@ export const en = {
       phone: 'Phone',
       email: 'Email',
       instagram: 'Instagram',
+      telegram: 'Telegram',
     },
     name: 'Name',
     namePlaceholder: 'How should we address you?',
@@ -386,8 +375,13 @@ export const en = {
       short: 'Too short',
     },
     // Replaces the form after a successful submit.
-    successTitle: 'Got it, thanks',
-    success: 'We’ll get back within 24 hours to set a time for the call.',
+    // After the form (variant A, Serhii 2026-11-28). plain*: when there is no bot link.
+    successTitle: 'Got it. One step left',
+    success:
+      'Confirm it in Telegram: we’ll get in touch faster and ask 2–⁠3 quick questions right away.',
+    successNote: 'Opens Telegram · @MavpyLeadsBot',
+    plainTitle: 'Got it, thanks',
+    plain: 'We’ll get back within 24 hours to set a time for the call.',
     // Success-card button to the studio bot (shown when the lead got an id). TODO(copy)
     telegram: 'Confirm in Telegram',
     // The studio e-mail is appended, so people can still reach us.

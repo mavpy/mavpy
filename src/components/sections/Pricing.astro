@@ -4,6 +4,7 @@
 // across cards when a uk title wraps. Both prices are in the markup and cross-fade on the section's
 // data-pay (the design swaps the text with JS); without JS the pay-once price shows.
 // A plan's button presets the contact form's goal (input[name=goal], added in Contact).
+import Arrow from '../ui/Arrow.astro';
 import Button from '../ui/Button.astro';
 import Container from '../ui/Container.astro';
 import SectionHead from '../ui/SectionHead.astro';
@@ -49,11 +50,11 @@ const partsCls = `${fade} invisible opacity-0 group-data-[pay=3]/pay:visible gro
           class="relative flex flex-col gap-[max(16px,calc(22*var(--u)))] rounded-[12px] border-2 border-transparent bg-snow p-[max(24px,calc(40*var(--u)))] shadow-[0_0_0_1px_var(--color-line)] hover:-translate-y-1 hover:border-amber-500 hover:shadow-none desk:row-span-6 desk:grid desk:grid-cols-[minmax(0,1fr)] desk:grid-rows-subgrid"
         >
           <div class="flex items-center justify-between">
-            <span class="font-mono text-[max(13px,calc(15*var(--u)))] font-medium text-amber-700">
+            <span class="font-mono text-[max(13px,calc(15*var(--u)))] max-tab:text-[14px] font-medium text-amber-700">
               {plan.kind}
             </span>
             {plan.popular && (
-              <span class="rounded-full bg-amber-500 px-[12px] py-[4px] text-[13px] font-medium text-black">
+              <span class="rounded-full bg-amber-500 px-[12px] py-[4px] text-[13px] font-medium text-black max-tab:px-[9px] max-tab:py-[2px] max-tab:text-[12px]">
                 {p.badge}
               </span>
             )}
@@ -91,9 +92,9 @@ const partsCls = `${fade} invisible opacity-0 group-data-[pay=3]/pay:visible gro
             {p.cta}
             <span
               aria-hidden="true"
-              class="inline-block transition-transform duration-200 ease-mv group-hover/btn:translate-x-[5px]"
+              class="inline-flex transition-transform duration-200 ease-mv group-hover/btn:translate-x-[5px]"
             >
-              →
+              <Arrow />
             </span>
           </Button>
         </li>

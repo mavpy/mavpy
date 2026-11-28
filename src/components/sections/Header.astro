@@ -12,9 +12,10 @@ import { getLang, localizePath, navLinks, t } from '../../i18n/utils';
 const lang = getLang(Astro.url);
 const { nav } = t(lang);
 const home = localizePath(lang, '#top');
-const contact = localizePath(lang, '#contact');
+// «Find out the cost» goes to the prices, same as the hero CTA (2026-11-28).
+const cost = localizePath(lang, '#pricing');
 const link =
-  'uppercase text-black transition-colors hover:text-amber-700 text-[max(13px,calc(18*var(--u)))] font-medium';
+  'uppercase text-black transition-colors hover:text-amber-700 text-[max(13px,calc(18*var(--u)))] max-tab:text-[14px] font-medium';
 const bar =
   'absolute left-0 h-[1.6px] w-full bg-black transition-[top,rotate] duration-250 ease-mv';
 ---
@@ -38,7 +39,7 @@ const bar =
         </a>
       ))}
       <LangSwitch />
-      <Button href={contact} size="sm">
+      <Button href={cost} size="sm">
         {nav.cta}
       </Button>
     </nav>
@@ -80,7 +81,7 @@ const bar =
     ))}
     <div class="flex items-center justify-between gap-3 pt-2">
       <LangSwitch />
-      <Button href={contact} data-menu-link>
+      <Button href={cost} data-menu-link>
         {nav.cta}
       </Button>
     </div>

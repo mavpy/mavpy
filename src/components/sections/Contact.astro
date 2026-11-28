@@ -7,6 +7,7 @@
 // Phone: a country-code picker (a transparent native select over a "🇺🇦 +380" label, so keyboard,
 // screen readers and mobile pickers work as usual) plus the national number; toE164 (shared with
 // the server) checks it. goal: preset by a pricing plan's button, sent to Telegram as the plan name.
+import Arrow from '../ui/Arrow.astro';
 import Button from '../ui/Button.astro';
 import Container from '../ui/Container.astro';
 import Input from '../ui/Input.astro';
@@ -14,6 +15,7 @@ import SectionHead from '../ui/SectionHead.astro';
 import PhoneIcon from '../../assets/v3/icons/phone.svg';
 import MailIcon from '../../assets/v3/icons/mail.svg';
 import InstaIcon from '../../assets/v3/icons/insta.svg';
+import TelegramIcon from '../../assets/v3/icons/telegram.svg';
 import { countries, dialCodes, flag } from '../../data/phone';
 import { site } from '../../data/site';
 import { getLang, t } from '../../i18n/utils';
@@ -36,6 +38,12 @@ const plaques = [
     label: contact.side.email,
     value: site.email,
     href: `mailto:${site.email}`,
+  },
+  {
+    Icon: TelegramIcon,
+    label: contact.side.telegram,
+    value: site.telegram.handle,
+    href: site.telegram.href,
   },
   {
     Icon: InstaIcon,
@@ -65,7 +73,7 @@ const short = (c: keyof typeof dialCodes) => `${flag(c)} +${dialCodes[c]}`;
     />
     <div
       data-ri
-      class="grid gap-[max(24px,calc(48*var(--u)))] rounded-[16px] border border-line bg-snow p-[16px] desk:grid-cols-[minmax(0,4fr)_minmax(0,8fr)] desk:p-[max(20px,calc(40*var(--u)))]"
+      class="grid grid-cols-[minmax(0,1fr)] gap-[max(24px,calc(48*var(--u)))] rounded-[16px] border border-line bg-snow p-[16px] desk:grid-cols-[minmax(0,4fr)_minmax(0,8fr)] desk:p-[max(20px,calc(40*var(--u)))]"
     >
       <div class="flex flex-col">
         <p class="mb-[max(12px,calc(16*var(--u)))] text-[max(18px,calc(24*var(--u)))] font-medium text-black">
@@ -173,12 +181,12 @@ const short = (c: keyof typeof dialCodes) => `${flag(c)} +${dialCodes[c]}`;
               {contact.cta}
               <span
                 aria-hidden="true"
-                class="inline-block transition-transform duration-200 ease-mv group-hover/btn:translate-x-[5px]"
+                class="inline-flex transition-transform duration-200 ease-mv group-hover/btn:translate-x-[5px]"
               >
-                →
+                <Arrow />
               </span>
             </Button>
-            <span class="font-mono text-[max(13px,calc(15*var(--u)))] text-text-3">
+            <span class="font-mono text-[max(13px,calc(15*var(--u)))] max-tab:text-[14px] text-text-3">
               {contact.reply}
             </span>
           </div>
@@ -189,38 +197,64 @@ const short = (c: keyof typeof dialCodes) => `${flag(c)} +${dialCodes[c]}`;
           ></p>
         </form>
 
-        <!-- Shown in place of the form after a successful submit, at the form's height. -->
+        <!-- Shown in place of the form after a successful submit, at the form's height.
+             With a bot link (the usual case): «one step left» + a button into Telegram (variant A,
+             Serhii 2026-11-28). Without one (Airtable down, no lead id): a plain thank-you. -->
         <div
           id="contact-success"
           hidden
           tabindex="-1"
-          class="flex flex-col items-start justify-center gap-[8px] outline-none motion-safe:transition-opacity motion-safe:duration-500 motion-safe:starting:opacity-0 [&[hidden]]:hidden"
+          class="flex flex-col items-start justify-center gap-[12px] outline-none motion-safe:transition-opacity motion-safe:duration-500 motion-safe:starting:opacity-0 [&[hidden]]:hidden"
         >
-          <h3 class="font-head text-h3 leading-[1.05] font-bold tracking-[-0.005em] text-black">
-            {contact.successTitle}
-          </h3>
-          <p class="text-body text-text-2">{contact.success}</p>
-          <!-- Bot confirmation (t.me deep link with the lead id). Shown by the script when the server
-               returns a link; leads without an id (Airtable down) just don't get the button. -->
-          <Button
-            href="#"
-            data-telegram
-            hidden
-            target="_blank"
-            rel="noopener"
-            tone="telegram"
-            class="mt-[16px] [&[hidden]]:hidden"
+          <span
+            aria-hidden="true"
+            class="mb-[4px] grid size-[52px] place-items-center rounded-full bg-amber-500 text-black"
           >
             <svg
               viewBox="0 0 24 24"
-              class="size-[1.1em] shrink-0"
-              fill="currentColor"
-              aria-hidden="true"
+              class="size-[24px]"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
             >
-              <path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z" />
+              <path d="M5 12.5l4.5 4.5L19 7.5"></path>
             </svg>
-            {contact.telegram}
-          </Button>
+          </span>
+          <div
+            data-tg
+            hidden
+            class="flex w-full flex-col items-start gap-[12px] [&[hidden]]:hidden"
+          >
+            <h3 class="font-head text-h3 leading-[1.05] font-bold tracking-[-0.005em] text-black">
+              {contact.successTitle}
+            </h3>
+            <p class="text-body text-text-2">{contact.success}</p>
+            <Button
+              href="#"
+              data-telegram
+              target="_blank"
+              rel="noopener"
+              class="mt-[8px] w-full max-tab:gap-[10px] max-tab:px-[16px] max-tab:text-[16px] max-[360px]:whitespace-normal tab:w-auto"
+            >
+              <TelegramIcon aria-hidden="true" class="size-[1.15em] shrink-0" />
+              {contact.telegram}
+              <Arrow class="max-tab:hidden" />
+            </Button>
+            <p class="font-mono text-[13px] text-text-3 max-tab:text-[14px]">
+              {contact.successNote}
+            </p>
+          </div>
+          <div
+            data-plain
+            class="flex flex-col items-start gap-[12px] [&[hidden]]:hidden"
+          >
+            <h3 class="font-head text-h3 leading-[1.05] font-bold tracking-[-0.005em] text-black">
+              {contact.plainTitle}
+            </h3>
+            <p class="text-body text-text-2">{contact.plain}</p>
+          </div>
         </div>
       </div>
     </div>
@@ -319,10 +353,11 @@ const short = (c: keyof typeof dialCodes) => `${flag(c)} +${dialCodes[c]}`;
       // Swap the form for the thank-you card at the same height, so the page doesn't jump,
       // and move focus there so screen readers announce it.
       success.style.minHeight = `${form.offsetHeight}px`;
-      const link = success.querySelector<HTMLAnchorElement>('[data-telegram]')!;
       if (telegram) {
-        link.href = telegram;
-        link.hidden = false;
+        success.querySelector<HTMLAnchorElement>('[data-telegram]')!.href =
+          telegram;
+        success.querySelector<HTMLElement>('[data-tg]')!.hidden = false;
+        success.querySelector<HTMLElement>('[data-plain]')!.hidden = true;
       }
       form.hidden = true;
       success.hidden = false;

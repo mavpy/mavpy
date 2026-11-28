@@ -1,0 +1,46 @@
+---
+// Phones only: a call to action pinned to the bottom of the screen, so there is always a way to the
+// form (Serhii, 2026-11-28). It shows once the hero is gone and hides while the hero, the prices
+// (they have their own buttons), the form or the footer is on screen, so it never meets «Back to top».
+// Floats above the screen edge (20px or the home-bar inset + 10px) so it's easy to hit.
+import Arrow from './Arrow.astro';
+import Button from './Button.astro';
+import { getLang, localizePath, t } from '../../i18n/utils';
+
+const lang = getLang(Astro.url);
+const { pricing } = t(lang);
+---
+
+<!-- A floating pill, narrower than the screen and fully rounded like iOS/Android controls
+     (Serhii, 2026-11-28); the wrapper lets taps through around it. -->
+<div
+  data-sticky-cta
+  inert
+  class="pointer-events-none fixed inset-x-0 bottom-0 z-40 flex translate-y-[calc(100%+24px)] justify-center px-[20px] pb-[max(20px,calc(env(safe-area-inset-bottom)+10px))] transition-transform duration-300 ease-mv tab:hidden data-[on]:translate-y-0 motion-reduce:transition-none"
+>
+  <Button
+    href={localizePath(lang, '#contact')}
+    class="pointer-events-auto h-[52px]! min-w-[240px] rounded-full! px-[28px]! text-[17px]! shadow-[0_8px_24px_-6px_rgb(15_15_15/0.35)]"
+  >
+    {pricing.cta}
+    <Arrow />
+  </Button>
+</div>
+
+<script>
+  const bar = document.querySelector<HTMLElement>('[data-sticky-cta]');
+  const hide = ['#top', '#pricing', '#contact', 'footer']
+    .map((s) => document.querySelector(s))
+    .filter((el): el is Element => !!el);
+  if (bar && hide.length) {
+    const seen = new Set<Element>();
+    const io = new IntersectionObserver((entries) => {
+      for (const e of entries)
+        e.isIntersecting ? seen.add(e.target) : seen.delete(e.target);
+      const on = seen.size === 0;
+      bar.toggleAttribute('data-on', on);
+      bar.inert = !on;
+    });
+    hide.forEach((el) => io.observe(el));
+  }
+</script>

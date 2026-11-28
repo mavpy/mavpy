@@ -22,7 +22,8 @@ const { title, noindex = false } = Astro.props;
 const lang = getLang(Astro.url);
 const { meta, a11y } = t(lang);
 const pageTitle = title ?? meta.title;
-const ogImage = new URL('/og.jpg', Astro.site ?? Astro.url).href;
+// New file name for each new picture: Telegram and other apps cache previews by image URL.
+const ogImage = new URL('/og-v2.jpg', Astro.site ?? Astro.url).href;
 const site = Astro.site ?? Astro.url;
 const canonical = new URL(Astro.url.pathname, site).href;
 const ogLocale = { en: 'en_US', uk: 'uk_UA' } as const;

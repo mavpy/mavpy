@@ -1,12 +1,15 @@
 ---
 // Footer: dark band; logo + tagline (6fr), then Navigate / Contact / Studio (2fr
 // each), stacked in one column below 1200px. A rule, the full-width wordmark, and the bottom bar.
-// Contacts match the Contact section (no Telegram until Serhii confirms the handle).
+// Contacts match the Contact section. Below the line over the wordmark: the hero grid, faint, full
+// width; «Back to top» is a 52px round button sitting on that line (Serhii's option A, 2026-11-28).
+import Arrow from '../ui/Arrow.astro';
 import { Image } from 'astro:assets';
 import Logo from '../../assets/v3/logo-light.svg';
 import MailIcon from '../../assets/v3/icons/mail.svg';
 import PhoneIcon from '../../assets/v3/icons/phone.svg';
 import InstaIcon from '../../assets/v3/icons/insta.svg';
+import TelegramIcon from '../../assets/v3/icons/telegram.svg';
 import wordmark from '../../assets/v3/footer-wordmark.png';
 import Container from '../ui/Container.astro';
 import { site } from '../../data/site';
@@ -17,11 +20,15 @@ const { nav, footer } = t(lang);
 const contacts = [
   { Icon: MailIcon, value: site.email, href: `mailto:${site.email}` },
   { Icon: PhoneIcon, value: site.phone.display, href: site.phone.href },
+  { Icon: TelegramIcon, value: site.telegram.handle, href: site.telegram.href },
   { Icon: InstaIcon, value: site.instagram.handle, href: site.instagram.href },
 ];
-const col = 'flex flex-col gap-3';
-const title = 'mb-1 font-mono text-[13px] font-medium text-amber-500';
-const link = 'transition-colors hover:text-amber-400';
+const col = 'flex flex-col gap-3 max-desk:gap-0';
+const title =
+  'mb-1 max-desk:mt-[8px] font-mono text-[13px] max-tab:text-[14px] font-medium text-amber-500';
+// Phones: each link gets a 44px tap row.
+const link =
+  'transition-colors hover:text-amber-400 max-desk:flex max-desk:min-h-[44px] max-desk:items-center';
 ---
 
 <footer class="overflow-hidden bg-ink pt-[max(88px,calc(160*var(--u)))] text-[max(15px,calc(17*var(--u)))] text-[#ededeb]">
@@ -71,33 +78,43 @@ const link = 'transition-colors hover:text-amber-400';
         ))}
       </div>
 
-      <div class:list={[col, 'text-[#b9b9b4]']}>
+      <div class="flex flex-col gap-3 text-[#b9b9b4] max-desk:gap-[6px]">
         <p class={title}>{footer.studioTitle}</p>
         {footer.studio.map((line) => (
           <span>{line}</span>
         ))}
       </div>
     </div>
+  </Container>
 
-    <hr class="mb-[max(24px,calc(40*var(--u)))] border-graphite" />
-
-    <!-- Decorative: the logo and the copyright already name the studio. -->
-    <Image
-      src={wordmark}
-      alt=""
-      widths={[640, 1271]}
-      sizes="calc(100vw - 40px)"
-      class="mt-[max(24px,calc(48*var(--u)))] mb-[max(16px,calc(32*var(--u)))] block h-auto w-full"
-    />
-
-    <div class="flex justify-between gap-4 border-t border-graphite py-5 font-mono text-[13px] text-[#9a9a96]">
-      <span>{footer.copyright}</span>
+  <div class="bg-grid-dark">
+    <Container class="relative">
+      <hr class="border-graphite" />
       <a
         href={localizePath(lang, '#top')}
-        class:list={['text-[#ededeb]', link]}
+        class="group absolute top-0 right-0 flex -translate-y-1/2 items-center gap-[12px] text-[#ededeb] transition-colors hover:text-amber-400"
       >
-        {footer.toTop}
+        <span class="bg-ink px-[8px] leading-[1.2]">{footer.toTop}</span>
+        <span
+          aria-hidden="true"
+          class="grid size-[52px] place-items-center rounded-full border-[1.5px] bg-ink border-white/50 text-[20px] transition-colors group-hover:border-amber-500 group-hover:bg-amber-500 group-hover:text-black"
+        >
+          <Arrow dir="up" />
+        </span>
       </a>
-    </div>
-  </Container>
+
+      <!-- Decorative: the logo and the copyright already name the studio. -->
+      <Image
+        src={wordmark}
+        alt=""
+        widths={[640, 1271]}
+        sizes="calc(100vw - 40px)"
+        class="mt-[max(56px,calc(88*var(--u)))] mb-[max(16px,calc(32*var(--u)))] block h-auto w-full"
+      />
+
+      <p class="border-t border-graphite py-5 font-mono text-[13px] text-[#9a9a96] max-tab:text-[14px]">
+        {footer.copyright}
+      </p>
+    </Container>
+  </div>
 </footer>

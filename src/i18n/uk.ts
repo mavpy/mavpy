@@ -1,6 +1,6 @@
 import { copyright, type Dict } from './en';
 
-// review: Serhii (whole file is a draft translation until he approves it).
+// Ukrainian copy approved by Serhii 2026-11-28 (was a draft translation).
 export const uk: Dict = {
   meta: {
     title: 'MAVPY: сайти, що приводять клієнтів, для бізнесу, який росте',
@@ -42,7 +42,7 @@ export const uk: Dict = {
     studioTitle: 'Студія',
     studio: ['Дизайн і розробка', 'З 2022 року', 'UA / EN'],
     copyright,
-    toTop: 'Нагору ↑',
+    toTop: 'Нагору',
   },
   hero: {
     h1: { before: 'Сайти, що працюють ', em: 'на результат', after: '' },
@@ -74,7 +74,7 @@ export const uk: Dict = {
       { value: '№ 1–2', label: 'у Google за назвою й районом' },
       { value: '$0', label: 'на рекламу' },
     ],
-    cta: 'Дивитися кейс ↓',
+    cta: 'Дивитися кейс',
     live: 'Відкрити сайт',
     shotAlt: 'Сайт Doctor LOR',
     url: 'https://www.drlor-kh.com/',
@@ -200,16 +200,11 @@ export const uk: Dict = {
     title: 'Відгуки наших клієнтів',
     sub: 'Відгуки тих, з ким ми вже запустили сайт.',
     listLabel: 'Відгуки клієнтів',
-    // The three real reviews. Display order follows the design (it starts the line at the third).
+    // Phone pager (← 1 / 3 →).
+    prev: 'Попередній відгук',
+    next: 'Наступний відгук',
+    // The three real reviews. UA starts with a Ukrainian one; Bram's (English) goes last (2026-11-28).
     items: [
-      {
-        avatar: 'review-bram-spacem',
-        name: 'Bram V.',
-        project: 'Space’M Online · вебдизайн · відгук з Upwork',
-        quote:
-          'Serhii is strong in communication, super fast in delivering the scope, overdelivers and is a real professional. Gladly recommend.',
-        lang: 'en', // Upwork review, kept in the original
-      },
       {
         avatar: 'review-natalia-srt',
         name: 'Наталія М.',
@@ -224,11 +219,20 @@ export const uk: Dict = {
         quote:
           'Відвідувачі були, а заявок — майже ні. Сергій спершу з’ясував, чому люди йдуть, і лише потім узявся за дизайн. Форма нарешті почала заповнюватися.',
       },
+      {
+        avatar: 'review-bram-spacem',
+        name: 'Bram V.',
+        project: 'Space’M Online · вебдизайн · відгук з Upwork',
+        quote:
+          'Serhii is strong in communication, super fast in delivering the scope, overdelivers and is a real professional. Gladly recommend.',
+        lang: 'en', // Upwork review, kept in the original
+      },
     ],
   },
   team: {
     label: 'Команда',
     title: 'Люди, які працюватимуть\nнад вашим проєктом',
+    // Tags shortened, same meaning (Serhii, 2026-11-28).
     what: 'Чим займаюся',
     members: [
       {
@@ -239,12 +243,7 @@ export const uk: Dict = {
           'Спершу з’ясовую, чому люди йдуть із сайту, і лише потім проєктую сторінку, яка їх утримає.',
           'Від першого дзвінка до запуску ви спілкуєтеся зі мною. План, строки й рішення — в одному місці.',
         ],
-        tags: [
-          'Дослідження та UX',
-          'Структура сайту',
-          'Дизайн у Figma',
-          'Керування проєктом',
-        ],
+        tags: ['UX-дослідження', 'Структура', 'Дизайн', 'Ведення проєкту'],
       },
       {
         photo: 'team-nikita',
@@ -254,12 +253,7 @@ export const uk: Dict = {
           'Розробляю сайт і підключаю його до того, чим ви вже користуєтеся: запис, CRM чи Telegram-бот.',
           'Кожна заявка потрапляє туди, де її побачить ваша команда. Після запуску відповідаю за технічну частину, тож оновлення й виправлення не затягуються.',
         ],
-        tags: [
-          'Webflow і власний код',
-          'Запис, CRM, Telegram-боти',
-          'Інтеграції',
-          'Запуск і підтримка',
-        ],
+        tags: ['Webflow і код', 'CRM і боти', 'Інтеграції', 'Підтримка'],
       },
       {
         photo: 'team-julia',
@@ -269,12 +263,7 @@ export const uk: Dict = {
           'Пишу словами ваших клієнтів, а не нашими. Кожен заголовок відповідає на одне питання: чому варто обрати саме вас.',
           'Перш ніж писати, вивчаю ваші відгуки, дзвінки й сайти конкурентів, щоб знайти фрази, якими говорять ваші клієнти.',
         ],
-        tags: [
-          'Позиціонування й пропозиція',
-          'Тексти для сайту',
-          'Кейси',
-          'Контент для реклами',
-        ],
+        tags: ['Позиціонування', 'Тексти сайту', 'Кейси', 'Рекламні тексти'],
       },
       {
         photo: 'team-marina',
@@ -285,15 +274,14 @@ export const uk: Dict = {
           'Ви отримуєте короткий звіт простими словами: скільки витратили, що отримали й що змінюємо далі.',
         ],
         tags: [
-          'Реклама в Google і Meta',
-          'Аналітика й відстеження',
-          'Звіти про вартість заявки',
-          'Планування бюджету',
+          'Google і Meta Ads',
+          'Аналітика',
+          'Ціна заявки',
+          'Бюджет реклами',
         ],
       },
     ],
   },
-  // review: Serhii
   pricing: {
     label: 'Ціни',
     title: 'Ціни без дзвінків і форм',
@@ -351,7 +339,6 @@ export const uk: Dict = {
       },
     ],
   },
-  // review: Serhii
   contact: {
     label: 'Контакти',
     title: 'Безкоштовний\n15‑хвилинний розбір',
@@ -361,6 +348,7 @@ export const uk: Dict = {
       phone: 'Телефон',
       email: 'Email',
       instagram: 'Instagram',
+      telegram: 'Telegram',
     },
     name: 'Ім’я',
     namePlaceholder: 'Як до вас звертатися?',
@@ -371,15 +359,19 @@ export const uk: Dict = {
     emailPlaceholder: 'you@company.com',
     cta: 'Записатися на розбір',
     reply: 'Відповімо протягом доби · без спаму',
-    // review: Serhii
     errors: {
       required: 'Заповніть це поле',
       email: 'Введіть коректний e-mail',
       phone: 'Введіть коректний номер телефону',
       short: 'Занадто коротко',
     },
-    successTitle: 'Дякуємо, заявку отримали',
-    success: 'Зв’яжемося протягом доби, щоб домовитися про час дзвінка.',
+    // After the form (variant A, Serhii 2026-11-28). plain*: when there is no bot link.
+    successTitle: 'Заявку отримали. Лишився один крок',
+    success:
+      'Підтвердьте її в Telegram: так ми зв’яжемося швидше й одразу поставимо 2–⁠3 уточнювальні питання.',
+    successNote: 'Відкриється Telegram · @MavpyLeadsBot',
+    plainTitle: 'Дякуємо, заявку отримали',
+    plain: 'Зв’яжемося протягом доби, щоб домовитися про час дзвінка.',
     telegram: 'Підтвердити в Telegram',
     error: 'Не вдалося надіслати заявку. Спробуйте ще раз або напишіть нам на',
     autoReply: {
@@ -400,7 +392,6 @@ export const uk: Dict = {
         '🎉 Дякуємо, {name}!\n\nЗаявку підтверджено. Ми зв’яжемося з вами протягом 24 годин.',
       hello:
         '👋 Вітаємо! Це бот студії MAVPY.\n\nЗалиште заявку на сайті, і ми з вами зв’яжемося: {site}',
-      // review: Serhii
       intro:
         '🐒 Кілька коротких запитань допоможуть нам підготуватися до дзвінка (будь-яке можна пропустити).\nПомилилися з відповіддю? Надішліть /start, щоб почати знову.',
       restart: '🔄 Почати спочатку',
